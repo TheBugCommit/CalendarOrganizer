@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Casts\HashCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -11,6 +11,12 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+
+    public const GENDERS = [
+        'M' => 'Male',
+        'F' => 'Female',
+        'O' => 'Other'
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -39,11 +45,22 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    public function nation(){
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'password' => HashCast::class,
+    ];
+
+    public function nation()
+    {
         return $this->belongsTo(Nation::class);
     }
 
-    public function categories(){
+    public function categories()
+    {
         return $this->hasMany(Category::class);
     }
 
@@ -52,7 +69,8 @@ class User extends Authenticatable
         return $this->hasMany(Event::class);
     }
 
-    public function calendars(){
+    public function calendars()
+    {
         return $this->hasMany(Calendar::class);
     }
 
