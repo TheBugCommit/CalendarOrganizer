@@ -21,6 +21,12 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'surname1',
+        'surname2',
+        'locked',
+        'birth_date',
+        'gender',
+        'nation_id',
     ];
 
     /**
@@ -33,12 +39,25 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    public function nation(){
+        return $this->belongsTo(Nation::class);
+    }
+
+    public function categories(){
+        return $this->hasMany(Category::class);
+    }
+
+    public function events()
+    {
+        return $this->hasMany(Event::class);
+    }
+
+    public function calendars(){
+        return $this->hasMany(Calendar::class);
+    }
+
+    public function helperCalendars()
+    {
+        return $this->belongsToMany(Calendar::class);
+    }
 }

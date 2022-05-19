@@ -18,6 +18,8 @@ class CreateEventsTable extends Migration
 
             $table->foreignId('calendar_id')->constrained('calendars')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('category_id')->constrained('categories')->nullable();
+            $table->foreignId('user_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
+
             $table->string('title', 30);
             $table->string('description', 1000);
             $table->string('location', 300);

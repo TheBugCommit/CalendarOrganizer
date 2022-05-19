@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
             $table->boolean('locked')->default(false);
             $table->date('birth_date');
             $table->string('phone', 15)->nullable();
-            $table->enum('gender', ['M', 'F' ,'O']);
+            $table->string('gender');
             $table->foreignId('nation_id')->constrained('nations')->restrictOnDelete();
             $table->rememberToken();
             $table->timestamps();
