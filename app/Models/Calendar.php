@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Calendar extends Model
 {
@@ -17,6 +18,15 @@ class Calendar extends Model
         'start_date',
         'end_date'
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        Calendar::creating(function($model) {
+            $model->user_id = Auth::user()->id;
+        });
+    }
 
     public function owner()
     {

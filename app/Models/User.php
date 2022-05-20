@@ -78,4 +78,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Calendar::class);
     }
+
+    public function hasCalendar($calendar_id)
+    {
+        return $this->calendars()->where('id', $calendar_id)->exists();
+    }
 }

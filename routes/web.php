@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Middleware\CalendarVerify;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,4 +30,10 @@ Route::middleware(['guest'])->group(function(){
 
 Route::middleware(['auth'])->group(function(){
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::name('calendar.')->group(function(){
+        Route::get('/calendars', [CalendarController::class,'index'])->name('all');
+        Route::post('/calendar_store', [CalendarController::class, 'store'])->name('store');
+        Route::get('/calendar_edit/{id}', [CalendarController::class, 'edit'])->name('edit')->middleware(CalendarVerify::class);
+    });
 });
