@@ -362,4 +362,7 @@ INSERT INTO nations (name, code) VALUES ('Zimbabwe', 'ZW');
 
 -- End nations initialization
 
+-- Users initialization
+INSERT INTO users VALUES (NULL, 'Gerard', 'admin@admin.com', '$2y$10$HCzABbNv9skrPq2C1TncOeNhC2JQ0lFdq0UyfVeYlTzYDHRAQ2ZnC', 'Casas', 'Serarols', 0, date '2002-10-03', NULL, 'M', 193, NULL, now(), now());
+
 COMMIT;

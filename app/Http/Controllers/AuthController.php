@@ -50,7 +50,7 @@ class AuthController extends Controller
     public function authenticate(AuthenticateUserRequest $request)
     {
         if (!Auth::attempt($request->except('_token'))) {
-            return back()->withErrors(['email' => 'The provided credentials do not match our records.']);
+            return back()->withErrors(['email' => 'The provided credentials do not match our records.'])->withInput();
         }
 
         $request->session()->regenerate();
@@ -60,7 +60,7 @@ class AuthController extends Controller
             Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
-            return back()->withErrors(['locked' => 'Your account is locked pleas contact with administrator']);
+            return back()->withErrors(['locked' => 'Your account is locked please contact with administrator'])->withInput();
         }
 
         Log::info("User $user->id logged at " . Carbon::now());
@@ -86,7 +86,7 @@ class AuthController extends Controller
             Log::error($e->getMessage());
         }
 
-        return $user ? redirect()->route('dashboard') : back()->withErrors(['errors' => 'Can\'t register user something went wrong'])->withInput($userData);
+        return $user ? redirect()->route('dashboard') : back()->withErrors(['errors' => 'Can\'t register user something went wrong'])->withInput();
     }
 
     /**
