@@ -19,13 +19,20 @@ class Calendar extends Model
         'end_date'
     ];
 
+    protected $appends = ['events'];
+
     protected static function boot()
     {
         parent::boot();
 
-        Calendar::creating(function($model) {
+        Calendar::creating(function ($model) {
             $model->user_id = Auth::user()->id;
         });
+    }
+
+    public function getEventsAttribute()
+    {
+        return $this->events();
     }
 
     public function owner()
@@ -38,7 +45,8 @@ class Calendar extends Model
         return $this->belongsToMany(User::class);
     }
 
-    public function events(){
+    public function events()
+    {
         return $this->hasMany(Event::class);
     }
 

@@ -18,7 +18,7 @@ class CalendarVerify
     public function handle(Request $request, Closure $next)
     {
         if(!isset($request->id) || !Auth::user()->hasCalendar($request->id))
-            abort(404);
+            abort(401);
 
         return $next($request);
     }

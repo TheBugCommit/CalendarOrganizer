@@ -28,13 +28,18 @@ class CalendarController extends Controller
      */
     public function store(CalendarStoreRequest $request)
     {
+        $calendar = null;
+
         try{
-            $calendar = Calendar::create($request->except('_token'));
+            $calendar = Calendar::create($request->all());
         }catch(PDOException $pe){
             return response()->json(['message' => 'Can\'t create calendar'], 500);
         }
 
-        return response()->json();
+        if(!$calendar)
+            return response()->json(['message' => 'Can\'t create calendar'], 500);
+        else
+            return response()->json($calendar);
     }
 
     /**
@@ -45,7 +50,7 @@ class CalendarController extends Controller
      */
     public function edit($id)
     {
-        $calendar = Calendar::find($id);
+        $calendar = Calendar::find($id)->toArray();
         return view('calendars.edit', compact('calendar'));
     }
 

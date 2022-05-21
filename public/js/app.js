@@ -5275,12 +5275,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ["calendar"]
 });
@@ -5322,15 +5316,15 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _components_CalendarComponent_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/CalendarComponent.vue */ "./resources/js/components/CalendarComponent.vue");
-/* harmony import */ var _components_LoadingComponent_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/LoadingComponent.vue */ "./resources/js/components/LoadingComponent.vue");
+/* harmony import */ var _components_LoadingComponent_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/LoadingComponent.vue */ "./resources/js/components/LoadingComponent.vue");
+/* harmony import */ var _components_CalendarComponent_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/CalendarComponent.vue */ "./resources/js/components/CalendarComponent.vue");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
-
-
 window.Vue = (__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js")["default"]);
-Vue.component('loading-component', _components_LoadingComponent_vue__WEBPACK_IMPORTED_MODULE_1__["default"]);
-Vue.component('calendar-component', _components_CalendarComponent_vue__WEBPACK_IMPORTED_MODULE_0__["default"]);
+
+
+Vue.component('loading-component', _components_LoadingComponent_vue__WEBPACK_IMPORTED_MODULE_0__["default"]);
+Vue.component('calendar-component', _components_CalendarComponent_vue__WEBPACK_IMPORTED_MODULE_1__["default"]);
 $.ajaxSetup({
   headers: {
     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -5341,7 +5335,12 @@ var app = new Vue({
   data: {
     show_loading: false,
     currentRoute: window.location.pathname,
-    calendars: []
+    calendars: [],
+    newCalendarForm: {
+      title: "",
+      start_date: "",
+      end_date: ""
+    }
   },
   mounted: function mounted() {
     if (this.currentRoute == '/') this.getCalendars();
@@ -5365,6 +5364,27 @@ var app = new Vue({
       }).always(function () {
         _this2.show_loading = false;
       });
+    },
+    storeCalendar: function storeCalendar() {
+      var _this = this;
+
+      $.ajax({
+        url: '/calendar_store',
+        dataType: 'JSON',
+        method: 'POST',
+        data: _this.newCalendarForm
+      }).done(function (response) {
+        _this.calendars.push(response);
+
+        Object.keys(_this.newCalendarForm).forEach(function (elem) {
+          _this.newCalendarForm[elem] = "";
+        });
+      }).fail(function (error) {
+        console.error(error);
+      });
+    },
+    redirect: function redirect(url) {
+      window.location.href = url;
     }
   },
   watch: {}
@@ -28027,27 +28047,32 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
-    _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-3" }, [
-        _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header" }, [
-            _vm._v(_vm._s(_vm.calendar.title)),
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "card-body" }, [
-            _vm._v(
-              "\n          " +
-                _vm._s(_vm.calendar.start_date) +
-                " - " +
-                _vm._s(_vm.calendar.end_date) +
-                "\n        "
-            ),
-          ]),
-        ]),
+  return _c(
+    "div",
+    {
+      staticClass: "card",
+      on: {
+        click: function ($event) {
+          return _vm.$emit("redirect")
+        },
+      },
+    },
+    [
+      _c("div", { staticClass: "card-header" }, [
+        _vm._v(_vm._s(_vm.calendar.title)),
       ]),
-    ]),
-  ])
+      _vm._v(" "),
+      _c("div", { staticClass: "card-body" }, [
+        _vm._v(
+          "\n    " +
+            _vm._s(_vm.calendar.start_date) +
+            " - " +
+            _vm._s(_vm.calendar.end_date) +
+            "\n  "
+        ),
+      ]),
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
