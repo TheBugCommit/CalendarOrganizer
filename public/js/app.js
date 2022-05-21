@@ -5266,6 +5266,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _LoadingComponent_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LoadingComponent.vue */ "./resources/js/components/LoadingComponent.vue");
 //
 //
 //
@@ -5281,27 +5282,43 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      calendars: []
+      calendars: [],
+      show_loading: false
     };
   },
   mounted: function mounted() {
     this.getCalendars();
   },
+  components: {
+    LoadingComponent: _LoadingComponent_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
   methods: {
     getCalendars: function getCalendars() {
+      var _this2 = this;
+
       var _this = this;
 
+      this.show_loading = true;
       $.ajax({
-        url: '/calendars',
+        url: "/calendars",
         method: "GET",
         dataType: "JSON"
       }).done(function (response) {
         _this.calendars = response;
       }).fail(function (error) {
         console.error(error);
+      }).always(function () {
+        _this2.show_loading = false;
       });
     },
     redirectToEdit: function redirectToEdit(id) {
@@ -5321,10 +5338,13 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_CalendarsComponent_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/CalendarsComponent.vue */ "./resources/js/components/CalendarsComponent.vue");
+/* harmony import */ var _components_LoadingComponent_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/LoadingComponent.vue */ "./resources/js/components/LoadingComponent.vue");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
+
 window.Vue = (__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js")["default"]);
+Vue.component('loading-component', _components_LoadingComponent_vue__WEBPACK_IMPORTED_MODULE_1__["default"]);
 Vue.component('calendars-component', _components_CalendarsComponent_vue__WEBPACK_IMPORTED_MODULE_0__["default"]);
 $.ajaxSetup({
   headers: {
@@ -27630,10 +27650,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/stylus/styles.styl":
-/*!**************************************!*\
-  !*** ./resources/stylus/styles.styl ***!
-  \**************************************/
+/***/ "./resources/css/styles.styl":
+/*!***********************************!*\
+  !*** ./resources/css/styles.styl ***!
+  \***********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -27876,6 +27896,43 @@ component.options.__file = "resources/js/components/CalendarsComponent.vue"
 
 /***/ }),
 
+/***/ "./resources/js/components/LoadingComponent.vue":
+/*!******************************************************!*\
+  !*** ./resources/js/components/LoadingComponent.vue ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _LoadingComponent_vue_vue_type_template_id_8aebcde8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LoadingComponent.vue?vue&type=template&id=8aebcde8& */ "./resources/js/components/LoadingComponent.vue?vue&type=template&id=8aebcde8&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+var script = {}
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
+  script,
+  _LoadingComponent_vue_vue_type_template_id_8aebcde8___WEBPACK_IMPORTED_MODULE_0__.render,
+  _LoadingComponent_vue_vue_type_template_id_8aebcde8___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/LoadingComponent.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/components/CalendarsComponent.vue?vue&type=script&lang=js&":
 /*!*********************************************************************************!*\
   !*** ./resources/js/components/CalendarsComponent.vue?vue&type=script&lang=js& ***!
@@ -27909,6 +27966,23 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/LoadingComponent.vue?vue&type=template&id=8aebcde8&":
+/*!*************************************************************************************!*\
+  !*** ./resources/js/components/LoadingComponent.vue?vue&type=template&id=8aebcde8& ***!
+  \*************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LoadingComponent_vue_vue_type_template_id_8aebcde8___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LoadingComponent_vue_vue_type_template_id_8aebcde8___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LoadingComponent_vue_vue_type_template_id_8aebcde8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./LoadingComponent.vue?vue&type=template&id=8aebcde8& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/LoadingComponent.vue?vue&type=template&id=8aebcde8&");
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/CalendarsComponent.vue?vue&type=template&id=8f7b0d9a&":
 /*!******************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/CalendarsComponent.vue?vue&type=template&id=8f7b0d9a& ***!
@@ -27925,44 +27999,96 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
-    _c(
-      "div",
-      { staticClass: "row" },
-      _vm._l(_vm.calendars, function (calendar) {
-        return _c(
-          "div",
-          {
-            key: calendar.id,
-            staticClass: "col-3",
-            on: {
-              click: function ($event) {
-                return _vm.redirectToEdit(calendar.id)
+  return _c(
+    "div",
+    { staticClass: "container" },
+    [
+      _c(
+        "div",
+        { staticClass: "row" },
+        _vm._l(_vm.calendars, function (calendar) {
+          return _c(
+            "div",
+            {
+              key: calendar.id,
+              staticClass: "col-3",
+              on: {
+                click: function ($event) {
+                  return _vm.redirectToEdit(calendar.id)
+                },
               },
             },
-          },
-          [
-            _c("div", { staticClass: "card" }, [
-              _c("div", { staticClass: "card-header" }, [
-                _vm._v(_vm._s(calendar.title)),
+            [
+              _c("div", { staticClass: "card" }, [
+                _c("div", { staticClass: "card-header" }, [
+                  _vm._v(_vm._s(calendar.title)),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "card-body" }, [
+                  _vm._v(
+                    "\n          " +
+                      _vm._s(calendar.start_date) +
+                      " - " +
+                      _vm._s(calendar.end_date) +
+                      "\n        "
+                  ),
+                ]),
               ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "card-body" }, [
-                _vm._v(
-                  "\n          " +
-                    _vm._s(calendar.start_date) +
-                    " - " +
-                    _vm._s(calendar.end_date) +
-                    "\n        "
-                ),
-              ]),
-            ]),
-          ]
-        )
-      }),
-      0
-    ),
-  ])
+            ]
+          )
+        }),
+        0
+      ),
+      _vm._v(" "),
+      _vm.show_loading ? _c("loading-component") : _vm._e(),
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/LoadingComponent.vue?vue&type=template&id=8aebcde8&":
+/*!****************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/LoadingComponent.vue?vue&type=template&id=8aebcde8& ***!
+  \****************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "d-flex justify-content-center align-items-center" },
+    [
+      _c(
+        "div",
+        { staticClass: "mosaic-loader" },
+        [
+          _c("span"),
+          _c("span"),
+          _vm._v(" "),
+          _vm._l(4, function (j, index_j) {
+            return _vm._l(4, function (i, index_i) {
+              return _c("div", { class: "cell d-" + (index_i + index_j) })
+            })
+          }),
+        ],
+        2
+      ),
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -40315,7 +40441,7 @@ module.exports = JSON.parse('{"name":"axios","version":"0.21.4","description":"P
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
 /******/ 	__webpack_require__.O(undefined, ["css/app","css/styles"], () => (__webpack_require__("./resources/js/app.js")))
 /******/ 	__webpack_require__.O(undefined, ["css/app","css/styles"], () => (__webpack_require__("./resources/sass/app.scss")))
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/app","css/styles"], () => (__webpack_require__("./resources/stylus/styles.styl")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/app","css/styles"], () => (__webpack_require__("./resources/css/styles.styl")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

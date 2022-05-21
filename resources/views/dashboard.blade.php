@@ -12,5 +12,5 @@
     </form>
 
     <calendars-component></calendars-component>
-@endsection
 
+@endsection

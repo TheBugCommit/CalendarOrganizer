@@ -1,9 +1,11 @@
 require('./bootstrap');
 
 import CalendarsComponent from './components/CalendarsComponent.vue'
+import LoadingComponent from './components/LoadingComponent.vue'
 
 window.Vue = require('vue').default;
 
+Vue.component('loading-component', LoadingComponent);
 Vue.component('calendars-component', CalendarsComponent);
 
 $.ajaxSetup({
@@ -15,7 +17,6 @@ $.ajaxSetup({
 const app = new Vue({
     el: '#app',
     data: {
-
     },
 
     mounted() {

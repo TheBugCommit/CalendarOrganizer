@@ -1,7 +1,12 @@
 <template>
   <div class="container">
     <div class="row">
-      <div class="col-3" v-for="calendar in calendars" :key="calendar.id" @click="redirectToEdit(calendar.id)">
+      <div
+        class="col-3"
+        v-for="calendar in calendars"
+        :key="calendar.id"
+        @click="redirectToEdit(calendar.id)"
+      >
         <div class="card">
           <div class="card-header">{{ calendar.title }}</div>
           <div class="card-body">
@@ -10,14 +15,17 @@
         </div>
       </div>
     </div>
+    <loading-component v-if="show_loading" />
   </div>
 </template>
 
 <script>
+import LoadingComponent from "./LoadingComponent.vue";
 export default {
   data: function () {
     return {
       calendars: [],
+      show_loading: false,
     };
   },
 
@@ -25,23 +33,33 @@ export default {
     this.getCalendars();
   },
 
+  components: {
+    LoadingComponent,
+  },
+
   methods: {
     getCalendars() {
-      let _this = this
+      let _this = this;
+      this.show_loading = true;
       $.ajax({
-        url: '/calendars',
+        url: "/calendars",
         method: "GET",
         dataType: "JSON",
-      }).done(function (response) {
-          _this.calendars = response
-      }).fail(function(error) {
-          console.error(error)
-      });
+      })
+        .done(function (response) {
+          _this.calendars = response;
+        })
+        .fail(function (error) {
+          console.error(error);
+        })
+        .always(() => {
+          this.show_loading = false;
+        });
     },
 
-    redirectToEdit(id){
-        window.location.href = `/calendar_edit/${id}`
-    }
+    redirectToEdit(id) {
+      window.location.href = `/calendar_edit/${id}`;
+    },
   },
 };
 </script>

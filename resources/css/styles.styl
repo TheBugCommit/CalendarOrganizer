@@ -1,0 +1,84 @@
+@import './colors.styl';
+@import './mixins.styl';
+
+.mosaic-loader
+    --cell-size 10px
+    --cell-spacing 1px
+    --border-width 1px
+    --cells 4
+    --total-size calc(var(--cells) * (var(--cell-size) + 2 * var(--cell-spacing)))
+    display flex
+    flex-wrap wrap
+    width var(--total-size)
+    height var(--total-size)
+    position relative
+    -webkit-box-shadow: 0px 0px 0px 1px rgba(219,226,239,1);
+    -moz-box-shadow: 0px 0px 0px 1px rgba(219,226,239,1);
+    box-shadow: 0px 0px 0px 1px rgba(219,226,239,1);
+
+    & > .cell
+        flex 0 0 var(--cell-size)
+        margin var(--cell-spacing)
+        background-color transparent
+        box-sizing border-box
+        border var(--border-width) solid var(--cell-color)
+        animation 1.5s ripple ease infinite
+        &.d-1
+            animation-delay 100ms
+        &.d-2
+            animation-delay 200ms
+        &.d-3
+            animation-delay 300ms
+        &.d-4
+            animation-delay 400ms
+        &.d-5
+            animation-delay 500ms
+        &.d-6
+            animation-delay 600ms
+
+
+        for j in (1..4)
+            &:nth-of-type({j})
+                --cell-color: $red
+        for j in (5..8)
+            &:nth-of-type({j})
+                --cell-color: $green
+        for j in (9..12)
+            &:nth-of-type({j})
+                --cell-color: $yellow
+        for j in (13..16)
+            &:nth-of-type({j})
+                --cell-color: $greenyellow
+    &:after
+        content ''
+        position absolute
+        top -10px
+        left -1
+        width 104%
+        height 10px
+        background-color $grey
+        border-top-left-radius: 20%
+        border-top-right-radius: 20%
+
+    span
+        position absolute
+        top -6px
+        width 4px
+        height 4px
+        z-index 10
+        border-radius: 50%
+        border: 1px solid black
+        &:nth-child(1)
+            left 22%
+        &:nth-child(2)
+            left 71%
+
+@keyframes ripple
+    0%
+        background-color transparent
+    30%
+        background-color var(--cell-color)
+    60%
+        background-color transparent
+    100%
+        background-color transparent
