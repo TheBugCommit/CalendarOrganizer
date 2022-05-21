@@ -11,6 +11,6 @@
         <input type="submit" value="Add">
     </form>
 
-    <calendars-component></calendars-component>
-
+    <calendar-component v-for="calendar in calendars" :key="calendar.id" :calendar="calendar"></calendar-component>
+    <loading-component :loading="show_loading"/>
 @endsection
