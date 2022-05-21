@@ -3,6 +3,7 @@
 @section('title', 'Calendar')
 
 @section('content')
+    <calendar/>
 @endsection
 
 @section('js')

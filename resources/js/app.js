@@ -4,7 +4,9 @@ window.Vue = require('vue').default;
 
 import LoadingComponent from './components/LoadingComponent.vue'
 import CalendarComponent from './components/CalendarComponent.vue'
+import Calendar from './components/Calendar/Calendar.vue'
 
+Vue.component('calendar', Calendar);
 Vue.component('loading-component', LoadingComponent);
 Vue.component('calendar-component', CalendarComponent);
 
@@ -24,7 +26,7 @@ const app = new Vue({
             title: "",
             start_date: "",
             end_date: ""
-        }
+        },
     },
 
     mounted() {

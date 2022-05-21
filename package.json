@@ -26,6 +26,13 @@
         "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
-        "autoprefixer": "10.4.5"
+        "@fullcalendar/bootstrap5": "^5.11.0",
+        "@fullcalendar/core": "^5.11.0",
+        "@fullcalendar/daygrid": "^5.11.0",
+        "@fullcalendar/interaction": "^5.11.0",
+        "@fullcalendar/timegrid": "^5.11.0",
+        "@fullcalendar/vue": "^5.11.0",
+        "autoprefixer": "10.4.5",
+        "bootstrap-icons": "^1.8.2"
     }
 }
