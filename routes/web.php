@@ -3,7 +3,9 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EventController;
 use App\Http\Middleware\CalendarVerify;
+use App\Http\Middleware\EventVerify;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,7 +35,20 @@ Route::middleware(['auth'])->group(function(){
 
     Route::name('calendar.')->group(function(){
         Route::get('/calendars', [CalendarController::class,'index'])->name('all');
+
         Route::post('/calendar_store', [CalendarController::class, 'store'])->name('store');
-        Route::get('/calendar_edit/{id}', [CalendarController::class, 'edit'])->name('edit')->middleware(CalendarVerify::class);
+
+        Route::middleware(CalendarVerify::class)->group(function(){
+            Route::get('/calendar_edit/{id}', [CalendarController::class, 'edit'])->name('edit');
+            Route::get('/calendar_events', [CalendarController::class, 'getCalendarEvents'])->name('events');
+            Route::delete('/calendar_update/{id}', [CalendarController::class, 'update'])->name('update');
+            Route::delete('/calendar_destroy/{id}', [CalendarController::class, 'destory'])->name('destroy');
+            Route::post('/calendar_event_store', [EventController::class, 'store'])->name('event.store');
+        });
+
+        Route::middleware(EventVerify::class)->group(function () {
+            Route::patch('/calendar_event_update', [EventController::class, 'update'])->name('event.update');
+            Route::delete('/calendar_event_destroy', [EventController::class, 'destory'])->name('event.destroy');
+        });
     });
 });

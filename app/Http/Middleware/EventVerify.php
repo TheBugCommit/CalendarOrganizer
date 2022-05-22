@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class CalendarVerify
+class EventVerify
 {
     /**
      * Handle an incoming request.
@@ -17,14 +17,7 @@ class CalendarVerify
      */
     public function handle(Request $request, Closure $next)
     {
-        $id = null;
-
-        if(isset($request->calendar_id))
-            $id = $request->calendar_id;
-        else if(isset($request->id))
-            $id = $request->id;
-
-        if(!Auth::user()->hasCalendar($id))
+        if(!isset($request->id) || !Auth::user()->hasEvent($request->id))
             abort(401);
 
         return $next($request);

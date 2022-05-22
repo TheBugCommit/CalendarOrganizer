@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Event extends Model
 {
@@ -23,6 +24,15 @@ class Event extends Model
         'start_time',
         'end_time'
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        Event::creating(function ($model) {
+            $model->user_id = Auth::user()->id;
+        });
+    }
 
     public function calendar(){
         return $this->belongsTo(Calendar::class);

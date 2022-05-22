@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CalendarStoreRequest;
 use App\Models\Calendar;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use PDOException;
@@ -18,6 +19,25 @@ class CalendarController extends Controller
     public function index ()
     {
         return response()->json(Auth::user()->calendars);
+    }
+
+    /**
+     * Returns all events of calendar
+     *
+     * @param Request  $request
+     * @return JsonResponse
+     */
+    public function getCalendarEvents(Request $request){
+        if(!isset($request->id))
+            return response()->json(['message' => 'Missing parameters']);
+
+        try{
+            $calendar = Calendar::findOrFail($request->id);
+        }catch(ModelNotFoundException $mnf){
+            return response()->json(['message' => 'Calendar not found'], 404);
+        }
+
+        return response()->json($calendar->events);
     }
 
     /**
@@ -50,8 +70,9 @@ class CalendarController extends Controller
      */
     public function edit($id)
     {
-        $calendar = Calendar::find($id)->toArray();
-        return view('calendars.edit', compact('calendar'));
+        $calendar = Calendar::find($id);
+        $categories = Auth::user()->categories;
+        return view('calendars.edit', compact('calendar', 'categories'));
     }
 
     /**

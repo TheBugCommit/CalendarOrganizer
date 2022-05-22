@@ -30,6 +30,12 @@ const app = new Vue({
     },
 
     mounted() {
+
+        $("select").selectize({
+            create: false,
+            sortField: "text",
+        });
+
         if(this.currentRoute == '/')
             this.getCalendars()
     },

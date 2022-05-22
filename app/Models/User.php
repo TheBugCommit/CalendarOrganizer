@@ -83,4 +83,9 @@ class User extends Authenticatable
     {
         return $this->calendars()->where('id', $calendar_id)->exists();
     }
+
+    public function hasEvent($event_id)
+    {
+        return $this->events()->where('id', $event_id)->exists();
+    }
 }
