@@ -9,6 +9,8 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import timegridPlugin from "@fullcalendar/timegrid";
 import bootstrap5Plugin from "@fullcalendar/bootstrap5";
+import Swal from 'sweetalert2'
+
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
@@ -40,6 +42,7 @@ export default {
                 ],
                 eventDrop: this.handelEventDrop,
                 dateClick: this.handleDateClick,
+                eventClick: this.handleEventClick,
                 selectable: true,
                 allDaySlot: false,
                 initialDate: new Date(),
@@ -62,18 +65,41 @@ export default {
             $("#createEditEvent").modal("toggle");
         },
 
-        handelEventDrop(event) {
+        handelEventDrop(info ) {
             this.updateCalendarEvent({
-                id: event.event.id,
-                category_id: event.event.category_id,
-                calendar_id: event.event.calendar_id,
-                title: event.event.title,
-                description: event.event.description,
-                location: event.event.location,
-                color: event.event.color,
-                start_time: moment(event.event.start).format("YYYY-MM-DD hh:mm:ss"),
-                end_time: moment(event.event.end).format("YYYY-MM-DD hh:mm:ss"),
+                id: info.event.id,
+                category_id: info.event.category_id,
+                calendar_id: info.event.calendar_id,
+                title: info.event.title,
+                description: info.event.description,
+                location: info.event.location,
+                color: info.event.color,
+                start_time: moment(info.event.start).format("YYYY-MM-DD hh:mm:ss"),
+                end_time: moment(info.event.end).format("YYYY-MM-DD hh:mm:ss"),
             });
+        },
+
+        handleEventClick(eventClickInfo) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.destroyCalendarEvent(eventClickInfo.event.id)
+                    this.fullCalendar.getEventById(eventClickInfo.event.id).remove()
+                    Swal.fire(
+                    'Deleted!',
+                    'Event has been deleted.',
+                    'success'
+                    )
+                }
+            })
+
         },
 
         async getCalendarEvents() {
@@ -126,6 +152,21 @@ export default {
                 });
         },
 
+        destroyCalendarEvent(id){
+            let _this = this;
+
+            $.ajax({
+                url: route_events_destroy,
+                data: {id: id},
+                dataType: "JSON",
+                method: "DELETE",
+            }).done((response) => {
+                console.log(response);
+            }).fail((error) => {
+                console.error(error);
+            });
+        },
+
         addEvent(event) {
             this.fullCalendar.addEvent(this.parseEvent(event));
         },
@@ -134,10 +175,8 @@ export default {
             let _this = this;
             let data = {
                 calendar_id: _this.calendar.id,
-                category_id: 1,
-                description: "descripccio",
-                location: "Barcelona",
-                color: "red",
+                category_id: $('select[name="category_id"]').val(),
+                description: tinymce.activeEditor.getContent()
             };
             $("#createEditEvent input").each(function () {
                 data[$(this).attr("name")] = $(this).val();

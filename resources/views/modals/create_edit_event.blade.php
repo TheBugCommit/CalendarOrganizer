@@ -1,8 +1,8 @@
 <div class="modal fade" id="createEditEvent" tabindex="-1" aria-labelledby="createEditEventLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="createEditEventLabel">Modal title</h5>
+                <h5 class="modal-title" id="createEditEventLabel"></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -21,8 +21,13 @@
                     @endforeach
                 </select>
 
-                <textarea name="description"></textarea>
+                <textarea name="description" id="description"></textarea>
 
+                <label for="color">Color: </label>
+                <input type="text" id="color" class="color-field" name="color"  />
+
+                <label for="location">Location: </label>
+                <input type="text" name="location" id="location">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

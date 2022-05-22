@@ -24,7 +24,7 @@ class EventController extends Controller
         try {
             $event = Event::create($request->all());
         } catch (PDOException $pe) {
-            return response()->json(['message' => 'Can\'t create event' . $pe->getMessage()], 500);
+            return response()->json(['message' => 'Can\'t create event'], 500);
         }
 
         if (!$event)
@@ -59,7 +59,7 @@ class EventController extends Controller
         } catch (ModelNotFoundException  $mnf) {
             return response()->json(['message' => 'Event not found'], 404);
         } catch (PDOException $pdoe) {
-            return response()->json(['message' => 'Can\'t update event' . $pdoe->getMessage()], 500);
+            return response()->json(['message' => 'Can\'t update event'], 500);
         }
 
         return response()->json();

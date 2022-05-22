@@ -73,6 +73,20 @@
         &:nth-child(2)
             left 71%
 
+.clr-picker.clr-open, .clr-picker[data-inline=true]
+    z-index 9999
+
+.color-field
+    opacity 0
+    width 3rem
+
+button[aria-labelledby="clr-open-label"]
+    border-radius: 50%
+    width 1rem
+    height 1rem
+    position absolute
+    left 0.5rem
+
 @keyframes ripple
     0%
         background-color transparent

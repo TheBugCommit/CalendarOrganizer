@@ -48,7 +48,7 @@ Route::middleware(['auth'])->group(function(){
 
         Route::middleware(EventVerify::class)->group(function () {
             Route::patch('/calendar_event_update', [EventController::class, 'update'])->name('event.update');
-            Route::delete('/calendar_event_destroy', [EventController::class, 'destory'])->name('event.destroy');
+            Route::delete('/calendar_event_destroy', [EventController::class, 'destroy'])->name('event.destroy');
         });
     });
 });
