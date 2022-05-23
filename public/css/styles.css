@@ -133,6 +133,16 @@ button[aria-labelledby="clr-open-label"] {
   position: absolute;
   left: 0.5rem;
 }
+#eventEditTooltip {
+  display: none;
+}
+.tippy-box {
+  background-color: #ff6347;
+  color: #ff0;
+}
+.tippy-box > .tippy-svg-arrow {
+  fill: #ff6347;
+}
 @-webkit-keyframes ripple {
   0% {
     background-color: transparent;

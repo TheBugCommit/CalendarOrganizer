@@ -7,7 +7,8 @@
 @endsection
 
 @section('content')
-    @include('modals.create_edit_event')
+    @include('modals.create_event')
+    @include('modals.edit_event')
     <calendar/>
 @endsection
 
