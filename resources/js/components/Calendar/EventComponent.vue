@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import tippy, { createSingleton, roundArrow } from "tippy.js";
+import tippy, { roundArrow } from "tippy.js";
 import "tippy.js/dist/svg-arrow.css";
 import "tippy.js/animations/perspective.css";
 

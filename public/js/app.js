@@ -20901,8 +20901,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         console.error(error);
       });
     },
-    editEvent: function editEvent() {
-      $('#editEvent').modal('toggle');
+    editEvent: function editEvent(id) {
+      var event = this.fullCalendar.getEventById(id);
+      console.log(event);
+      $("#editEvent").modal("toggle");
     },
     deleteEvent: function deleteEvent(id) {
       var _this3 = this;

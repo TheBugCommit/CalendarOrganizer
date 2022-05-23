@@ -147,8 +147,10 @@ export default {
         });
     },
 
-    editEvent() {
-        $('#editEvent').modal('toggle')
+    editEvent(id) {
+      let event = this.fullCalendar.getEventById(id);
+      console.log(event)
+      $("#editEvent").modal("toggle");
     },
 
     deleteEvent(id) {
