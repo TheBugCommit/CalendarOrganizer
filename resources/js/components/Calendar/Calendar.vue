@@ -32,7 +32,8 @@ export default {
             calendarOptions: {
                 initialView: "dayGridMonth",
                 themeSystem: "bootstrap5",
-                timeZone: "Europe/Madrid",
+                timeZone: "local",
+                nextDayThreshold: '00:00',
                 editable: true,
                 droppable: true,
                 validRange: {
@@ -86,8 +87,8 @@ export default {
             this.selected_target = null
             this.selected_event = {
                 id: '',
-                category_id: '',
-                calendar_id: '',
+                category_id: null,
+                calendar_id: this.calendar.id,
                 title: '',
                 description: '',
                 location: '',
@@ -126,15 +127,21 @@ export default {
 
         storeCalendarEvent() {
             let _this = this;
-            //falta afegir calendar_id i calendar_category i modificar data a tostring
+
+            let event = {..._this.selected_event}
+
+            event.start = event.start instanceof moment ? event.start.format('YYYY-MM-DD hh:mm:ss') : event.start
+            event.end =  event.end instanceof moment ? event.end.format('YYYY-MM-DD hh:mm:ss') : event.end
+
             $.ajax({
                 url: route_events_store,
-                data: _this.selected_event,
+                data: event,
                 dataType: "JSON",
                 method: "POST",
             })
                 .done((response) => {
                     _this.addEvent(response);
+                    _this.$refs.eventManage.toggle()
                 })
                 .fail((error) => {
                     console.error(error);
@@ -142,19 +149,26 @@ export default {
         },
 
 
-        updateCalendarEvent() {
+        updateCalendarEvent(event = null) {
             let _this = this;
+
+            if(event == null)
+                event = {...this.selected_event}
+
+            event.start = event.start instanceof moment ? event.start.format('YYYY-MM-DD hh:mm:ss') : event.start
+            event.end =  event.end instanceof moment ? event.end.format('YYYY-MM-DD hh:mm:ss') : event.end
 
             $.ajax({
                 url: route_events_update,
-                data: _this.selected_event,
+                data: event,
                 dataType: "JSON",
                 method: "PATCH",
             })
                 .done((response) => {
-                    this.fullCalendar.getEventById(response.id).remove();
-                    this.fullCalendar.addEvent(response);
-                    console.log(response);
+                    _this.fullCalendar.getEventById(response.id).remove();
+                    _this.fullCalendar.addEvent(response);
+                    _this.$refs.eventManage.hide()
+
                 })
                 .fail((error) => {
                     console.error(error);
@@ -226,8 +240,8 @@ export default {
                 description: info.event.extendedProps.description,
                 location: info.event.extendedProps.location,
                 color: info.event.backgroundColor,
-                start: moment(info.event.start).format("YYYY-MM-DD hh:mm:ss"),
-                end: moment(info.event.end).format("YYYY-MM-DD hh:mm:ss")
+                start: moment(info.event.start).format('Y-MM-DD HH:mm:ss'),
+                end: moment(info.event.end).format('Y-MM-DD HH:mm:ss')
             }
         },
 

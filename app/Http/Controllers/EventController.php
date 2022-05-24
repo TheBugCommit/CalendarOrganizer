@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CalendarEventRequest;
 use App\Models\Event;
+use DateTime;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,8 +29,8 @@ class EventController extends Controller
 
         if (!$event)
             return response()->json(['message' => 'Can\'t create event'], 500);
-        else
-            return response()->json($event);
+
+        return response()->json($event);
     }
 
     /**

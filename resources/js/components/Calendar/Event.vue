@@ -10,13 +10,11 @@
                     <label for="title">Title: </label>
                     <input type="text" v-model="event.title" id="title">
 
-                    <label for="start">Start: </label>
-                    <input type="text" id="start">
+                    <label for="date-range">Date Range: </label>
+                    <input type="text" autocomplete="off" id="date-range">
 
-                    <label for="end">End: </label>
-                    <input type="text" id="end">
 
-                    <select v-model="event.category_id" id="categories">
+                    <select id="categories">
                         <option v-for="category in categories" :key="category.id" :value="category.id">
                             {{ category.name }}
                         </option>
@@ -26,7 +24,6 @@
 
                     <label for="color">Color: </label>
                     <button data-jscolor="{}" id="color"></button>
-                    <!--Falta color-->
 
                     <label for="location">Location: </label>
                     <input type="text" v-model="event.location" id="location">
@@ -55,6 +52,10 @@ export default {
             $('#manageEvent').modal('toggle')
         },
 
+        hide() {
+            $('#manageEvent').modal('hide')
+        },
+
         getUserCategories() {
             let _this = this;
 
@@ -65,9 +66,12 @@ export default {
             }).done((response) => {
                 _this.categories = response
                 _this.$nextTick(function () {
-                    $("select").selectize({
+                    $("#categories").selectize({
                         create: false,
                         sortField: "text",
+                        onChange: function (value) {
+                            _this.event.category_id = value
+                        }
                     })
                 })
             }).fail((response) => {
@@ -93,8 +97,21 @@ export default {
 
     watch: {
         event: function (value) {
-            if (value != null)
+            let _this = this
+            if (value != null) {
                 tinymce.get('description').setContent(value.description)
+                $("#categories")[0].selectize.setValue(_this.editing ? value.category_id : null)
+                $('#date-range').data('daterangepicker').setStartDate(_this.editing ? value.start : moment())
+                $('#date-range').data('daterangepicker').setEndDate(_this.editing ? value.end : moment())
+                if (_this.editing) {
+                    _this.event.start = $('#date-range').data('daterangepicker').startDate
+                    _this.event.end = $('#date-range').data('daterangepicker').endDate
+                    $('#date-range').val($('#date-range').data('daterangepicker').startDate.format('YYYY-MM-DD hh:mm:ss') + ' - ' + $('#date-range').data('daterangepicker').endDate.format('YYYY-MM-DD hh:mm:ss'));
+                    document.querySelector('#color').jscolor.fromString(_this.event.color)
+                } else {
+                    document.querySelector('#color').jscolor.fromRGBA(255, 255, 255, 0)
+                }
+            }
         }
     },
 
@@ -116,32 +133,34 @@ export default {
                 _this.event.description = tinymce.activeEditor.getContent()
             })
         });
+
         const config = {
-            "singleDatePicker": true,
-            "showDropdowns": true,
-            "timePicker": true,
+            timePicker: true,
             "timePicker24Hour": true,
-            "linkedCalendars": false,
-            "showCustomRangeLabel": false,
             "autoUpdateInput": false,
             "minDate": moment([moment().year()]).clone().format("YYYY-MM-DD hh:mm:ss"),
             "maxDate": moment([moment().year()]).clone().endOf("year").format("YYYY-MM-DD hh:mm:ss"),
-            //"buttonClasses": "btn btn-smd",
-            //"applyButtonClasses": "btn-primaryd",
-            //"cancelClass": "btn-defaulta"
+            "showDropdowns": true,
+            locale: {
+                format: 'YYYY-MM-DD hh:mm:ss'
+            }
         }
 
-        $('#start').daterangepicker(config, function (start, end, label) {
-            _this.event.start = start
-        });
+        $('#date-range').daterangepicker(config);
+        $('#date-range').on('apply.daterangepicker', function (ev, picker) {
+            if (!picker.startDate.isSame(picker.endDate)) {
 
-        $('#end').daterangepicker(config, function (start, end, label) {
-            _this.event.end = start
-        });
+                if (picker.startDate.format('HH:mm') == '00:00') {
+                    picker.endDate.add('days', 1);
+                }
 
-        $('#start,#end').on('apply.daterangepicker', function (ev, picker) {
-            $(this).val(picker.startDate.format('YYYY-MM-DD hh:mm:ss'))
-        });
+                $('#date-range').val($('#date-range').data('daterangepicker').startDate.format('YYYY-MM-DD hh:mm:ss') + ' - ' + $('#date-range').data('daterangepicker').endDate.format('YYYY-MM-DD hh:mm:ss'));
+                _this.event.start = picker.startDate
+                _this.event.end = picker.endDate
+            } else {
+                console.log('this dates are the same')
+            }
+        })
 
         jscolor.presets.default = {
             format: 'hex',
@@ -151,13 +170,16 @@ export default {
                 '#ffffff', '#c3c3c3', '#b87957', '#feaec9', '#ffc80d',
                 '#eee3af', '#b5e61d', '#99d9ea', '#7092be', '#c8bfe7',
             ],
-            paletteCols:11,
-            hideOnPaletteClick:true,
-            onChange: function(){ _this.event.color = this.toHEXString() }
+            paletteCols: 11,
+            hideOnPaletteClick: true,
+            onChange: function () { _this.event.color = this.toHEXString() }
         };
 
-        jscolor.install();
-        document.querySelector('#color').jscolor.fromString(_this.event.color)
+        $('#manageEvent').on('hidden.bs.modal', function(){
+            Object.keys(_this.event).forEach(key => {
+                _this.event[key] = ''
+            })
+        })
     }
 };
 </script>
