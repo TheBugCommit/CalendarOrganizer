@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CalendarController;
-use App\Http\Controllers\CalendarHelpersController;
+//use App\Http\Controllers\CalendarHelpersController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\MailerController;
@@ -38,6 +38,7 @@ Route::middleware(['auth'])->group(function(){
 
     Route::name('user.')->group(function () {
         Route::get('/categories', [UserController::class, 'getCategories'])->name('categories');
+        Route::get('/become_calendar_helper/{jwt}', [UserController::class, 'becomeHelper'])->name('become.helper');
     });
 
     Route::name('email.')->group(function () {
@@ -50,10 +51,12 @@ Route::middleware(['auth'])->group(function(){
         Route::post('/calendar_store', [CalendarController::class, 'store'])->name('store');
 
         Route::name('helpers.')->group(function () {
-            Route::get('/calendar_helpers/{calendar_id}', [CalendarHelpersController::class, 'index'])->name('index');
+            Route::get('/addHelpers', [CalendarController::class, 'addHelpers'])->name('add');
+            /*   Route::get('/calendar_helpers/{calendar_id}', [CalendarHelpersController::class, 'index'])->name('index');
             Route::get('/calendar_get_helpers/{calendar_id}', [CalendarHelpersController::class, 'getHelpers'])->name('all');
             Route::post('/calendar_add_helper', [CalendarHelpersController::class, 'addHelper'])->name('add');
             Route::delete('/calendar_delete_helper', [CalendarHelpersController::class, 'removeHelper'])->name('remove');
+            */
         });
 
         Route::middleware(CalendarVerify::class)->group(function(){

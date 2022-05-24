@@ -65,7 +65,7 @@ class AuthController extends Controller
 
         Log::info("User $user->id logged at " . Carbon::now());
 
-        return redirect()->route('dashboard');
+        return redirect()->intended('/');
     }
 
     /**
@@ -86,7 +86,7 @@ class AuthController extends Controller
             Log::error($e->getMessage());
         }
 
-        return $user ? redirect()->route('dashboard') : back()->withErrors(['errors' => 'Can\'t register user something went wrong'])->withInput();
+        return $user ? redirect()->intended('/') : back()->withErrors(['errors' => 'Can\'t register user something went wrong'])->withInput();
     }
 
     /**

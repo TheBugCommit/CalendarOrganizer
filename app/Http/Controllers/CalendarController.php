@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\Mailer;
 use App\Http\Requests\CalendarStoreRequest;
 use App\Models\Calendar;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use PDOException;
+use JWTFactory;
+use JWTAuth;
+use Tymon\JWTAuth\JWT;
+use Tymon\JWTAuth\Manager;
 
 class CalendarController extends Controller
 {
@@ -16,7 +21,7 @@ class CalendarController extends Controller
      *
      * @return ResponseJson
      */
-    public function index ()
+    public function index()
     {
         return response()->json(Auth::user()->calendars);
     }
@@ -27,13 +32,14 @@ class CalendarController extends Controller
      * @param Request  $request
      * @return JsonResponse
      */
-    public function getCalendarEvents(Request $request){
-        if(!isset($request->id))
+    public function getCalendarEvents(Request $request)
+    {
+        if (!isset($request->id))
             return response()->json(['message' => 'Missing parameters']);
 
-        try{
+        try {
             $calendar = Calendar::findOrFail($request->id);
-        }catch(ModelNotFoundException $mnf){
+        } catch (ModelNotFoundException $mnf) {
             return response()->json(['message' => 'Calendar not found'], 404);
         }
 
@@ -50,13 +56,13 @@ class CalendarController extends Controller
     {
         $calendar = null;
 
-        try{
+        try {
             $calendar = Calendar::create($request->all());
-        }catch(PDOException $pe){
+        } catch (PDOException $pe) {
             return response()->json(['message' => 'Can\'t create calendar'], 500);
         }
 
-        if(!$calendar)
+        if (!$calendar)
             return response()->json(['message' => 'Can\'t create calendar'], 500);
         else
             return response()->json($calendar);
@@ -95,6 +101,38 @@ class CalendarController extends Controller
      */
     public function destroy($id)
     {
+    }
 
+
+    /**
+     * Send mail to the assistants, requesting that they join the calendar
+     *
+     * @param Request  $request
+     * @return JsonResponse
+     */
+    public function addHelpers(Request $request, JWT $jwt)
+    {
+        //  $jwt->invalidate();
+        //dd($jwt->checkOrFail());
+        foreach ($request->users_email as $user) {
+            $customClaims = ['calendar_id' => $request->calendar_id, 'user_email' => $user];
+
+            $factory = JWTFactory::addClaims($customClaims);
+            $payload = $factory->make();
+            $token = JWTAuth::encode($payload);
+
+            try {
+                Mailer::send(
+                    ((object)[
+                        'view' => 'calendars.helpers_edit',
+                        'subject' => 'Invitation to be part of a calendar',
+                        'recipients' => [$user],
+                        'view_data' => ['token' => $token]
+                    ])
+                );
+            } catch (Exception $ex) {
+                //afegir correus que no s'han pogut enviar
+            }
+        }
     }
 }

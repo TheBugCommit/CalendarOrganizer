@@ -16,4 +16,12 @@ class UserController extends Controller
     {
         return response()->json(Auth::user()->categories);
     }
+
+    /**
+     *
+     */
+    public function becomeHelper(Request $request)
+    {
+
+    }
 }
