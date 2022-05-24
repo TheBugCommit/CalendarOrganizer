@@ -78,9 +78,9 @@ export default {
 
         saveEvent() {
             if (this.editing)
-                this.$parent.updateCalendarEvent(this.event)
+                this.$parent.updateCalendarEvent()
             else
-                this.$parent.storeCalendarEvent(this.event)
+                this.$parent.storeCalendarEvent()
         }
 
     },

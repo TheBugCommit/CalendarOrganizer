@@ -124,12 +124,12 @@ export default {
             return [];
         },
 
-        storeCalendarEvent(event) {
+        storeCalendarEvent() {
             let _this = this;
-
+            //falta afegir calendar_id i calendar_category i modificar data a tostring
             $.ajax({
                 url: route_events_store,
-                data: event,
+                data: _this.selected_event,
                 dataType: "JSON",
                 method: "POST",
             })
@@ -142,12 +142,12 @@ export default {
         },
 
 
-        updateCalendarEvent(event) {
+        updateCalendarEvent() {
             let _this = this;
 
             $.ajax({
                 url: route_events_update,
-                data: event,
+                data: _this.selected_event,
                 dataType: "JSON",
                 method: "PATCH",
             })

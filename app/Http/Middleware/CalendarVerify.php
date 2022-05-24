@@ -19,13 +19,13 @@ class CalendarVerify
     {
         $id = null;
 
-        if(isset($request->calendar_id))
+        /*if(isset($request->calendar_id))
             $id = $request->calendar_id;
         else if(isset($request->id))
             $id = $request->id;
 
         if(!Auth::user()->hasCalendar($id))
-            abort(401);
+            abort(401);*/
 
         return $next($request);
     }

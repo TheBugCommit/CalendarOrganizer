@@ -75,7 +75,7 @@ CREATE TABLE events (
 
 CREATE TABLE targets (
   calendar_id bigint(20) unsigned NOT NULL,
-  email varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  email varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   CONSTRAINT pk_targets PRIMARY KEY (calendar_id,email),
   CONSTRAINT targets_calendar_id_foreign FOREIGN KEY (calendar_id) REFERENCES calendars (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

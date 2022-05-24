@@ -20879,12 +20879,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee, null, [[1, 7]]);
       }))();
     },
-    storeCalendarEvent: function storeCalendarEvent(event) {
-      var _this = this;
+    storeCalendarEvent: function storeCalendarEvent() {
+      var _this = this; //falta afegir calendar_id i calendar_category i modificar data a tostring
+
 
       $.ajax({
         url: route_events_store,
-        data: event,
+        data: _this.selected_event,
         dataType: "JSON",
         method: "POST"
       }).done(function (response) {
@@ -20893,14 +20894,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         console.error(error);
       });
     },
-    updateCalendarEvent: function updateCalendarEvent(event) {
+    updateCalendarEvent: function updateCalendarEvent() {
       var _this3 = this;
 
       var _this = this;
 
       $.ajax({
         url: route_events_update,
-        data: event,
+        data: _this.selected_event,
         dataType: "JSON",
         method: "PATCH"
       }).done(function (response) {
@@ -21133,7 +21134,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     saveEvent: function saveEvent() {
-      if (this.editing) this.$parent.updateCalendarEvent(this.event);else this.$parent.storeCalendarEvent(this.event);
+      if (this.editing) this.$parent.updateCalendarEvent();else this.$parent.storeCalendarEvent();
     }
   },
   computed: {

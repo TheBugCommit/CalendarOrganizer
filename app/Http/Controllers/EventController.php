@@ -23,7 +23,7 @@ class EventController extends Controller
         try {
             $event = Event::create($request->all());
         } catch (PDOException $pe) {
-            return response()->json(['message' => 'Can\'t create event'], 500);
+            return response()->json(['message' => 'Can\'t create event' . $pe->getMessage()], 500);
         }
 
         if (!$event)
