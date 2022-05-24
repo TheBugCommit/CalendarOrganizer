@@ -72,7 +72,7 @@ class CalendarController extends Controller
     {
         $calendar = Calendar::find($id);
         $categories = Auth::user()->categories;
-        return view('calendars.edit', compact('calendar', 'categories'));
+        return view('calendars.calendars_edit', compact('calendar', 'categories'));
     }
 
     /**

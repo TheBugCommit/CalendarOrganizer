@@ -4,6 +4,9 @@
 
 @section('content')
     <calendar/>
+
+    <a class="btn btn-primary" href="{{ route('calendar.helpers.index', ['calendar_id' => $calendar->id]) }}">Manage Helpers</a>
+
 @endsection
 
 @section('js')
