@@ -21,8 +21,8 @@ class Event extends Model
         'location',
         'published',
         'color',
-        'start_time',
-        'end_time'
+        'start',
+        'end'
     ];
 
     protected static function boot()

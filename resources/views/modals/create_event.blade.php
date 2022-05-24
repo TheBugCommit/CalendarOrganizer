@@ -9,11 +9,11 @@
                 <label for="title">Title: </label>
                 <input type="text" name="title" id="title">
 
-                <label for="start_time">Start: </label>
-                <input type="datetime-local" name="start_time" id="start_time">
+                <label for="start">Start: </label>
+                <input type="datetime-local" name="start" id="start">
 
-                <label for="end_time">End: </label>
-                <input type="datetime-local" name="end_time" id="end_time">
+                <label for="end">End: </label>
+                <input type="datetime-local" name="end" id="end">
 
                 <select name="category_id">
                     @foreach ($categories as $category)

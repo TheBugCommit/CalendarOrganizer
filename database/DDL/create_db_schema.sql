@@ -61,8 +61,8 @@ CREATE TABLE events (
   location varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL,
   published tinyint(1) NOT NULL DEFAULT 0,
   color varchar(7) COLLATE utf8mb4_unicode_ci NOT NULL,
-  start_time datetime NOT NULL,
-  end_time datetime NOT NULL,
+  start datetime NOT NULL,
+  end datetime NOT NULL,
   CONSTRAINT pk_events PRIMARY KEY (id),
   KEY events_user_id_foreign (user_id),
   KEY events_calendar_id_foreign (calendar_id),
@@ -116,7 +116,7 @@ CREATE TABLE migrations (
 
 -- Migrations initialization
 
-INSERT INTO migrations (migration, batch) VALUES 
+INSERT INTO migrations (migration, batch) VALUES
 ('2019_12_14_000001_create_personal_access_tokens_table',1),
 ('2022_05_18_000001_create_nations_table',1),
 ('2022_05_18_000002_create_users_table',1),

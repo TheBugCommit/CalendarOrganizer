@@ -20,7 +20,6 @@ class EventController extends Controller
     public function store(CalendarEventRequest $request) // TODO request validation
     {
         $event = null;
-
         try {
             $event = Event::create($request->all());
         } catch (PDOException $pe) {
@@ -41,6 +40,8 @@ class EventController extends Controller
      */
     public function update(CalendarEventRequest $request)
     {
+        $event = null;
+
         try {
             $event = Event::findOrFail($request->id);
 
@@ -48,21 +49,21 @@ class EventController extends Controller
             $event->category_id = $request->category_id ?? $event->category_id;
             $event->user_id     = $request->user_id ?? $event->user_id;
             $event->title       = $request->title ?? $event->title;
-            $event->description = $request->description ?? $event->description;
+            $event->description = $request->description == null ? '' : $request->description;
             $event->location    = $request->location ?? $event->location;
             $event->published   = $request->published ?? $event->published;
             $event->color       = $request->color ?? $event->color;
-            $event->start_time  = $request->start_time ?? $event->start_time;
-            $event->end_time    = $request->end_time ?? $event->end_time;
+            $event->start       = $request->start ?? $event->start;
+            $event->end         = $request->end ?? $event->end;
 
             $event->save();
         } catch (ModelNotFoundException  $mnf) {
             return response()->json(['message' => 'Event not found'], 404);
         } catch (PDOException $pdoe) {
-            return response()->json(['message' => 'Can\'t update event'], 500);
+            return response()->json(['message' => 'Can\'t update event' . $pdoe->getMessage()], 500);
         }
 
-        return response()->json();
+        return response()->json($event);
     }
 
     /**

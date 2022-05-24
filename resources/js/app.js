@@ -30,52 +30,8 @@ const app = new Vue({
     },
 
     mounted() {
-
-        $("select").selectize({
-            create: false,
-            sortField: "text",
-        })
-
-
         if (this.currentRoute == '/')
             this.getCalendars()
-
-        if (typeof tinymce !== 'undefined') {
-            tinymce.init({
-                selector: 'textarea',
-                menubar: false,
-                resize: false,
-                plugins: [
-                    'lists emoticons'
-                ],
-                toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | ' +
-                    'bullist numlist outdent indent ' +
-                    'forecolor backcolor emoticons',
-            });
-        }
-
-        if (typeof Coloris !== 'undefined') {
-            Coloris({
-                el: '.color-field',
-                themeMode: 'auto',
-                alpha: false,
-                wrap: true,
-                swatches: [
-                    '#FF0000',
-                    '#00FFFF',
-                    '#800080',
-                    '#FFFF00',
-                    '#00FF00',
-                    '#FF00FF',
-                    '#FFC0CB',
-                    '#808080',
-                    '#FFA500',
-                    '#008000',
-                    '#7FFD4',
-                    '#A52A2A'
-                ],
-            });
-        }
     },
 
     created() {

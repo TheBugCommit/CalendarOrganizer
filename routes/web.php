@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\UserController;
 use App\Http\Middleware\CalendarVerify;
 use App\Http\Middleware\EventVerify;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,10 @@ Route::middleware(['guest'])->group(function(){
 
 Route::middleware(['auth'])->group(function(){
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::name('user.')->group(function () {
+        Route::get('/categories', [UserController::class, 'getCategories'])->name('categories');
+    });
 
     Route::name('calendar.')->group(function(){
         Route::get('/calendars', [CalendarController::class,'index'])->name('all');

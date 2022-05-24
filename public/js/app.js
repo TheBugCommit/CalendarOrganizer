@@ -20733,9 +20733,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _fullcalendar_bootstrap5__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @fullcalendar/bootstrap5 */ "./node_modules/@fullcalendar/bootstrap5/main.js");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _EventComponent_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./EventComponent.vue */ "./resources/js/components/Calendar/EventComponent.vue");
-/* harmony import */ var bootstrap_dist_css_bootstrap_css__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! bootstrap/dist/css/bootstrap.css */ "./node_modules/bootstrap/dist/css/bootstrap.css");
-/* harmony import */ var bootstrap_icons_font_bootstrap_icons_css__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! bootstrap-icons/font/bootstrap-icons.css */ "./node_modules/bootstrap-icons/font/bootstrap-icons.css");
+/* harmony import */ var _EventPopup_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./EventPopup.vue */ "./resources/js/components/Calendar/EventPopup.vue");
+/* harmony import */ var _Event_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Event.vue */ "./resources/js/components/Calendar/Event.vue");
+/* harmony import */ var bootstrap_dist_css_bootstrap_css__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! bootstrap/dist/css/bootstrap.css */ "./node_modules/bootstrap/dist/css/bootstrap.css");
+/* harmony import */ var bootstrap_icons_font_bootstrap_icons_css__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! bootstrap-icons/font/bootstrap-icons.css */ "./node_modules/bootstrap-icons/font/bootstrap-icons.css");
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return generator._invoke = function (innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; }(innerFn, self, context), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; this._invoke = function (method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); }; } function maybeInvokeDelegate(delegate, context) { var method = delegate.iterator[context.method]; if (undefined === method) { if (context.delegate = null, "throw" === context.method) { if (delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel; context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method"); } return ContinueSentinel; } var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) { if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; } return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (object) { var keys = []; for (var key in object) { keys.push(key); } return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) { "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); } }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, "catch": function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
@@ -20744,19 +20745,15 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+//
+//
+//
+//
+//
+//
+//
+//
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -20770,7 +20767,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
     FullCalendar: _fullcalendar_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
-    Event: _EventComponent_vue__WEBPACK_IMPORTED_MODULE_7__["default"]
+    EventPopup: _EventPopup_vue__WEBPACK_IMPORTED_MODULE_7__["default"],
+    Event: _Event_vue__WEBPACK_IMPORTED_MODULE_8__["default"]
   },
   data: function data() {
     return {
@@ -20781,8 +20779,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         editable: true,
         droppable: true,
         validRange: {
-          start: moment([moment().year()]).clone().format("YYYY-MM-DD"),
-          end: moment([moment().year()]).clone().endOf("year").format("YYYY-MM-DD")
+          start: moment([moment().year()]).clone().format("YYYY-MM-DD hh:mm:ss"),
+          end: moment([moment().year()]).clone().endOf("year").format("YYYY-MM-DD hh:mm:ss")
         },
         plugins: [_fullcalendar_daygrid__WEBPACK_IMPORTED_MODULE_2__["default"], _fullcalendar_interaction__WEBPACK_IMPORTED_MODULE_3__["default"], _fullcalendar_timegrid__WEBPACK_IMPORTED_MODULE_4__["default"], _fullcalendar_bootstrap5__WEBPACK_IMPORTED_MODULE_5__["default"]],
         eventDrop: this.handelEventDrop,
@@ -20800,37 +20798,45 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       },
       fullCalendar: null,
       calendar: {},
-      selected_event: null,
-      selected_target: null
+      selected_event: {
+        id: '',
+        category_id: '',
+        calendar_id: '',
+        title: '',
+        description: '',
+        location: '',
+        color: '',
+        start: '',
+        end: ''
+      },
+      selected_target: null,
+      user_id: auth_user_id,
+      event_editing: false
     };
   },
   methods: {
     handleDateClick: function handleDateClick(date) {
-      $("#createEvent #start_time").val(moment());
-      $("#createEvent #end_time").val(moment().add(1, "hours"));
-      $("#createEvent").modal("toggle");
+      this.event_editing = false;
+      this.selected_target = null;
+      this.selected_event = {
+        id: '',
+        category_id: '',
+        calendar_id: '',
+        title: '',
+        description: '',
+        location: '',
+        color: '',
+        start: '',
+        end: ''
+      };
+      this.$refs.eventManage.toggle();
     },
     handelEventDrop: function handelEventDrop(info) {
-      this.updateCalendarEvent({
-        id: info.event.id,
-        category_id: info.event.category_id,
-        calendar_id: info.event.calendar_id,
-        title: info.event.title,
-        description: info.event.description,
-        location: info.event.location,
-        color: info.event.color,
-        start_time: moment(info.event.start).format("YYYY-MM-DD hh:mm:ss"),
-        end_time: moment(info.event.end).format("YYYY-MM-DD hh:mm:ss")
-      });
+      this.updateCalendarEvent(this.extractEventData(info));
     },
     handleEventClick: function handleEventClick(eventClickInfo) {
-      var event = _objectSpread({}, eventClickInfo.event.extendedProps);
-
-      event.id = eventClickInfo.event.id;
-      event.start = eventClickInfo.event.start;
-      event.end = eventClickInfo.event.end;
-      event.title = eventClickInfo.event.title;
-      this.selected_event = event;
+      this.event_editing = true;
+      this.selected_event = this.extractEventData(eventClickInfo);
       this.selected_target = this.getPath($(eventClickInfo.el));
     },
     getCalendarEvents: function getCalendarEvents() {
@@ -20873,12 +20879,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }, _callee, null, [[1, 7]]);
       }))();
     },
-    storeCalendarEvent: function storeCalendarEvent() {
+    storeCalendarEvent: function storeCalendarEvent(event) {
       var _this = this;
 
       $.ajax({
         url: route_events_store,
-        data: this.getEventData(),
+        data: event,
         dataType: "JSON",
         method: "POST"
       }).done(function (response) {
@@ -20888,6 +20894,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     updateCalendarEvent: function updateCalendarEvent(event) {
+      var _this3 = this;
+
       var _this = this;
 
       $.ajax({
@@ -20896,18 +20904,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         dataType: "JSON",
         method: "PATCH"
       }).done(function (response) {
+        _this3.fullCalendar.getEventById(response.id).remove();
+
+        _this3.fullCalendar.addEvent(response);
+
         console.log(response);
       }).fail(function (error) {
         console.error(error);
       });
     },
     editEvent: function editEvent(id) {
-      var event = this.fullCalendar.getEventById(id);
-      console.log(event);
-      $("#editEvent").modal("toggle");
+      this.$refs.eventManage.toggle();
     },
     deleteEvent: function deleteEvent(id) {
-      var _this3 = this;
+      var _this4 = this;
 
       sweetalert2__WEBPACK_IMPORTED_MODULE_6___default().fire({
         title: "Are you sure?",
@@ -20919,9 +20929,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         confirmButtonText: "Yes, delete it!"
       }).then(function (result) {
         if (result.isConfirmed) {
-          _this3.destroyEventRequest(id);
+          _this4.destroyEventRequest(id);
 
-          _this3.fullCalendar.getEventById(id).remove();
+          _this4.fullCalendar.getEventById(id).remove();
 
           sweetalert2__WEBPACK_IMPORTED_MODULE_6___default().fire("Deleted!", "Event has been deleted.", "success");
         }
@@ -20944,7 +20954,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     addEvent: function addEvent(event) {
-      this.fullCalendar.addEvent(this.parseEvent(event));
+      this.fullCalendar.addEvent(event);
     },
     getEventData: function getEventData() {
       var _this = this;
@@ -20959,21 +20969,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
       return data;
     },
-    parseEvents: function parseEvents(events) {
-      var _this4 = this;
-
-      return Array.isArray(events) ? events.map(function (elem) {
-        return _this4.parseEvent(elem);
-      }) : [];
-    },
-    parseEvent: function parseEvent(event) {
-      var obj = _objectSpread({}, event);
-
-      delete obj.start_time;
-      delete obj.end_time;
-      obj.start = event.start_time;
-      obj.end = event.end_time;
-      return obj;
+    extractEventData: function extractEventData(info) {
+      return {
+        id: info.event.id,
+        category_id: info.event.extendedProps.category_id,
+        calendar_id: info.event.extendedProps.calendar_id,
+        title: info.event.title,
+        description: info.event.extendedProps.description,
+        location: info.event.extendedProps.location,
+        color: info.event.backgroundColor,
+        start: moment(info.event.start).format("YYYY-MM-DD hh:mm:ss"),
+        end: moment(info.event.end).format("YYYY-MM-DD hh:mm:ss")
+      };
     },
     getPath: function getPath(node) {
       var path;
@@ -21022,7 +21029,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
               case 2:
                 events = _context2.sent;
-                _this.calendar.events = _this.parseEvents(events);
+                _this.calendar.events = events;
 
                 _this.fullCalendar.addEventSource(_this.calendar.events);
 
@@ -21039,10 +21046,164 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Calendar/EventComponent.vue?vue&type=script&lang=js&":
-/*!******************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Calendar/EventComponent.vue?vue&type=script&lang=js& ***!
-  \******************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Calendar/Event.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Calendar/Event.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: ["event", 'editing'],
+  data: function data() {
+    return {
+      categories: null
+    };
+  },
+  methods: {
+    toggle: function toggle() {
+      $('#manageEvent').modal('toggle');
+    },
+    getUserCategories: function getUserCategories() {
+      var _this = this;
+
+      $.ajax({
+        url: route_user_categories,
+        dataType: "JSON",
+        method: 'GET'
+      }).done(function (response) {
+        _this.categories = response;
+
+        _this.$nextTick(function () {
+          $("select").selectize({
+            create: false,
+            sortField: "text"
+          });
+        });
+      }).fail(function (response) {
+        _this.categories = _this.categories || [];
+        console.log(response);
+      });
+    },
+    saveEvent: function saveEvent() {
+      if (this.editing) this.$parent.updateCalendarEvent(this.event);else this.$parent.storeCalendarEvent(this.event);
+    }
+  },
+  computed: {
+    title: function title() {
+      return this.editing ? 'Editing Event' : 'Creating Event';
+    }
+  },
+  watch: {
+    event: function event(value) {
+      if (value != null) tinymce.get('description').setContent(value.description);
+    }
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    this.getUserCategories();
+    tinymce.init({
+      selector: 'textarea',
+      menubar: false,
+      resize: false,
+      plugins: ['lists emoticons'],
+      toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | ' + 'bullist numlist outdent indent ' + 'forecolor backcolor emoticons'
+    }).then(function (instance) {
+      instance[0].on('keyup', function () {
+        _this.event.description = tinymce.activeEditor.getContent();
+      });
+    });
+    var config = {
+      "singleDatePicker": true,
+      "showDropdowns": true,
+      "timePicker": true,
+      "timePicker24Hour": true,
+      "linkedCalendars": false,
+      "showCustomRangeLabel": false,
+      "autoUpdateInput": false,
+      "minDate": moment([moment().year()]).clone().format("YYYY-MM-DD hh:mm:ss"),
+      "maxDate": moment([moment().year()]).clone().endOf("year").format("YYYY-MM-DD hh:mm:ss") //"buttonClasses": "btn btn-smd",
+      //"applyButtonClasses": "btn-primaryd",
+      //"cancelClass": "btn-defaulta"
+
+    };
+    $('#start').daterangepicker(config, function (start, end, label) {
+      _this.event.start = start;
+    });
+    $('#end').daterangepicker(config, function (start, end, label) {
+      _this.event.end = start;
+    });
+    $('#start,#end').on('apply.daterangepicker', function (ev, picker) {
+      $(this).val(picker.startDate.format('YYYY-MM-DD hh:mm:ss'));
+    });
+    jscolor.presets["default"] = {
+      format: 'hex',
+      palette: ['#000000', '#7d7d7d', '#870014', '#ec1c23', '#ff7e26', '#fef100', '#22b14b', '#00a1e7', '#3f47cc', '#a349a4', '#ffffff', '#c3c3c3', '#b87957', '#feaec9', '#ffc80d', '#eee3af', '#b5e61d', '#99d9ea', '#7092be', '#c8bfe7'],
+      paletteCols: 11,
+      hideOnPaletteClick: true,
+      onChange: function onChange() {
+        _this.event.color = this.toHEXString();
+      }
+    };
+    jscolor.install();
+    document.querySelector('#color').jscolor.fromString(_this.event.color);
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Calendar/EventPopup.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Calendar/EventPopup.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -21223,31 +21384,7 @@ var app = new Vue({
     }
   },
   mounted: function mounted() {
-    $("select").selectize({
-      create: false,
-      sortField: "text"
-    });
     if (this.currentRoute == '/') this.getCalendars();
-
-    if (typeof tinymce !== 'undefined') {
-      tinymce.init({
-        selector: 'textarea',
-        menubar: false,
-        resize: false,
-        plugins: ['lists emoticons'],
-        toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | ' + 'bullist numlist outdent indent ' + 'forecolor backcolor emoticons'
-      });
-    }
-
-    if (typeof Coloris !== 'undefined') {
-      Coloris({
-        el: '.color-field',
-        themeMode: 'auto',
-        alpha: false,
-        wrap: true,
-        swatches: ['#FF0000', '#00FFFF', '#800080', '#FFFF00', '#00FF00', '#FF00FF', '#FFC0CB', '#808080', '#FFA500', '#008000', '#7FFD4', '#A52A2A']
-      });
-    }
   },
   created: function created() {},
   methods: {
@@ -51599,10 +51736,10 @@ component.options.__file = "resources/js/components/Calendar/Calendar.vue"
 
 /***/ }),
 
-/***/ "./resources/js/components/Calendar/EventComponent.vue":
-/*!*************************************************************!*\
-  !*** ./resources/js/components/Calendar/EventComponent.vue ***!
-  \*************************************************************/
+/***/ "./resources/js/components/Calendar/Event.vue":
+/*!****************************************************!*\
+  !*** ./resources/js/components/Calendar/Event.vue ***!
+  \****************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -51610,8 +51747,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _EventComponent_vue_vue_type_template_id_86ab680e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EventComponent.vue?vue&type=template&id=86ab680e& */ "./resources/js/components/Calendar/EventComponent.vue?vue&type=template&id=86ab680e&");
-/* harmony import */ var _EventComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EventComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/Calendar/EventComponent.vue?vue&type=script&lang=js&");
+/* harmony import */ var _Event_vue_vue_type_template_id_1bf26b14___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Event.vue?vue&type=template&id=1bf26b14& */ "./resources/js/components/Calendar/Event.vue?vue&type=template&id=1bf26b14&");
+/* harmony import */ var _Event_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Event.vue?vue&type=script&lang=js& */ "./resources/js/components/Calendar/Event.vue?vue&type=script&lang=js&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -51621,9 +51758,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 ;
 var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _EventComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _EventComponent_vue_vue_type_template_id_86ab680e___WEBPACK_IMPORTED_MODULE_0__.render,
-  _EventComponent_vue_vue_type_template_id_86ab680e___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  _Event_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Event_vue_vue_type_template_id_1bf26b14___WEBPACK_IMPORTED_MODULE_0__.render,
+  _Event_vue_vue_type_template_id_1bf26b14___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
   false,
   null,
   null,
@@ -51633,7 +51770,46 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/Calendar/EventComponent.vue"
+component.options.__file = "resources/js/components/Calendar/Event.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/Calendar/EventPopup.vue":
+/*!*********************************************************!*\
+  !*** ./resources/js/components/Calendar/EventPopup.vue ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _EventPopup_vue_vue_type_template_id_36f74228___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EventPopup.vue?vue&type=template&id=36f74228& */ "./resources/js/components/Calendar/EventPopup.vue?vue&type=template&id=36f74228&");
+/* harmony import */ var _EventPopup_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EventPopup.vue?vue&type=script&lang=js& */ "./resources/js/components/Calendar/EventPopup.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _EventPopup_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _EventPopup_vue_vue_type_template_id_36f74228___WEBPACK_IMPORTED_MODULE_0__.render,
+  _EventPopup_vue_vue_type_template_id_36f74228___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/Calendar/EventPopup.vue"
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
 
 /***/ }),
@@ -51709,10 +51885,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/Calendar/EventComponent.vue?vue&type=script&lang=js&":
-/*!**************************************************************************************!*\
-  !*** ./resources/js/components/Calendar/EventComponent.vue?vue&type=script&lang=js& ***!
-  \**************************************************************************************/
+/***/ "./resources/js/components/Calendar/Event.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************!*\
+  !*** ./resources/js/components/Calendar/Event.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -51720,8 +51896,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EventComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./EventComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Calendar/EventComponent.vue?vue&type=script&lang=js&");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EventComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Event_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Event.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Calendar/Event.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Event_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/Calendar/EventPopup.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************!*\
+  !*** ./resources/js/components/Calendar/EventPopup.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EventPopup_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./EventPopup.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Calendar/EventPopup.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EventPopup_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
@@ -51775,19 +51967,36 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/Calendar/EventComponent.vue?vue&type=template&id=86ab680e&":
-/*!********************************************************************************************!*\
-  !*** ./resources/js/components/Calendar/EventComponent.vue?vue&type=template&id=86ab680e& ***!
-  \********************************************************************************************/
+/***/ "./resources/js/components/Calendar/Event.vue?vue&type=template&id=1bf26b14&":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/components/Calendar/Event.vue?vue&type=template&id=1bf26b14& ***!
+  \***********************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EventComponent_vue_vue_type_template_id_86ab680e___WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EventComponent_vue_vue_type_template_id_86ab680e___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Event_vue_vue_type_template_id_1bf26b14___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Event_vue_vue_type_template_id_1bf26b14___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EventComponent_vue_vue_type_template_id_86ab680e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./EventComponent.vue?vue&type=template&id=86ab680e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Calendar/EventComponent.vue?vue&type=template&id=86ab680e&");
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Event_vue_vue_type_template_id_1bf26b14___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Event.vue?vue&type=template&id=1bf26b14& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Calendar/Event.vue?vue&type=template&id=1bf26b14&");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/Calendar/EventPopup.vue?vue&type=template&id=36f74228&":
+/*!****************************************************************************************!*\
+  !*** ./resources/js/components/Calendar/EventPopup.vue?vue&type=template&id=36f74228& ***!
+  \****************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EventPopup_vue_vue_type_template_id_36f74228___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EventPopup_vue_vue_type_template_id_36f74228___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EventPopup_vue_vue_type_template_id_36f74228___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./EventPopup.vue?vue&type=template&id=36f74228& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Calendar/EventPopup.vue?vue&type=template&id=36f74228&");
 
 
 /***/ }),
@@ -51884,9 +52093,14 @@ var render = function () {
         attrs: { options: _vm.calendarOptions },
       }),
       _vm._v(" "),
-      _c("Event", {
-        ref: "eventEdit",
+      _c("EventPopup", {
+        ref: "eventPopup",
         attrs: { event: _vm.selected_event, target: _vm.selected_target },
+      }),
+      _vm._v(" "),
+      _c("Event", {
+        ref: "eventManage",
+        attrs: { event: _vm.selected_event, editing: _vm.event_editing },
       }),
     ],
     1
@@ -51899,10 +52113,212 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Calendar/EventComponent.vue?vue&type=template&id=86ab680e&":
-/*!***********************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Calendar/EventComponent.vue?vue&type=template&id=86ab680e& ***!
-  \***********************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Calendar/Event.vue?vue&type=template&id=1bf26b14&":
+/*!**************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Calendar/Event.vue?vue&type=template&id=1bf26b14& ***!
+  \**************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    {
+      staticClass: "modal fade",
+      attrs: {
+        id: "manageEvent",
+        tabindex: "-1",
+        "aria-labelledby": "manageEventLabel",
+        "aria-hidden": "true",
+      },
+    },
+    [
+      _c(
+        "div",
+        { staticClass: "modal-dialog modal-lg modal-dialog-centered" },
+        [
+          _c("div", { staticClass: "modal-content" }, [
+            _c("div", { staticClass: "modal-header" }, [
+              _c(
+                "h5",
+                {
+                  staticClass: "modal-title",
+                  attrs: { id: "manageEventLabel" },
+                },
+                [_vm._v(_vm._s(_vm.title))]
+              ),
+              _vm._v(" "),
+              _c("button", {
+                staticClass: "btn-close",
+                attrs: {
+                  type: "button",
+                  "data-bs-dismiss": "modal",
+                  "aria-label": "Close",
+                },
+              }),
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "modal-body" }, [
+              _c("label", { attrs: { for: "title" } }, [_vm._v("Title: ")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.event.title,
+                    expression: "event.title",
+                  },
+                ],
+                attrs: { type: "text", id: "title" },
+                domProps: { value: _vm.event.title },
+                on: {
+                  input: function ($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.event, "title", $event.target.value)
+                  },
+                },
+              }),
+              _vm._v(" "),
+              _c("label", { attrs: { for: "start" } }, [_vm._v("Start: ")]),
+              _vm._v(" "),
+              _c("input", { attrs: { type: "text", id: "start" } }),
+              _vm._v(" "),
+              _c("label", { attrs: { for: "end" } }, [_vm._v("End: ")]),
+              _vm._v(" "),
+              _c("input", { attrs: { type: "text", id: "end" } }),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.event.category_id,
+                      expression: "event.category_id",
+                    },
+                  ],
+                  attrs: { id: "categories" },
+                  on: {
+                    change: function ($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function (o) {
+                          return o.selected
+                        })
+                        .map(function (o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.event,
+                        "category_id",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    },
+                  },
+                },
+                _vm._l(_vm.categories, function (category) {
+                  return _c(
+                    "option",
+                    { key: category.id, domProps: { value: category.id } },
+                    [
+                      _vm._v(
+                        "\n                        " +
+                          _vm._s(category.name) +
+                          "\n                    "
+                      ),
+                    ]
+                  )
+                }),
+                0
+              ),
+              _vm._v(" "),
+              _c("textarea", { attrs: { id: "description" } }),
+              _vm._v(" "),
+              _c("label", { attrs: { for: "color" } }, [_vm._v("Color: ")]),
+              _vm._v(" "),
+              _c("button", { attrs: { "data-jscolor": "{}", id: "color" } }),
+              _vm._v(" "),
+              _c("label", { attrs: { for: "location" } }, [
+                _vm._v("Location: "),
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.event.location,
+                    expression: "event.location",
+                  },
+                ],
+                attrs: { type: "text", id: "location" },
+                domProps: { value: _vm.event.location },
+                on: {
+                  input: function ($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.event, "location", $event.target.value)
+                  },
+                },
+              }),
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "modal-footer" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-secondary",
+                  attrs: { type: "button", "data-bs-dismiss": "modal" },
+                },
+                [_vm._v("Close")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary",
+                  attrs: { type: "button" },
+                  on: {
+                    click: function ($event) {
+                      return _vm.saveEvent()
+                    },
+                  },
+                },
+                [_vm._v("Save")]
+              ),
+            ]),
+          ]),
+        ]
+      ),
+    ]
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Calendar/EventPopup.vue?vue&type=template&id=36f74228&":
+/*!*******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Calendar/EventPopup.vue?vue&type=template&id=36f74228& ***!
+  \*******************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -51917,47 +52333,43 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c("div", { attrs: { id: "eventEditTooltip" } }, [
     _c("div", { staticClass: "row" }, [
-      _vm.event != null
-        ? _c("div", { staticClass: "col-12" }, [
-            _c(
-              "button",
-              { staticClass: "btn", attrs: { type: "button", id: "edit" } },
-              [_vm._v("Edit")]
-            ),
-            _vm._v(" "),
-            _c(
-              "button",
-              { staticClass: "btn", attrs: { type: "button", id: "delete" } },
-              [_vm._v("Delete")]
-            ),
-            _vm._v(" "),
-            _c("label", { attrs: { for: "title" } }, [_vm._v("Title: ")]),
-            _vm._v(" "),
-            _c("p", { domProps: { innerHTML: _vm._s(_vm.event.title) } }),
-            _vm._v(" "),
-            _c("label", { attrs: { for: "start_time" } }, [_vm._v("Start: ")]),
-            _vm._v(" "),
-            _c("p", { domProps: { innerHTML: _vm._s(_vm.event.start) } }),
-            _vm._v(" "),
-            _c("label", { attrs: { for: "end_time" } }, [_vm._v("End: ")]),
-            _vm._v(" "),
-            _c("p", _vm._b({}, "p", _vm.event.end, false)),
-            _vm._v("\n\n      Caegory:\n      "),
-            _c("p", { domProps: { innerHTML: _vm._s(_vm.event.category_id) } }),
-            _vm._v("\n      description:\n      "),
-            _c("div", {
-              domProps: { innerHTML: _vm._s(_vm.event.description) },
-            }),
-            _vm._v(" "),
-            _c("label", { attrs: { for: "color" } }, [_vm._v("Color: ")]),
-            _vm._v(" "),
-            _c("p", { domProps: { innerHTML: _vm._s(_vm.event.color) } }),
-            _vm._v(" "),
-            _c("label", { attrs: { for: "location" } }, [_vm._v("Location: ")]),
-            _vm._v(" "),
-            _c("p", { domProps: { innerHTML: _vm._s(_vm.event.location) } }),
-          ])
-        : _vm._e(),
+      _c("div", { staticClass: "col-12" }, [
+        _c(
+          "button",
+          { staticClass: "btn", attrs: { type: "button", id: "edit" } },
+          [_vm._v("Edit")]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          { staticClass: "btn", attrs: { type: "button", id: "delete" } },
+          [_vm._v("Delete")]
+        ),
+        _vm._v(" "),
+        _c("label", { attrs: { for: "title" } }, [_vm._v("Title: ")]),
+        _vm._v(" "),
+        _c("p", { domProps: { innerHTML: _vm._s(_vm.event.title) } }),
+        _vm._v(" "),
+        _c("label", { attrs: { for: "start_time" } }, [_vm._v("Start: ")]),
+        _vm._v(" "),
+        _c("p", { domProps: { innerHTML: _vm._s(_vm.event.start) } }),
+        _vm._v(" "),
+        _c("label", { attrs: { for: "end_time" } }, [_vm._v("End: ")]),
+        _vm._v(" "),
+        _c("p", { domProps: { innerHTML: _vm._s(_vm.event.end) } }),
+        _vm._v("\n\n            Caegory:\n            "),
+        _c("p", { domProps: { innerHTML: _vm._s(_vm.event.category_id) } }),
+        _vm._v("\n            description:\n            "),
+        _c("div", { domProps: { innerHTML: _vm._s(_vm.event.description) } }),
+        _vm._v(" "),
+        _c("label", { attrs: { for: "color" } }, [_vm._v("Color: ")]),
+        _vm._v(" "),
+        _c("p", { domProps: { innerHTML: _vm._s(_vm.event.color) } }),
+        _vm._v(" "),
+        _c("label", { attrs: { for: "location" } }, [_vm._v("Location: ")]),
+        _vm._v(" "),
+        _c("p", { domProps: { innerHTML: _vm._s(_vm.event.location) } }),
+      ]),
     ]),
   ])
 }
