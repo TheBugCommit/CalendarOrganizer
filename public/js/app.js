@@ -20863,7 +20863,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   type: "GET",
                   data: {
                     id: _this.calendar.id
-                  }
+                  },
+                  dataType: 'JSON'
                 });
 
               case 4:
@@ -21080,7 +21081,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 2:
               _this.calendar = _context3.sent;
 
-              if (!(_this.calendar != null || _this.calendar.length != 0)) {
+              if (!(_this.calendar != null && _this.calendar.length != 0)) {
                 _context3.next = 9;
                 break;
               }
@@ -21449,6 +21450,26 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -21457,7 +21478,11 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       helpers: [],
-      users: []
+      users: [],
+      selected_users: [],
+      custom_user: {
+        email: ''
+      }
     };
   },
   methods: {
@@ -21478,9 +21503,40 @@ __webpack_require__.r(__webpack_exports__);
         console.error(error);
       });
     },
-    getAllUsers: function getAllUsers() {//recull tots els usuaris
+    getAllUsers: function getAllUsers() {
+      var _this = this;
+
+      $.ajax({
+        url: route_user_all,
+        method: "GET",
+        dataType: 'JSON'
+      }).done(function (response) {
+        _this.users = response;
+      }).fail(function (error) {
+        console.error(error);
+      });
     },
-    addHelpers: function addHelpers() {//afegeix els usuaris selecionats al calendari
+    addHelpers: function addHelpers() {
+      var _this = this;
+
+      var calendar_id = window.location.href.split("/").pop();
+      $.ajax({
+        url: route_helpers_add,
+        method: "POST",
+        dataType: "JSON",
+        data: {
+          users: _this.selected_users,
+          calendar_id: calendar_id
+        }
+      }).done(function (response) {
+        _this.helpers.push(_this.selected_users);
+
+        _this.selected_users = [];
+
+        _this.getHelpers();
+      }).fail(function (error) {
+        console.error(error);
+      });
     },
     removeHelper: function removeHelper(id) {
       var _this = this;
@@ -21503,6 +21559,10 @@ __webpack_require__.r(__webpack_exports__);
       }).fail(function (error) {
         console.error(error);
       });
+    },
+    appendCustomUser: function appendCustomUser() {
+      if (this.custom_user.email != '') this.selected_users.push(this.custom_user.email);
+      this.custom_user.email = '';
     }
   },
   mounted: function mounted() {
@@ -52773,18 +52833,122 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    _vm._l(_vm.helpers, function (helper) {
-      return _c("helper-component", {
-        key: helper.id,
-        attrs: { user: helper },
-        on: {
-          remove: function ($event) {
-            return _vm.removeHelper()
+    [
+      _vm._l(_vm.helpers, function (helper) {
+        return _c("helper-component", {
+          key: helper.id,
+          attrs: { user: helper },
+          on: { remove: _vm.removeHelper },
+        })
+      }),
+      _vm._v(" "),
+      _c(
+        "div",
+        [
+          _vm._v("\n        Selected\n        ----\n        "),
+          _vm._l(_vm.selected_users, function (user, index) {
+            return _c("p", { key: index }, [_vm._v(_vm._s(user))])
+          }),
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        [
+          _vm._v("\n        Coose\n        ----\n        "),
+          _vm._l(_vm.users, function (user) {
+            return _c("div", { key: user.id }, [
+              _c("label", { attrs: { for: "" } }, [_vm._v(_vm._s(user.email))]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.selected_users,
+                    expression: "selected_users",
+                  },
+                ],
+                attrs: { type: "checkbox" },
+                domProps: {
+                  value: user.email,
+                  checked: Array.isArray(_vm.selected_users)
+                    ? _vm._i(_vm.selected_users, user.email) > -1
+                    : _vm.selected_users,
+                },
+                on: {
+                  change: function ($event) {
+                    var $$a = _vm.selected_users,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = user.email,
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 && (_vm.selected_users = $$a.concat([$$v]))
+                      } else {
+                        $$i > -1 &&
+                          (_vm.selected_users = $$a
+                            .slice(0, $$i)
+                            .concat($$a.slice($$i + 1)))
+                      }
+                    } else {
+                      _vm.selected_users = $$c
+                    }
+                  },
+                },
+              }),
+            ])
+          }),
+          _vm._v("\n        custom user\n        "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.custom_user.email,
+                expression: "custom_user.email",
+              },
+            ],
+            attrs: { type: "text" },
+            domProps: { value: _vm.custom_user.email },
+            on: {
+              input: function ($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.custom_user, "email", $event.target.value)
+              },
+            },
+          }),
+          _vm._v(" "),
+          _c("button", {
+            attrs: { type: "button" },
+            on: {
+              click: function ($event) {
+                return _vm.appendCustomUser()
+              },
+            },
+          }),
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          attrs: { type: "button" },
+          on: {
+            click: function ($event) {
+              return _vm.addHelpers()
+            },
           },
         },
-      })
-    }),
-    1
+        [_vm._v("AddHelpers")]
+      ),
+    ],
+    2
   )
 }
 var staticRenderFns = []

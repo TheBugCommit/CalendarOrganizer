@@ -110,12 +110,12 @@ export default {
 
         async getCalendarEvents() {
             let _this = this;
-
             try {
                 return await $.ajax({
                     url: route_events,
                     type: "GET",
                     data: { id: _this.calendar.id },
+                    dataType: 'JSON'
                 });
             } catch (error) {
                 console.error(error);
@@ -296,7 +296,7 @@ export default {
 
         (async function () {
             _this.calendar = await _this.getCalendar();
-            if (_this.calendar != null || _this.calendar.length != 0) {
+            if (_this.calendar != null && _this.calendar.length != 0) {
                 let events = await _this.getCalendarEvents();
                 _this.calendar.events = events;
                 _this.fullCalendar.addEventSource(_this.calendar.events);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Calendar;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -32,6 +33,16 @@ class UserController extends Controller
     }
 
     /**
+     * Returns all users (only email, full_name)
+     *
+     * @return JsonResponse
+     */
+    public function getAllUsers(Request $request)
+    {
+        return response()->json(User::getAll(['email', 'id']));
+    }
+
+    /**
      * From a token, assign a user to a calendar, as a helper
      *
      * @param string $token
@@ -51,6 +62,9 @@ class UserController extends Controller
         if($info == null)
             abort(401);
 
+        if($info->user_email != Auth::user()->email)
+            abort(401);
+
         $calendar = null;
         try{
             $calendar = Calendar::findOrFail($info->calendar_id);
@@ -59,13 +73,10 @@ class UserController extends Controller
         }
 
         if(Auth::user()->hasHelperCalendar($calendar->id)){
-            $jwt->invalidate();
             return redirect()->route('dashboard')->with('alreadyHelper', $calendar->title);
         }
 
         $calendar->helpers()->attach(Auth::user()->id);
-        $jwt->invalidate();
-
         return redirect()->route('dashboard')->with('becomeHelper', $calendar->title);
     }
 }

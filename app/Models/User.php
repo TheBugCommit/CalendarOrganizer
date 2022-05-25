@@ -105,4 +105,12 @@ class User extends Authenticatable
     {
         return $this->name . ' ' . $this->surname1 . ' ' . $this->surname2;
     }
+
+    public static function getAll(array $fields = null)
+    {
+        if($fields == null)
+            return User::all();
+        else
+            return User::select($fields)->get();
+    }
 }

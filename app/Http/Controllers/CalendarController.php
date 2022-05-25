@@ -28,14 +28,14 @@ class CalendarController extends Controller
     }
 
     /**
-     * Returns single calendar of user
+     * Returns single calendar
      *
      * @param Request $request
      * @return ResponseJson
      */
     public function getCalendar(Request $request)
     {
-        return response()->json(Auth::user()->calendars()->where('id', $request->id)->first());
+        return response()->json(Calendar::find($request->id));
     }
 
     /**
@@ -153,7 +153,7 @@ class CalendarController extends Controller
             return response()->json(['message' => 'Missing data'], 400);
 
         foreach ($request->users as $user) {
-            $customClaims = ['calendar_id' => $user['id'], 'user_email' => $user['email']];
+            $customClaims = ['calendar_id' => $request->calendar_id, 'user_email' => $user];
 
             $factory = JWTFactory::addClaims($customClaims);
             $payload = $factory->make();
@@ -167,10 +167,10 @@ class CalendarController extends Controller
             ];
 
             try{
-                $mailer = new Mailer($user, GenericMail::class, $data);
+                $mailer = new Mailer(['name' => '', 'email' => $user], GenericMail::class, $data);
                 $mailer->send();
             }catch(Exception $ex){
-                return response()->json(['message' => 'Can\'t send all emails']);
+                return response()->json(['message' => 'Can\'t send all emails'. $ex->getMessage()]);
             }
         }
 
@@ -185,6 +185,9 @@ class CalendarController extends Controller
      */
     public function removeHelper(Request $request)
     {
+        if($request->user_id == null)
+            return response()->json(['message' => 'Invalid User'], 400);
+
         try{
             $calendar = Calendar::findOrFail($request->calendar_id);
             $calendar->helpers()->detach($request->user_id);

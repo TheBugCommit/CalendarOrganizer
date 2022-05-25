@@ -2,12 +2,11 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Event;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class EventVerify
+class CalendarVerify
 {
     /**
      * Handle an incoming request.
@@ -18,15 +17,20 @@ class EventVerify
      */
     public function handle(Request $request, Closure $next)
     {
-        if(!isset($request->id))
-            abort(401);
+        $id = null;
 
-        $calendar = Event::find($request->id);
-        if(!$calendar)
-            abort(404);
-        if(!Auth::user()->hasEvent($request->id) || Auth::user()->id != $calendar->calendar->user_id)
-            abort(401);
+        if(isset($request->calendar_id) && isset($request->id))
+            $id = $request->calendar_id;
+        else if(isset($request->calendar_id))
+            $id = $request->calendar_id;
+        else if(isset($request->id))
+            $id = $request->id;
 
-        return $next($request);
+
+        if(Auth::user()->hasCalendar($id) || Auth::user()->hasHelperCalendar($id))
+            return $next($request);
+
+        abort(401);
+
     }
 }
