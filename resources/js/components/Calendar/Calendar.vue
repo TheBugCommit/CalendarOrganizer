@@ -14,8 +14,8 @@ import interactionPlugin from "@fullcalendar/interaction";
 import timegridPlugin from "@fullcalendar/timegrid";
 import bootstrap5Plugin from "@fullcalendar/bootstrap5";
 import Swal from "sweetalert2";
-import EventPopup from "./EventPopup.vue";
-import Event from "./Event.vue";
+import EventPopup from "./Events/EventPopup.vue";
+import Event from "./Events/Event.vue";
 
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -76,7 +76,6 @@ export default {
                 end: ''
             },
             selected_target: null,
-            user_id: auth_user_id,
             event_editing: false,
         };
     },
@@ -100,7 +99,7 @@ export default {
         },
 
         handelEventDrop(info) {
-            this.updateCalendarEvent(this.extractEventData(info));
+            this.updateCalendarEvent(this.extractEventData(info), info.event);
         },
 
         handleEventClick(eventClickInfo) {
@@ -128,10 +127,10 @@ export default {
         storeCalendarEvent() {
             let _this = this;
 
-            let event = {..._this.selected_event}
+            let event = { ..._this.selected_event }
 
             event.start = event.start instanceof moment ? event.start.format('YYYY-MM-DD hh:mm:ss') : event.start
-            event.end =  event.end instanceof moment ? event.end.format('YYYY-MM-DD hh:mm:ss') : event.end
+            event.end = event.end instanceof moment ? event.end.format('YYYY-MM-DD hh:mm:ss') : event.end
 
             $.ajax({
                 url: route_events_store,
@@ -149,30 +148,28 @@ export default {
         },
 
 
-        updateCalendarEvent(event = null) {
+        updateCalendarEvent(event = null, originalEvent = null) {
             let _this = this;
 
-            if(event == null)
-                event = {...this.selected_event}
+            if (event == null)
+                event = { ...this.selected_event }
 
             event.start = event.start instanceof moment ? event.start.format('YYYY-MM-DD hh:mm:ss') : event.start
-            event.end =  event.end instanceof moment ? event.end.format('YYYY-MM-DD hh:mm:ss') : event.end
+            event.end = event.end instanceof moment ? event.end.format('YYYY-MM-DD hh:mm:ss') : event.end
 
             $.ajax({
                 url: route_events_update,
                 data: event,
                 dataType: "JSON",
                 method: "PATCH",
-            })
-                .done((response) => {
-                    _this.fullCalendar.getEventById(response.id).remove();
-                    _this.fullCalendar.addEvent(response);
-                    _this.$refs.eventManage.hide()
-
-                })
-                .fail((error) => {
-                    console.error(error);
-                });
+            }).done((response) => {
+                if (originalEvent != null)
+                    originalEvent.remove()
+                _this.fullCalendar.addEvent(response);
+                _this.$refs.eventManage.hide()
+            }).fail((error) => {
+                console.error(error);
+            });
         },
 
         editEvent(id) {
@@ -205,13 +202,11 @@ export default {
                 data: { id: id },
                 dataType: "JSON",
                 method: "DELETE",
-            })
-                .done((response) => {
-                    console.log(response);
-                })
-                .fail((error) => {
-                    console.error(error);
-                });
+            }).done((response) => {
+                console.log(response);
+            }).fail((error) => {
+                console.error(error);
+            });
         },
 
         addEvent(event) {
@@ -229,6 +224,22 @@ export default {
                 data[$(this).attr("name")] = $(this).val();
             });
             return data;
+        },
+
+        async getCalendar() {
+            let calendar_id = window.location.href.split("/").pop()
+
+            try {
+                return await $.ajax({
+                    url: route_calendar_get,
+                    method: "GET",
+                    data: { id: calendar_id }
+                })
+            } catch (error) {
+                console.error(error);
+            }
+
+            return []
         },
 
         extractEventData(info) {
@@ -283,15 +294,14 @@ export default {
             _this.storeCalendarEvent
         );
 
-        if (typeof calendar !== "undefined") {
-            this.calendar = calendar;
-
-            (async function () {
+        (async function () {
+            _this.calendar = await _this.getCalendar();
+            if (_this.calendar != null || _this.calendar.length != 0) {
                 let events = await _this.getCalendarEvents();
                 _this.calendar.events = events;
                 _this.fullCalendar.addEventSource(_this.calendar.events);
-            })(_this);
-        }
+            }
+        })(_this);
     },
 };
 </script>

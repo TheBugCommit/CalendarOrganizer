@@ -28,6 +28,17 @@ class CalendarController extends Controller
     }
 
     /**
+     * Returns single calendar of user
+     *
+     * @param Request $request
+     * @return ResponseJson
+     */
+    public function getCalendar(Request $request)
+    {
+        return response()->json(Auth::user()->calendars()->where('id', $request->id)->first());
+    }
+
+    /**
      * Returns all events of calendar
      *
      * @param Request  $request
@@ -70,16 +81,14 @@ class CalendarController extends Controller
     }
 
     /**
-     * Display the specified calendar.
+     * Display the calendar.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        $calendar = Calendar::find($id);
-        $categories = Auth::user()->categories;
-        return view('calendars.calendars_edit', compact('calendar', 'categories'));
+        $calendar_id = $request->id;
+        return view('calendars.calendars_edit', compact('calendar_id'));
     }
 
     /**
@@ -104,28 +113,51 @@ class CalendarController extends Controller
     {
     }
 
+    public function getHelpers(Request $request)
+    {
+        $helpers = null;
+        try{
+            $helpers = Auth::user()->calendars()->where('id', $request->id)->first()->helpers;
+        }catch(Exception $ex){
+            return response()->json(['message' => 'Can\'t get helpers']);
+        }
+
+        return response()->json($helpers);
+    }
+
+    /**
+     * Display view to manage calendar helpers
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
+     */
+    public function editHelpers()
+    {
+        return view('calendars.helpers_edit');
+    }
+
     /**
      * Send mail to the assistants, requesting that they join the calendar
      *
-     * @param Request  $request     users and calendar_id required
+     * - calendar_id is required
+     * - users       is required and format must be ['name' => '..', 'email' => '...']
+     * - subject     is optional
      *
-     * - users format must be ['name' => '..', 'email' => '...']
-     *
+     *  @param Request  $request
+     * @param \Tymon\JWTAuth\JWT $jwt
      * @return JsonResponse
      */
     public function addHelpers(Request $request, JWT $jwt)
     {
-        //foreach ($request->users as $user) {
-            $customClaims = ['calendar_id' => 1, 'user_email' => 'g3casas@gmail.com'];
+        if(!isset($request->users) || !isset($request->calendar_id))
+            return response()->json(['message' => 'Missing data'], 400);
+
+        foreach ($request->users as $user) {
+            $customClaims = ['calendar_id' => $user['id'], 'user_email' => $user['email']];
 
             $factory = JWTFactory::addClaims($customClaims);
             $payload = $factory->make();
             $token = JWTAuth::encode($payload);
-
-            $recipient = [
-                'name' => 'Gerard Casas Serarols',
-                'email' => 'g3casas@gmail.com',
-            ];
 
             $data = [
                 'subject' => 'Invitation to be part of a calendar',
@@ -135,11 +167,31 @@ class CalendarController extends Controller
             ];
 
             try{
-                $mailer = new Mailer($recipient, GenericMail::class, $data);
+                $mailer = new Mailer($user, GenericMail::class, $data);
                 $mailer->send();
             }catch(Exception $ex){
-                echo "connection fail";
+                return response()->json(['message' => 'Can\'t send all emails']);
             }
-        //}
+        }
+
+        return response()->json(['message' => 'Calendar helper invitations sended']);
+    }
+
+    /**
+     * Removes a helper from calendar
+     *
+     * @param Request $request
+     * @return ResponseJson
+     */
+    public function removeHelper(Request $request)
+    {
+        try{
+            $calendar = Calendar::findOrFail($request->calendar_id);
+            $calendar->helpers()->detach($request->user_id);
+        }catch(Exception $ex){
+            return response()->json(['message' => 'Can\'t remove helper from calendar ' . $request->calendar_id], 500);
+        }
+
+        return response()->json(['message' => 'Helper removed from calendar '. $request->calendar_id]);
     }
 }

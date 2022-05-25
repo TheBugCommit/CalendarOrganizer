@@ -13,7 +13,7 @@
     <loading-component :loading="show_loading"></loading-component>
     <div class="container">
         <div class="row">
-            <calendar-component v-for="calendar in calendars" :key="calendar.id" :calendar="calendar" @redirect="redirect('/calendar_edit/' + calendar.id)"></calendar-component>
+            <calendar-component v-for="calendar in calendars" :key="calendar.id" :calendar="calendar" @redirect="redirect('/calendar_edit/' + calendar.id)" ></calendar-component>
         </div>
     </div>
 @endsection

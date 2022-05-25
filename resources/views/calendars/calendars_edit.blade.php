@@ -3,10 +3,8 @@
 @section('title', 'Calendar')
 
 @section('content')
-    <calendar/>
-
-    <a class="btn btn-primary" href="{{ route('calendar.helpers.index', ['calendar_id' => $calendar->id]) }}">Manage Helpers</a>
-
+    <calendar></calendar>
+    <a class="btn btn-primary" href="{{ route('calendar.helpers.index', ['id' => $calendar_id]) }}">Manage Helpers</a>
 @endsection
 
 @section('js')
@@ -18,8 +16,7 @@
         const route_events_store = '{{ route('calendar.event.store') }}';
         const route_events_update = '{{ route('calendar.event.update') }}';
         const route_events_destroy = '{{ route('calendar.event.destroy') }}';
-        const auth_user_id = @json(Auth::user()->id)
-
-        const calendar = @json($calendar);
+        const route_calendar_get = '{{ route('calendar.get')}}'
+        const route_user_me = '{{ route('user.me') }}'
     </script>
 @endsection

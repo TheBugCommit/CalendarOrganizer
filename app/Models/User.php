@@ -54,6 +54,13 @@ class User extends Authenticatable
         'password' => HashCast::class,
     ];
 
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+     protected $appends = ['full_name'];
+
     public function nation()
     {
         return $this->belongsTo(Nation::class);
@@ -92,5 +99,10 @@ class User extends Authenticatable
     public function hasEvent($event_id)
     {
         return $this->events()->where('id', $event_id)->exists();
+    }
+
+    public function getFullNameAttribute()
+    {
+        return $this->name . ' ' . $this->surname1 . ' ' . $this->surname2;
     }
 }

@@ -11,6 +11,16 @@ use Tymon\JWTAuth\JWT;
 
 class UserController extends Controller
 {
+
+    /**
+     * Returns current autenticated user instance
+     *
+     * @return JsonResponse
+     */
+    public function me(){
+        return response()->json(Auth::user());
+    }
+
     /**
      * Returns categories of autenticated user
      *

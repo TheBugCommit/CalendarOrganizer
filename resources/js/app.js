@@ -2,13 +2,16 @@ require('./bootstrap');
 
 window.Vue = require('vue').default;
 
+import Vue from 'vue';
 import LoadingComponent from './components/LoadingComponent.vue'
-import CalendarComponent from './components/CalendarComponent.vue'
+import CalendarListComponent from './components/CalendarListComponent.vue'
 import Calendar from './components/Calendar/Calendar.vue'
+import HelpersListComponent from './components/Calendar/Helpers/HelpersListComponent.vue'
 
 Vue.component('calendar', Calendar);
 Vue.component('loading-component', LoadingComponent);
-Vue.component('calendar-component', CalendarComponent);
+Vue.component('calendar-component', CalendarListComponent);
+Vue.component('helpers-list', HelpersListComponent);
 
 $.ajaxSetup({
     headers: {
@@ -19,9 +22,11 @@ $.ajaxSetup({
 const app = new Vue({
     el: '#app',
     data: {
+        me: null,
         show_loading: false,
         currentRoute: window.location.pathname,
         calendars: [],
+        selected_calendar: null,
         newCalendarForm: {
             title: "",
             start_date: "",
@@ -30,6 +35,8 @@ const app = new Vue({
     },
 
     mounted() {
+        if(typeof route_user_me !== 'undefined')
+            this.getMe()
         if (this.currentRoute == '/')
             this.getCalendars()
     },
@@ -70,9 +77,22 @@ const app = new Vue({
             })
         },
 
+        getMe() {
+            let _this = this
+            $.ajax({
+                url: route_user_me,
+                dataType: 'JSON',
+                method: 'GET',
+            }).done(function (response) {
+                _this.me = response
+            }).fail(function (error) {
+                console.error(error)
+            })
+        },
+
         redirect(url) {
             window.location.href = url
-        }
+        },
     },
 
     watch: {
