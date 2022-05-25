@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Classes\Mailer;
+use App\Mail\Mailer;
 use App\Http\Requests\CalendarStoreRequest;
+use App\Mail\GenericMail;
 use App\Models\Calendar;
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,7 +14,6 @@ use PDOException;
 use JWTFactory;
 use JWTAuth;
 use Tymon\JWTAuth\JWT;
-use Tymon\JWTAuth\Manager;
 
 class CalendarController extends Controller
 {
@@ -103,36 +104,42 @@ class CalendarController extends Controller
     {
     }
 
-
     /**
      * Send mail to the assistants, requesting that they join the calendar
      *
-     * @param Request  $request
+     * @param Request  $request     users and calendar_id required
+     *
+     * - users format must be ['name' => '..', 'email' => '...']
+     *
      * @return JsonResponse
      */
     public function addHelpers(Request $request, JWT $jwt)
     {
-        //  $jwt->invalidate();
-        //dd($jwt->checkOrFail());
-        foreach ($request->users_email as $user) {
-            $customClaims = ['calendar_id' => $request->calendar_id, 'user_email' => $user];
+        //foreach ($request->users as $user) {
+            $customClaims = ['calendar_id' => 1, 'user_email' => 'g3casas@gmail.com'];
 
             $factory = JWTFactory::addClaims($customClaims);
             $payload = $factory->make();
             $token = JWTAuth::encode($payload);
 
-            try {
-                Mailer::send(
-                    ((object)[
-                        'view' => 'calendars.helpers_edit',
-                        'subject' => 'Invitation to be part of a calendar',
-                        'recipients' => [$user],
-                        'view_data' => ['token' => $token]
-                    ])
-                );
-            } catch (Exception $ex) {
-                //afegir correus que no s'han pogut enviar
+            $recipient = [
+                'name' => 'Gerard Casas Serarols',
+                'email' => 'g3casas@gmail.com',
+            ];
+
+            $data = [
+                'subject' => 'Invitation to be part of a calendar',
+                'view'    => 'emails.helper_invitation',
+                'varname' => 'data',
+                'data'    => ['token' => route('user.become.helper', ['token' => $token])],
+            ];
+
+            try{
+                $mailer = new Mailer($recipient, GenericMail::class, $data);
+                $mailer->send();
+            }catch(Exception $ex){
+                echo "connection fail";
             }
-        }
+        //}
     }
 }

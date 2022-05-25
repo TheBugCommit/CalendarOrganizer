@@ -21,7 +21,6 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::middleware(['guest'])->group(function(){
     Route::name('auth.')->group(function () {
 
@@ -38,7 +37,7 @@ Route::middleware(['auth'])->group(function(){
 
     Route::name('user.')->group(function () {
         Route::get('/categories', [UserController::class, 'getCategories'])->name('categories');
-        Route::get('/become_calendar_helper/{jwt}', [UserController::class, 'becomeHelper'])->name('become.helper');
+        Route::get('/become_calendar_helper/{token}', [UserController::class, 'becomeHelper'])->name('become.helper');
     });
 
     Route::name('email.')->group(function () {
