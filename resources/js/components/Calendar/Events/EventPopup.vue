@@ -2,8 +2,8 @@
     <div id="eventEditTooltip">
         <div class="row">
             <div class="col-12">
-                <button type="button" class="btn" id="edit">Edit</button>
-                <button type="button" class="btn" id="delete">Delete</button>
+                <button type="button" class="btn" v-if="canEditDelete" id="edit">Edit</button>
+                <button type="button" class="btn" v-if="canEditDelete" id="delete">Delete</button>
 
                 <label for="title">Title: </label>
                 <p v-html="event.title"></p>
@@ -34,7 +34,7 @@ import "tippy.js/dist/svg-arrow.css";
 import "tippy.js/animations/perspective.css";
 
 export default {
-    props: ["event", "target"],
+    props: ["event", "target", "me", "calendar"],
     data() {
         return {
             tippyInsance: null,
@@ -91,6 +91,12 @@ export default {
         destroyEvent() {
             this.$parent.deleteEvent(this.event.id);
         },
+    },
+
+    computed: {
+        canEditDelete(){
+            return this.me.id == this.calendar.user_id || this.me.id == this.event.user_id
+        }
     },
 
     watch: {

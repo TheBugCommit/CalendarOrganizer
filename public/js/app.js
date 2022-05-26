@@ -20814,7 +20814,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         location: '',
         color: '',
         start: '',
-        end: ''
+        end: '',
+        user_id: '',
+        published: 0
       },
       selected_target: null,
       event_editing: false
@@ -20833,11 +20835,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         location: '',
         color: '',
         start: '',
-        end: ''
+        end: '',
+        user_id: '',
+        published: 0
       };
       this.$refs.eventManage.toggle();
     },
     handelEventDrop: function handelEventDrop(info) {
+      if (this.$root.me.id != this.calendar.user_id && this.$root.me.id != info.event.extendedProps.user_id) {
+        info.revert();
+        return;
+      }
+
       this.updateCalendarEvent(this.extractEventData(info), info.event);
     },
     handleEventClick: function handleEventClick(eventClickInfo) {
@@ -20921,7 +20930,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         dataType: "JSON",
         method: "PATCH"
       }).done(function (response) {
-        if (originalEvent != null) originalEvent.remove();
+        if (originalEvent != null) originalEvent.remove();else _this.fullCalendar.getEventById(response.id).remove();
 
         _this.fullCalendar.addEvent(response);
 
@@ -20973,19 +20982,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     addEvent: function addEvent(event) {
       this.fullCalendar.addEvent(event);
     },
-    getEventData: function getEventData() {
-      var _this = this;
-
-      var data = {
-        calendar_id: _this.calendar.id,
-        category_id: $('select[name="category_id"]').val(),
-        description: tinymce.activeEditor.getContent()
-      };
-      $("#createEvent input").each(function () {
-        data[$(this).attr("name")] = $(this).val();
-      });
-      return data;
-    },
     getCalendar: function getCalendar() {
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
         var calendar_id;
@@ -21033,7 +21029,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         location: info.event.extendedProps.location,
         color: info.event.backgroundColor,
         start: moment(info.event.start).format('Y-MM-DD HH:mm:ss'),
-        end: moment(info.event.end).format('Y-MM-DD HH:mm:ss')
+        end: moment(info.event.end).format('Y-MM-DD HH:mm:ss'),
+        published: info.event.extendedProps.published,
+        user_id: info.event.extendedProps.user_id
       };
     },
     getPath: function getPath(node) {
@@ -21333,7 +21331,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ["event", "target"],
+  props: ["event", "target", "me", "calendar"],
   data: function data() {
     return {
       tippyInsance: null
@@ -21392,6 +21390,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     destroyEvent: function destroyEvent() {
       this.$parent.deleteEvent(this.event.id);
+    }
+  },
+  computed: {
+    canEditDelete: function canEditDelete() {
+      return this.me.id == this.calendar.user_id || this.me.id == this.event.user_id;
     }
   },
   watch: {
@@ -21633,7 +21636,7 @@ $.ajaxSetup({
 var app = new vue__WEBPACK_IMPORTED_MODULE_4__["default"]({
   el: '#app',
   data: {
-    me: null,
+    me: {},
     show_loading: false,
     currentRoute: window.location.pathname,
     calendars: [],
@@ -52514,7 +52517,12 @@ var render = function () {
       _vm._v(" "),
       _c("EventPopup", {
         ref: "eventPopup",
-        attrs: { event: _vm.selected_event, target: _vm.selected_target },
+        attrs: {
+          event: _vm.selected_event,
+          target: _vm.selected_target,
+          calendar: _vm.calendar,
+          me: _vm.$root.me,
+        },
       }),
       _vm._v(" "),
       _c("Event", {
@@ -52724,17 +52732,21 @@ var render = function () {
   return _c("div", { attrs: { id: "eventEditTooltip" } }, [
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-12" }, [
-        _c(
-          "button",
-          { staticClass: "btn", attrs: { type: "button", id: "edit" } },
-          [_vm._v("Edit")]
-        ),
+        _vm.canEditDelete
+          ? _c(
+              "button",
+              { staticClass: "btn", attrs: { type: "button", id: "edit" } },
+              [_vm._v("Edit")]
+            )
+          : _vm._e(),
         _vm._v(" "),
-        _c(
-          "button",
-          { staticClass: "btn", attrs: { type: "button", id: "delete" } },
-          [_vm._v("Delete")]
-        ),
+        _vm.canEditDelete
+          ? _c(
+              "button",
+              { staticClass: "btn", attrs: { type: "button", id: "delete" } },
+              [_vm._v("Delete")]
+            )
+          : _vm._e(),
         _vm._v(" "),
         _c("label", { attrs: { for: "title" } }, [_vm._v("Title: ")]),
         _vm._v(" "),

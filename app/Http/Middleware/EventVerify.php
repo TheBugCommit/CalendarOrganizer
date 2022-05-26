@@ -21,10 +21,11 @@ class EventVerify
         if(!isset($request->id))
             abort(401);
 
-        $calendar = Event::find($request->id);
-        if(!$calendar)
+        $event = Event::find($request->id);
+        if(!$event)
             abort(404);
-        if(!Auth::user()->hasEvent($request->id) || Auth::user()->id != $calendar->calendar->user_id)
+
+        if((!Auth::user()->hasEvent($request->id) && Auth::user()->id != $event->calendar->user_id) || $event->published)
             abort(401);
 
         return $next($request);

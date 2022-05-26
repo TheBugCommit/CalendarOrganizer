@@ -1,0 +1,8 @@
+composer update
+npm install
+npm run dev
+php artisan key:generate
+php artisan jwt:secret
+php artisan cache:clear
+php artisan config:clear
+php artisan route:cache

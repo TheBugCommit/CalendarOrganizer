@@ -22,7 +22,7 @@ $.ajaxSetup({
 const app = new Vue({
     el: '#app',
     data: {
-        me: null,
+        me: {},
         show_loading: false,
         currentRoute: window.location.pathname,
         calendars: [],

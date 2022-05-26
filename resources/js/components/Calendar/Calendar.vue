@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <FullCalendar :options="calendarOptions" ref="fullCalendar" />
-        <EventPopup :event="selected_event" :target="selected_target" ref="eventPopup" />
+        <EventPopup :event="selected_event" :target="selected_target" :calendar="calendar" :me="$root.me" ref="eventPopup" />
         <Event :event="selected_event" :editing="event_editing" ref="eventManage" />
     </div>
 </template>
@@ -73,7 +73,9 @@ export default {
                 location: '',
                 color: '',
                 start: '',
-                end: ''
+                end: '',
+                user_id: '',
+                published: 0,
             },
             selected_target: null,
             event_editing: false,
@@ -93,12 +95,19 @@ export default {
                 location: '',
                 color: '',
                 start: '',
-                end: ''
+                end: '',
+                user_id: '',
+                published: 0,
             }
             this.$refs.eventManage.toggle()
         },
 
         handelEventDrop(info) {
+            if(this.$root.me.id != this.calendar.user_id && this.$root.me.id != info.event.extendedProps.user_id){
+                info.revert();
+                return;
+            }
+
             this.updateCalendarEvent(this.extractEventData(info), info.event);
         },
 
@@ -107,6 +116,7 @@ export default {
             this.selected_event = this.extractEventData(eventClickInfo);
             this.selected_target = this.getPath($(eventClickInfo.el));
         },
+
 
         async getCalendarEvents() {
             let _this = this;
@@ -165,6 +175,9 @@ export default {
             }).done((response) => {
                 if (originalEvent != null)
                     originalEvent.remove()
+                else
+                    _this.fullCalendar.getEventById(response.id).remove()
+
                 _this.fullCalendar.addEvent(response);
                 _this.$refs.eventManage.hide()
             }).fail((error) => {
@@ -213,19 +226,6 @@ export default {
             this.fullCalendar.addEvent(event);
         },
 
-        getEventData() {
-            let _this = this;
-            let data = {
-                calendar_id: _this.calendar.id,
-                category_id: $('select[name="category_id"]').val(),
-                description: tinymce.activeEditor.getContent(),
-            };
-            $("#createEvent input").each(function () {
-                data[$(this).attr("name")] = $(this).val();
-            });
-            return data;
-        },
-
         async getCalendar() {
             let calendar_id = window.location.href.split("/").pop()
 
@@ -252,7 +252,9 @@ export default {
                 location: info.event.extendedProps.location,
                 color: info.event.backgroundColor,
                 start: moment(info.event.start).format('Y-MM-DD HH:mm:ss'),
-                end: moment(info.event.end).format('Y-MM-DD HH:mm:ss')
+                end: moment(info.event.end).format('Y-MM-DD HH:mm:ss'),
+                published: info.event.extendedProps.published,
+                user_id: info.event.extendedProps.user_id
             }
         },
 
