@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class FileUploadRequest extends FormRequest
+class TargetsUploadRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,8 @@ class FileUploadRequest extends FormRequest
     public function rules()
     {
         return [
-            'file' => ['required', 'mimetypes:application/json,text/plain', 'max:10240']
+            'file'        => ['required', 'mimetypes:application/json,text/plain', 'max:10240'],
+            'id'          => ['required', 'numeric', 'exists:calendars']
         ];
     }
 }

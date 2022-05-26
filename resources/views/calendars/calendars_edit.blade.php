@@ -5,9 +5,10 @@
 @section('content')
     <calendar></calendar>
     <a class="btn btn-primary" href="{{ route('calendar.helpers.index', ['id' => $calendar_id]) }}">Manage Helpers</a>
-    <form action="{{ route('calendar.targets.upload', ['id' => $calendar_id]) }}" method="post" enctype="multipart/form-data">
+    <form action="{{ route('calendar.targets.upload') }}" method="post" enctype="multipart/form-data">
         @csrf
         Select file to upload:
+        <input type="hidden" name="id" value="{{ $calendar_id }}">
         <input type="file" name="file" id="targets">
         <input type="submit" value="Upload Targets" name="submit">
 

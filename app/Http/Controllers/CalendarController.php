@@ -4,13 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Mail\Mailer;
 use App\Http\Requests\CalendarStoreRequest;
-use App\Http\Requests\FileUploadRequest;
+use App\Http\Requests\TargetsUploadRequest;
 use App\Mail\GenericMail;
 use App\Models\Calendar;
+use App\Models\Target;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use PDOException;
 use JWTFactory;
 use JWTAuth;
@@ -205,16 +207,41 @@ class CalendarController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function uploadTargets(FileUploadRequest $request)
+    public function uploadTargets(TargetsUploadRequest $request)
     {
         $targets = $request->file()["file"]->get();
-        $targets = json_decode($targets);
+        $targets = json_decode($targets, true);
 
-        if($targets == null)
+        if($targets == null || !$this->validateJSON($targets))
             return back()->withErrors(['Invalid Json']);
 
-        dd($targets);
-        return back()
-                ->with('success', 'File has been uploaded.');
+        DB::beginTransaction();
+        try{
+            foreach($targets['targets'] as $target){
+                Target::firstOrCreate([
+                    'email'       => $target,
+                    'calendar_id' => $request->id
+                ]);
+            }
+            DB::commit();
+        }catch(Exception $ex){
+            DB::rollBack();
+            return back()->withErrors('Something went wrong creating targets');
+        }
+
+        return back()->with('success', 'File has been uploaded.');
+    }
+
+    protected function validateJSON(&$array)
+    {
+        if(!array_key_exists('targets',$array) || !is_array($array['targets']))
+            return false;
+
+        foreach($array['targets'] as $key => $value){
+            if(is_array($value))
+                return false;
+        }
+
+        return true;
     }
 }
