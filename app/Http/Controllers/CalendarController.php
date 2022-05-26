@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\Mailer;
 use App\Http\Requests\CalendarStoreRequest;
+use App\Http\Requests\FileUploadRequest;
 use App\Mail\GenericMail;
 use App\Models\Calendar;
 use Exception;
@@ -116,9 +117,9 @@ class CalendarController extends Controller
     public function getHelpers(Request $request)
     {
         $helpers = null;
-        try{
+        try {
             $helpers = Auth::user()->calendars()->where('id', $request->id)->first()->helpers;
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
             return response()->json(['message' => 'Can\'t get helpers']);
         }
 
@@ -149,7 +150,7 @@ class CalendarController extends Controller
      */
     public function addHelpers(Request $request, JWT $jwt)
     {
-        if(!isset($request->users) || !isset($request->calendar_id))
+        if (!isset($request->users) || !isset($request->calendar_id))
             return response()->json(['message' => 'Missing data'], 400);
 
         foreach ($request->users as $user) {
@@ -166,11 +167,11 @@ class CalendarController extends Controller
                 'data'    => ['token' => route('user.become.helper', ['token' => $token])],
             ];
 
-            try{
+            try {
                 $mailer = new Mailer(['name' => '', 'email' => $user], GenericMail::class, $data);
                 $mailer->send();
-            }catch(Exception $ex){
-                return response()->json(['message' => 'Can\'t send all emails'. $ex->getMessage()]);
+            } catch (Exception $ex) {
+                return response()->json(['message' => 'Can\'t send all emails' . $ex->getMessage()]);
             }
         }
 
@@ -185,16 +186,35 @@ class CalendarController extends Controller
      */
     public function removeHelper(Request $request)
     {
-        if($request->user_id == null)
+        if ($request->user_id == null)
             return response()->json(['message' => 'Invalid User'], 400);
 
-        try{
+        try {
             $calendar = Calendar::findOrFail($request->calendar_id);
             $calendar->helpers()->detach($request->user_id);
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
             return response()->json(['message' => 'Can\'t remove helper from calendar ' . $request->calendar_id], 500);
         }
 
-        return response()->json(['message' => 'Helper removed from calendar '. $request->calendar_id]);
+        return response()->json(['message' => 'Helper removed from calendar ' . $request->calendar_id]);
+    }
+
+    /**
+     * Fetch a .json file and insert or update the passed targets
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function uploadTargets(FileUploadRequest $request)
+    {
+        $targets = $request->file()["file"]->get();
+        $targets = json_decode($targets);
+
+        if($targets == null)
+            return back()->withErrors(['Invalid Json']);
+
+        dd($targets);
+        return back()
+                ->with('success', 'File has been uploaded.');
     }
 }

@@ -61,6 +61,7 @@ Route::middleware(['auth'])->group(function(){
 
         Route::middleware(OwnerCalendarVerify::class)->group(function (){
 
+            Route::post('/upload_targets/{id}', [CalendarController::class, 'uploadTargets'])->name('targets.upload');
             Route::patch('/calendar_update/{id}', [CalendarController::class, 'update'])->name('update');
             Route::delete('/calendar_destroy/{id}', [CalendarController::class, 'destory'])->name('destroy');
 
