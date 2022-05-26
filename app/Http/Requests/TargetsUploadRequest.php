@@ -25,7 +25,7 @@ class TargetsUploadRequest extends FormRequest
     {
         return [
             'file'        => ['required', 'mimetypes:application/json,text/plain', 'max:10240'],
-            'id'          => ['required', 'numeric', 'exists:calendars']
+            'id'          => ['required', 'numeric']
         ];
     }
 }

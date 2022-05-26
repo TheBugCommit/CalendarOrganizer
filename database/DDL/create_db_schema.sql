@@ -20,6 +20,7 @@ CREATE TABLE users (
   phone varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   gender char(1) COLLATE utf8mb4_unicode_ci NOT NULL,
   nation_id bigint(20) unsigned NOT NULL,
+  google_access_token_json text,
   remember_token varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   created_at timestamp NULL DEFAULT NULL,
   updated_at timestamp NULL DEFAULT NULL,
@@ -43,7 +44,9 @@ CREATE TABLE categories (
 CREATE TABLE calendars (
   id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   user_id bigint(20) unsigned NOT NULL,
-  title varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
+  title varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  description varchar(200) COLLATE utf8mb4_unicode_ci,
+  google_calendar_id varchar(300) COLLATE utf8mb4_unicode_ci,
   start_date date NOT NULL,
   end_date date NOT NULL,
   CONSTRAINT pk_calendars PRIMARY KEY (id),
@@ -363,6 +366,6 @@ INSERT INTO nations (name, code) VALUES ('Zimbabwe', 'ZW');
 -- End nations initialization
 
 -- Users initialization
-INSERT INTO users VALUES (NULL, 'Gerard', 'admin@admin.com', '$2y$10$HCzABbNv9skrPq2C1TncOeNhC2JQ0lFdq0UyfVeYlTzYDHRAQ2ZnC', 'Casas', 'Serarols', 0, date '2002-10-03', NULL, 'M', 193, NULL, now(), now());
+INSERT INTO users VALUES (NULL, 'Gerard', 'admin@admin.com', '$2y$10$HCzABbNv9skrPq2C1TncOeNhC2JQ0lFdq0UyfVeYlTzYDHRAQ2ZnC', 'Casas', 'Serarols', 0, date '2002-10-03', NULL, 'M', 193, NULL, NULL ,now(), now());
 
 COMMIT;

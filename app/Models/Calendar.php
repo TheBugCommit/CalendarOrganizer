@@ -15,8 +15,10 @@ class Calendar extends Model
     protected $fillable = [
         'user_id',
         'title',
+        'description',
+        'google_calendar_id',
         'start_date',
-        'end_date'
+        'end_date',
     ];
 
     protected static function boot()

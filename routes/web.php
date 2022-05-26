@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CalendarController;
 //use App\Http\Controllers\CalendarHelpersController;
@@ -33,6 +34,10 @@ Route::middleware(['guest'])->group(function(){
     });
 });
 
+
+Route::get('/google_login', [GoogleController::class, 'getAuthUrl'])->name('login');
+Route::get('/publish_calendar', [GoogleController::class, 'publishGoogleCalendar'])->name('publish');
+
 Route::middleware(['auth'])->group(function(){
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -61,6 +66,11 @@ Route::middleware(['auth'])->group(function(){
 
         Route::middleware(OwnerCalendarVerify::class)->group(function (){
 
+            /*Route::name('google.')->group(function() {
+                Route::get('/google_login', [GoogleController::class, 'getAuthUrl'])->name('login');
+            });*/
+
+            Route::get('/calendar_publish/{id}', [CalendarController::class, 'publishCalendar'])->name('publish');
             Route::post('/upload_targets', [CalendarController::class, 'uploadTargets'])->name('targets.upload');
             Route::patch('/calendar_update/{id}', [CalendarController::class, 'update'])->name('update');
             Route::delete('/calendar_destroy/{id}', [CalendarController::class, 'destory'])->name('destroy');

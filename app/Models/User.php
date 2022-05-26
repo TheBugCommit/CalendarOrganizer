@@ -33,6 +33,7 @@ class User extends Authenticatable
         'birth_date',
         'gender',
         'nation_id',
+        'google_access_token_json'
     ];
 
     /**
