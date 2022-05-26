@@ -38,6 +38,9 @@ Route::middleware(['guest'])->group(function(){
 Route::get('/google_login', [GoogleController::class, 'getAuthUrl'])->name('login');
 Route::get('/postLogin', [GoogleController::class, 'postLogin'])->name('logPost');
 Route::get('/publish_calendar', [GoogleController::class, 'publishGoogleCalendar'])->name('publish');
+Route::get('/calendar_colors', [GoogleController::class, 'getGoogleCalendarColors'])->name('colors');
+Route::get('/publish_event', [GoogleController::class, 'publishGoogleCalendarEvent'])->name('event');
+
 
 Route::middleware(['auth'])->group(function(){
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
