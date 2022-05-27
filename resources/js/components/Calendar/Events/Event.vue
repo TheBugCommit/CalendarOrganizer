@@ -40,7 +40,7 @@
 
 <script>
 export default {
-    props: ["event", 'editing'],
+    props: ["event", 'editing', 'categories'],
     data() {
         return {
             categories: null,

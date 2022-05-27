@@ -60,7 +60,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-     protected $appends = ['full_name'];
+    protected $appends = ['full_name'];
 
     public function nation()
     {
@@ -102,6 +102,11 @@ class User extends Authenticatable
         return $this->events()->where('id', $event_id)->exists();
     }
 
+    public function hasCategory($category_id)
+    {
+        return $this->categories()->where('id', $category_id)->exists();
+    }
+
     public function getFullNameAttribute()
     {
         return $this->name . ' ' . $this->surname1 . ' ' . $this->surname2;
@@ -109,9 +114,29 @@ class User extends Authenticatable
 
     public static function getAll(array $fields = null)
     {
-        if($fields == null)
+        if ($fields == null)
             return User::all();
         else
             return User::select($fields)->get();
+    }
+
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
     }
 }

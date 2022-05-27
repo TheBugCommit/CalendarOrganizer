@@ -28,7 +28,6 @@
                 </ul>
             </div>
         @endif
-
     </form>
 @endsection
 
@@ -37,7 +36,7 @@
         referrerpolicy="origin"></script>
     <script src="/js/jscolor.min.js"></script>
     <script>
-        const route_user_categories = '{{ route('user.categories') }}';
+        const route_user_categories = '{{ route('user.category.all') }}';
         const route_events = '{{ route('calendar.events') }}';
         const route_events_store = '{{ route('calendar.event.store') }}';
         const route_events_update = '{{ route('calendar.event.update') }}';

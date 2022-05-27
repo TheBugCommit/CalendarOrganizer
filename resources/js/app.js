@@ -32,18 +32,20 @@ const app = new Vue({
             start_date: "",
             end_date: ""
         },
+        categories: [],
     },
 
     mounted() {
         if(typeof route_user_me !== 'undefined')
             this.getMe()
+
         if (this.currentRoute == '/')
             this.getCalendars()
+
+        if(typeof route_user_categories !== 'undefined')
+            this.getCategories();
     },
 
-    created() {
-
-    },
 
     methods: {
         getCalendars() {
@@ -76,6 +78,52 @@ const app = new Vue({
                 console.error(error)
             })
         },
+
+        getCategories() {
+            let _this = this;
+
+            $.ajax({
+                url: route_user_categories,
+                dataType: "JSON",
+                method: 'GET',
+            }).done((response) => {
+                _this.categories = response
+            }).fail((response) => {
+                _this.categories = _this.categories || []
+            })
+        },
+
+        /*deleteCategory(id){
+            let _this = this
+            $.ajax({
+                url: route_user_category_delete,
+                dataType: "JSON",
+                method: 'DELETE',
+                data: {id: id}
+            }).done((response) => {
+                let index = _this.categories.findIndex(cat => cat.id == id)
+                if(index != -1)
+                    _this.categories.splice(index, 1)
+            }).fail((response) => {
+                _this.categories = _this.categories || []
+            })
+        },
+
+        updateCategory(id){
+            let _this = this
+            $.ajax({
+                url: route_user_category_update,
+                dataType: "JSON",
+                method: 'PATCH',
+                data: {id: id, name: _this.}
+            }).done((response) => {
+                let index = _this.categories.findIndex(cat => cat.id == id)
+                if(index != -1)
+                    _this.categories.splice(index, 1)
+            }).fail((response) => {
+                _this.categories = _this.categories || []
+            })
+        },*/
 
         getMe() {
             let _this = this

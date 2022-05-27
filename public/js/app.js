@@ -21157,7 +21157,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ["event", 'editing'],
+  props: ["event", 'editing', 'categories'],
   data: function data() {
     return {
       categories: null
@@ -21645,13 +21645,14 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_4__["default"]({
       title: "",
       start_date: "",
       end_date: ""
-    }
+    },
+    categories: []
   },
   mounted: function mounted() {
     if (typeof route_user_me !== 'undefined') this.getMe();
     if (this.currentRoute == '/') this.getCalendars();
+    if (typeof route_user_categories !== 'undefined') this.getCategories();
   },
-  created: function created() {},
   methods: {
     getCalendars: function getCalendars() {
       var _this2 = this;
@@ -21689,6 +21690,50 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_4__["default"]({
         console.error(error);
       });
     },
+    getCategories: function getCategories() {
+      var _this = this;
+
+      $.ajax({
+        url: route_user_categories,
+        dataType: "JSON",
+        method: 'GET'
+      }).done(function (response) {
+        _this.categories = response;
+      }).fail(function (response) {
+        _this.categories = _this.categories || [];
+      });
+    },
+
+    /*deleteCategory(id){
+        let _this = this
+        $.ajax({
+            url: route_user_category_delete,
+            dataType: "JSON",
+            method: 'DELETE',
+            data: {id: id}
+        }).done((response) => {
+            let index = _this.categories.findIndex(cat => cat.id == id)
+            if(index != -1)
+                _this.categories.splice(index, 1)
+        }).fail((response) => {
+            _this.categories = _this.categories || []
+        })
+    },
+     updateCategory(id){
+        let _this = this
+        $.ajax({
+            url: route_user_category_update,
+            dataType: "JSON",
+            method: 'PATCH',
+            data: {id: id, name: _this.}
+        }).done((response) => {
+            let index = _this.categories.findIndex(cat => cat.id == id)
+            if(index != -1)
+                _this.categories.splice(index, 1)
+        }).fail((response) => {
+            _this.categories = _this.categories || []
+        })
+    },*/
     getMe: function getMe() {
       var _this = this;
 

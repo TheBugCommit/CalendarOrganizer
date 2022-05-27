@@ -3,12 +3,14 @@
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\CategoryController;
 //use App\Http\Controllers\CalendarHelpersController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\MailerController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\CalendarVerify;
+use App\Http\Middleware\CategoryVerify;
 use App\Http\Middleware\OwnerCalendarVerify;
 use App\Http\Middleware\EventVerify;
 use Illuminate\Support\Facades\Route;
@@ -25,7 +27,6 @@ use Illuminate\Support\Facades\Route;
 */
 Route::middleware(['guest'])->group(function(){
     Route::name('auth.')->group(function () {
-
         Route::get('/login', [AuthController::class, 'index'])->name('login');
         Route::get('/signin', [AuthController::class, 'signin'])->name('signin');
 
@@ -51,8 +52,18 @@ Route::middleware(['auth'])->group(function(){
     Route::name('user.')->group(function () {
         Route::get('/me', [UserController::class, 'me'])->name('me');
         Route::get('/all_users', [UserController::class, 'getAllUsers'])->name('all');
-        Route::get('/categories', [UserController::class, 'getCategories'])->name('categories');
         Route::get('/become_calendar_helper/{token}', [UserController::class, 'becomeHelper'])->name('become.helper');
+
+        Route::name('category.')->group(function(){
+            Route::get('/categories', [CategoryController::class, 'index'])->name('index');
+            Route::get('/user_categories', [CategoryController::class, 'getCategories'])->name('all');
+            Route::post('/category_store', [CategoryController::class, 'store'])->name('store');
+            Route::middleware(CategoryVerify::class)->group(function (){
+                Route::patch('/category_update', [CategoryController::class, 'update'])->name('update');
+                Route::delete('/category_delete', [CategoryController::class, 'destroy'])->name('delete');
+            });
+        });
+
     });
 
     Route::name('email.')->group(function () {
