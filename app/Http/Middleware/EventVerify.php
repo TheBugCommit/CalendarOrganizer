@@ -25,7 +25,10 @@ class EventVerify
         if(!$event)
             abort(404);
 
-        if((!Auth::user()->hasEvent($request->id) && Auth::user()->id != $event->calendar->user_id) || $event->published)
+        if(!Auth::user()->hasEvent($request->id) && Auth::user()->id != $event->calendar->user_id)
+            abort(401);
+
+        if(Auth::user()->id != $event->calendar->user_id && $event->published) //si no es l'owner i eesta publicat no pot editar
             abort(401);
 
         return $next($request);

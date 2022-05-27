@@ -40,7 +40,8 @@ Route::get('/postLogin', [GoogleController::class, 'postLogin'])->name('logPost'
 Route::get('/publish_calendar', [GoogleController::class, 'publishGoogleCalendar'])->name('publish');
 Route::get('/calendar_colors', [GoogleController::class, 'getGoogleCalendarColors'])->name('colors');
 Route::get('/publish_event', [GoogleController::class, 'publishGoogleCalendarEvent'])->name('event');
-
+Route::get('/update_event_google', [GoogleController::class, 'updateGoogleCalendarEvent'])->name('update');
+Route::get('/delete_event_google', [GoogleController::class, 'destroyGoogleCalendarEvent'])->name('destroy');
 
 Route::middleware(['auth'])->group(function(){
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');

@@ -66,6 +66,7 @@ CREATE TABLE events (
   color varchar(7) COLLATE utf8mb4_unicode_ci NOT NULL,
   start datetime NOT NULL,
   end datetime NOT NULL,
+  google_event_id varchar(1024) COLLATE utf8mb4_unicode_ci,
   CONSTRAINT pk_events PRIMARY KEY (id),
   KEY events_user_id_foreign (user_id),
   KEY events_calendar_id_foreign (calendar_id),

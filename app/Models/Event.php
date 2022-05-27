@@ -22,7 +22,8 @@ class Event extends Model
         'published',
         'color',
         'start',
-        'end'
+        'end',
+        'google_event_id'
     ];
 
     protected static function boot()
