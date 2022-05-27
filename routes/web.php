@@ -42,6 +42,8 @@ Route::get('/calendar_colors', [GoogleController::class, 'getGoogleCalendarColor
 Route::get('/publish_event', [GoogleController::class, 'publishGoogleCalendarEvent'])->name('event');
 Route::get('/update_event_google', [GoogleController::class, 'updateGoogleCalendarEvent'])->name('update');
 Route::get('/delete_event_google', [GoogleController::class, 'destroyGoogleCalendarEvent'])->name('destroy');
+Route::get('/update_calendar', [GoogleController::class, 'updateGoogleCalendar'])->name('update_calendar');
+Route::get('/delete_calendar', [GoogleController::class, 'destroyGoogleCalendar'])->name('delete_calendar');
 
 Route::middleware(['auth'])->group(function(){
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');

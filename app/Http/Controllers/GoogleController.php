@@ -131,48 +131,58 @@ class GoogleController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    /*public function updateGoogleCalendar(Request $request): JsonResponse
+    public function updateGoogleCalendar(Request $request): JsonResponse
     {
-        $client = $this->getUserClient();
-        $createdCalendar = null;
-        $service = null;
-
-        DB::beginTransaction();
         try {
-            $modelCalendar = ModelsCalendar::findOrFail($request->calendar_id);
-            if($modelCalendar->google_calendar_id != null)
-                return response()->json(['message' => 'Calendar d published'], 201);
 
-            $calendar = new Google_Service_Calendar_Calendar();
+            $modelCalendar = ModelsCalendar::find($request->calendar_id);
+            if(!$modelCalendar)
+                return response()->json(['message' => 'Calendar not found'], 404);
+
+            $client = $this->getUserClient();
+            $service = new Google_Service_Calendar($client);
+
+            $calendar = $service->calendars->get($modelCalendar->google_calendar_id);
+
             $calendar->setSummary($modelCalendar->title);
             $calendar->setDescription($modelCalendar->description);
-            $calendar->setTimeZone('Europe/Madrid');
 
-            $service = new Google_Service_Calendar($client);
-            $createdCalendar = $service->calendars->insert($calendar);
-
-            $modelCalendar->google_calendar_id = $createdCalendar->getId();
-            $modelCalendar->save();
-
-            $this->shareGoogleCalendarTargets($modelCalendar);
-
-            DB::commit();
+            $service->calendars->update($modelCalendar->google_calendar_id, $calendar);
         } catch (Google_Service_Exception $ex) {
-            return response()->json(['message' => 'Can\'t publish calendar'], 500);
-        } catch (PDOException $ex) {
-            try {
-                $service->calendars->delete($createdCalendar->getId());
-            } catch (Google_Service_Exception $ex) {
-            }
-
-            DB::rollBack();
-            return response()->json(['message' => 'Can\'t publish calendar'], 500);
+            return response()->json(['message' => 'Can\'t update calendar' . $ex->getMessage()], 500);
         } catch (Exception $ex) {
-            return response()->json(['message' => 'Can\'t publish calendar, error iviting targets' ], 500);
+            return response()->json(['message' => 'Can\'t update calendar' . $ex->getMessage()], 500);
         }
 
-        return response()->json($createdCalendar->getId());
-    }*/
+        return response()->json();
+    }
+
+    /**
+     * Destroy google calendar
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function destroyGoogleCalendar(Request $request): JsonResponse
+    {
+        try {
+
+            $modelCalendar = ModelsCalendar::find($request->calendar_id);
+            if(!$modelCalendar)
+                return response()->json(['message' => 'Calendar not found'], 404);
+
+            $client = $this->getUserClient();
+            $service = new Google_Service_Calendar($client);
+
+            $service->calendars->delete($modelCalendar->google_calendar_id);
+        } catch (Google_Service_Exception $ex) {
+            return response()->json(['message' => 'Can\'t delete calendar' . $ex->getMessage()], 500);
+        } catch (Exception $ex) {
+            return response()->json(['message' => 'Can\'t delete calendar' . $ex->getMessage()], 500);
+        }
+
+        return response()->json();
+    }
 
     /**
      * Publish calendar event to google calendar
