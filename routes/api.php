@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('getToken', [AuthControllerAPI::class, 'getToken']);
+Route::post('getToken', [AuthControllerAPI::class, 'getToken']);
 Route::middleware(['auth:api'])->group(function(){
     Route::get('export_events',  [EventsControllerAPI::class, 'export']);
     Route::post('logout', [AuthControllerAPI::class, 'logout']);

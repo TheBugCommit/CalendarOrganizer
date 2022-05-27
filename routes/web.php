@@ -46,7 +46,7 @@ Route::get('/delete_event_google', [GoogleController::class, 'destroyGoogleCalen
 Route::get('/update_calendar', [GoogleController::class, 'updateGoogleCalendar'])->name('update_calendar');
 Route::get('/delete_calendar', [GoogleController::class, 'destroyGoogleCalendar'])->name('delete_calendar');
 
-Route::middleware(['auth'])->group(function(){
+Route::middleware(['auth:web'])->group(function(){
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::name('user.')->group(function () {

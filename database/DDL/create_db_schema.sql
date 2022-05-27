@@ -1,136 +1,103 @@
-START TRANSACTION;
-
 CREATE TABLE nations (
-  id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  code varchar(2) COLLATE utf8mb4_unicode_ci NOT NULL,
-  name varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
-  CONSTRAINT pk_nations PRIMARY KEY (id)
+id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+code varchar(2) COLLATE utf8mb4_unicode_ci NOT NULL,
+name varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+CONSTRAINT pk_nations PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE roles (
+id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+name varchar(2) COLLATE utf8mb4_unicode_ci NOT NULL,
+CONSTRAINT pk_roles PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE users (
-  id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  name varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
-  email varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  password varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL,
-  surname1 varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
-  surname2 varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
-  locked tinyint(1) NOT NULL DEFAULT 0,
-  birth_date date NOT NULL,
-  phone varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  gender char(1) COLLATE utf8mb4_unicode_ci NOT NULL,
-  nation_id bigint(20) unsigned NOT NULL,
-  google_access_token_json text,
-  remember_token varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  created_at timestamp NULL DEFAULT NULL,
-  updated_at timestamp NULL DEFAULT NULL,
-  CONSTRAINT pk_users PRIMARY KEY (id),
-  UNIQUE KEY users_email_unique (email),
-  KEY users_nation_id_foreign (nation_id),
-  CONSTRAINT users_nation_id_foreign FOREIGN KEY (nation_id) REFERENCES nations (id),
-  CONSTRAINT users_gender_check check (gender in ('M', 'F', 'O'))
+id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+name varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+email varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+password varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL,
+surname1 varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+surname2 varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+locked tinyint(1) NOT NULL DEFAULT 0,
+birth_date date NOT NULL,
+phone varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+gender char(1) COLLATE utf8mb4_unicode_ci NOT NULL,
+role_id bigint(20) unsigned NOT NULL DEFAULT 2,
+nation_id bigint(20) unsigned NOT NULL,
+google_access_token_json text,
+remember_token varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+created_at timestamp NULL DEFAULT NULL,
+updated_at timestamp NULL DEFAULT NULL,
+CONSTRAINT pk_users PRIMARY KEY (id),
+UNIQUE KEY users_email_unique (email),
+KEY users_nation_id_foreign (nation_id),
+KEY users_roles_id_foreign (role_id),
+CONSTRAINT users_roles_id_foreign FOREIGN KEY (role_id) REFERENCES roles (id),
+CONSTRAINT users_nation_id_foreign FOREIGN KEY (nation_id) REFERENCES nations (id),
+CONSTRAINT users_gender_check check (gender in ('M', 'F', 'O'))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 CREATE TABLE categories (
-  id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  user_id bigint(20) unsigned NOT NULL,
-  name varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
-  CONSTRAINT pk_categories PRIMARY KEY (id),
-  KEY categories_user_id_foreign (user_id),
-  CONSTRAINT categories_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
+id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+user_id bigint(20) unsigned NOT NULL,
+name varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+CONSTRAINT pk_categories PRIMARY KEY (id),
+KEY categories_user_id_foreign (user_id),
+CONSTRAINT categories_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE calendars (
-  id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  user_id bigint(20) unsigned NOT NULL,
-  title varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  description varchar(200) COLLATE utf8mb4_unicode_ci,
-  google_calendar_id varchar(300) COLLATE utf8mb4_unicode_ci,
-  start_date date NOT NULL,
-  end_date date NOT NULL,
-  CONSTRAINT pk_calendars PRIMARY KEY (id),
-  KEY calendars_user_id_foreign (user_id),
-  CONSTRAINT calendars_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
+id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+user_id bigint(20) unsigned NOT NULL,
+title varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+description varchar(200) COLLATE utf8mb4_unicode_ci,
+google_calendar_id varchar(300) COLLATE utf8mb4_unicode_ci,
+start_date date NOT NULL,
+end_date date NOT NULL,
+CONSTRAINT pk_calendars PRIMARY KEY (id),
+KEY calendars_user_id_foreign (user_id),
+CONSTRAINT calendars_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE events (
-  id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  calendar_id bigint(20) unsigned NOT NULL,
-  category_id bigint(20) unsigned NOT NULL,
-  user_id bigint(20) unsigned NOT NULL,
-  title varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
-  description varchar(1000) COLLATE utf8mb4_unicode_ci NOT NULL,
-  location varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL,
-  published tinyint(1) NOT NULL DEFAULT 0,
-  color varchar(7) COLLATE utf8mb4_unicode_ci NOT NULL,
-  start datetime NOT NULL,
-  end datetime NOT NULL,
-  google_event_id varchar(1024) COLLATE utf8mb4_unicode_ci,
-  CONSTRAINT pk_events PRIMARY KEY (id),
-  KEY events_user_id_foreign (user_id),
-  KEY events_calendar_id_foreign (calendar_id),
-  KEY events_category_id_foreign (category_id),
-  CONSTRAINT events_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT events_calendar_id_foreign FOREIGN KEY (calendar_id) REFERENCES calendars (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT events_category_id_foreign FOREIGN KEY (category_id) REFERENCES categories (id)
+id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+calendar_id bigint(20) unsigned NOT NULL,
+category_id bigint(20) unsigned NOT NULL,
+user_id bigint(20) unsigned NOT NULL,
+title varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+description varchar(1000) COLLATE utf8mb4_unicode_ci NOT NULL,
+location varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL,
+published tinyint(1) NOT NULL DEFAULT 0,
+color varchar(7) COLLATE utf8mb4_unicode_ci NOT NULL,
+start datetime NOT NULL,
+end datetime NOT NULL,
+google_event_id varchar(1024) COLLATE utf8mb4_unicode_ci,
+CONSTRAINT pk_events PRIMARY KEY (id),
+KEY events_user_id_foreign (user_id),
+KEY events_calendar_id_foreign (calendar_id),
+KEY events_category_id_foreign (category_id),
+CONSTRAINT events_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT events_calendar_id_foreign FOREIGN KEY (calendar_id) REFERENCES calendars (id) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT events_category_id_foreign FOREIGN KEY (category_id) REFERENCES categories (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 CREATE TABLE targets (
-  calendar_id bigint(20) unsigned NOT NULL,
-  email varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  CONSTRAINT pk_targets PRIMARY KEY (calendar_id,email),
-  CONSTRAINT targets_calendar_id_foreign FOREIGN KEY (calendar_id) REFERENCES calendars (id) ON DELETE CASCADE ON UPDATE CASCADE
+calendar_id bigint(20) unsigned NOT NULL,
+email varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+CONSTRAINT pk_targets PRIMARY KEY (calendar_id,email),
+CONSTRAINT targets_calendar_id_foreign FOREIGN KEY (calendar_id) REFERENCES calendars (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE calendar_user (
-  user_id bigint(20) unsigned NOT NULL,
-  calendar_id bigint(20) unsigned NOT NULL,
-  CONSTRAINT pk_calendar_user PRIMARY KEY (user_id,calendar_id),
-  KEY calendar_user_calendar_id_foreign (calendar_id),
-  CONSTRAINT calendar_user_calendar_id_foreign FOREIGN KEY (calendar_id) REFERENCES calendars (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT calendar_user_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
+user_id bigint(20) unsigned NOT NULL,
+calendar_id bigint(20) unsigned NOT NULL,
+CONSTRAINT pk_calendar_user PRIMARY KEY (user_id,calendar_id),
+KEY calendar_user_calendar_id_foreign (calendar_id),
+CONSTRAINT calendar_user_calendar_id_foreign FOREIGN KEY (calendar_id) REFERENCES calendars (id) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT calendar_user_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-
--- Laravel Tables
-
-CREATE TABLE personal_access_tokens (
-  id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  tokenable_type varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  tokenable_id bigint(20) unsigned NOT NULL,
-  name varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  token varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
-  abilities text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  last_used_at timestamp NULL DEFAULT NULL,
-  created_at timestamp NULL DEFAULT NULL,
-  updated_at timestamp NULL DEFAULT NULL,
-  CONSTRAINT pk_personal_access_tokens PRIMARY KEY (id),
-  UNIQUE KEY personal_access_tokens_token_unique (token),
-  KEY personal_access_tokens_tokenable_type_tokenable_id_index (tokenable_type,tokenable_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE TABLE migrations (
-  id int(10) unsigned NOT NULL AUTO_INCREMENT,
-  migration varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  batch int(11) NOT NULL,
-  PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- Migrations initialization
-
-INSERT INTO migrations (migration, batch) VALUES
-('2019_12_14_000001_create_personal_access_tokens_table',1),
-('2022_05_18_000001_create_nations_table',1),
-('2022_05_18_000002_create_users_table',1),
-('2022_05_18_124715_create_categories_table',1),
-('2022_05_18_124823_create_calendars_table',1),
-('2022_05_18_124847_create_events_table',1),
-('2022_05_18_124907_create_targets_table',1),
-('2022_05_18_130737_create_calendar_user_table',1);
-
--- End migrations initialization
 
 
 -- Nations initialization
@@ -366,7 +333,12 @@ INSERT INTO nations (name, code) VALUES ('Zimbabwe', 'ZW');
 
 -- End nations initialization
 
--- Users initialization
-INSERT INTO users VALUES (NULL, 'Gerard', 'admin@admin.com', '$2y$10$HCzABbNv9skrPq2C1TncOeNhC2JQ0lFdq0UyfVeYlTzYDHRAQ2ZnC', 'Casas', 'Serarols', 0, date '2002-10-03', NULL, 'M', 193, NULL, NULL ,now(), now());
+-- Roles initialization
 
-COMMIT;
+INSERT INTO roles VALUES (NULL, 'ADMIN');
+INSERT INTO roles VALUES (NULL, 'CUSTOMER');
+
+-- Users initialization
+INSERT INTO users VALUES (NULL, 'Gerard','admin@admin.com', '$2y$10$HCzABbNv9skrPq2C1TncOeNhC2JQ0lFdq0UyfVeYlTzYDHRAQ2ZnC', 'Casas', 'Serarols', 0, date '2002-10-03', NULL, 'M', 1 ,193, NULL, NULL ,now(), now());
+
+

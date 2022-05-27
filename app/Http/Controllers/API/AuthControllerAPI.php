@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Firebase\JWT\JWT;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthControllerAPI extends Controller
@@ -14,9 +15,9 @@ class AuthControllerAPI extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getToken() : JsonResponse
+    public function getToken(Request $request) : JsonResponse
     {
-        $credentials = request(['email', 'password']);
+        $credentials = $request->only('email', 'password');
 
         if (!$token = Auth::guard('api')->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);

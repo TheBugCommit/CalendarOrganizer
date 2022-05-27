@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -33,6 +34,7 @@ class User extends Authenticatable
         'birth_date',
         'gender',
         'nation_id',
+        'role_id',
         'google_access_token_json'
     ];
 
@@ -65,6 +67,11 @@ class User extends Authenticatable
     public function nation()
     {
         return $this->belongsTo(Nation::class);
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
     }
 
     public function categories()

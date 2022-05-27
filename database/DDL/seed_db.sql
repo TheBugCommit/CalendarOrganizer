@@ -1,27 +1,52 @@
-START TRANSACTION;
-insert into users values (
-    null,'Gerard','g3casas@gmail.com', 'admin', 'Casas', 'Serarosls',
-    0,  curdate(), null, 'O', 1, null ,sysdate(), sysdate()
-);
+SET FOREIGN_KEY_CHECKS = 0;
 
-insert into categories values (
-    null,1, 'Esports'
-);
+DELETE FROM categories;
+DELETE FROM users;
+DELETE FROM calendars;
+DELETE FROM targets;
+DELETE FROM calendar_user;
+DELETE FROM events;
+DELETE FROM roles;
 
-insert into calendars values (
-    null,1, 'Titulo',  curdate(),  curdate()
-);
+SET FOREIGN_KEY_CHECKS = 1;
 
-insert into targets values (
-    1, 'gonzalo@gmail.com'
-);
+INSERT INTO roles VALUES (NULL, 'ADMIN');
+INSERT INTO roles VALUES (NULL, 'CUSTOMER');
 
-insert into calendar_user values (
-    1, 1
-);
+INSERT INTO users VALUES (NULL, 'Gerard','admin@admin.com', '$2y$10$HCzABbNv9skrPq2C1TncOeNhC2JQ0lFdq0UyfVeYlTzYDHRAQ2ZnC', 'Casas', 'Serarols', 0, date '2002-10-03', NULL, 'M', 1 ,193, NULL, NULL ,now(), now());
+
+INSERT INTO users VALUES (NULL, 'Albert','albert@gmail.com', '$2y$10$HCzABbNv9skrPq2C1TncOeNhC2JQ0lFdq0UyfVeYlTzYDHRAQ2ZnC',
+'Casas', 'Montagut', 0, date '2002-11-23', NULL, 'M', 2 ,193, NULL, NULL ,now(), now());
+
+INSERT INTO users VALUES (NULL, 'Janma','janma@gmail.com', '$2y$10$HCzABbNv9skrPq2C1TncOeNhC2JQ0lFdq0UyfVeYlTzYDHRAQ2ZnC',
+'Managut', 'Urlan', 0, date '2001-02-23', NULL, 'O', 2 ,193, NULL, NULL ,now(), now());
+
+insert into categories values (null, 2, 'Esports');
+insert into categories values (null, 2, 'Cinema');
+insert into categories values (null, 2, 'Beisbol');
+insert into categories values (null, 2, 'Caminates');
+insert into categories values (null, 3, 'Alcoholics anonims');
+insert into categories values (null, 3, 'Atenció communitaria');
+insert into categories values (null, 3, 'Grup ajuda drogadictes');
+
+insert into calendars values (null,1, 'Esportiueig 2022', 'Calendari d''events esportius per l''estiu del 2022' ,NULL, curdate(),  curdate());
+insert into calendars values(null,2, 'Ajudes Communitaries', 'Calendari de les sessions d''ajuda del 2022' ,NULL, curdate(),  curdate());
+
+insert into targets values (1, 'servergerard@gmail.com');
+insert into targets values (1, 'g3casas@gmail.com');
+insert into targets values (2, 'g3casas@gmail.com');
+insert into targets values (2, 'servergerard@gmail.com');
+
+insert into calendar_user values (2, 2);
+insert into calendar_user values (3, 1);
 
 insert into events values (
-    null,1, 1, 1, 'tupak', 'si', 'si', 1, 'red', sysdate(),sysdate()
+    (null,1, 1, 2, 'Partit Futbol', 'Partit de futobol igualada vs lleida bengemins',
+     'Les Comes (Pavelló d''Hoquei Patins de Les Comes)', 0, '#ff0000', datetime '2022-06-01 18:30:00',datetime '2022-06-01 20:30:00', NULL),
+    (null,1, 4, 3, 'Caminata esgabetalls', 'Caminata pensda per tota la família per el magnific paisatge dels esgavetalls',
+     'Vilanova del Camí', 0, '#ff0000', datetime '2022-06-07 08:30:00',datetime '2022-06-07 10:30:00', NULL),
+    (null,2, 6, 2, 'Reunió d''ajuda comunitaria', 'Reunió per ajuda generica a la communitat de veïns d''Igualada',
+    'Plaça Calfont Igualada', 0, '#ff0000', datetime '2022-06-03 17:30:00',datetime '2022-06-03 20:30:00', NULL),
+    (null,2, 5, 3, 'Reunó d''ajuda a persones alcoholiques', 'Reunió on es posen en comú coses d''alcholics',
+    'C/ Anglí, 54, 08017 Barcelona – España', 0, '#ff0000', datetime '2022-06-23 08:30:00',datetime '2022-06-23 23:30:00', NULL),
 );
-
-COMMIT;

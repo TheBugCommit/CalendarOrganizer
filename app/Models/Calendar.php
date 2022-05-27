@@ -50,4 +50,30 @@ class Calendar extends Model
         return $this->hasMany(Target::class);
     }
 
+    public function getEventsByRange($start = null, $end = null)
+    {
+        if($start == null && $end == null)
+            return $this->events()->where('published', true)->get();
+
+        if($start != null && $end != null){
+            return $this->events()
+                ->where('start', '>=', $start)
+                ->where('start', '<', $end)
+                ->where('end', '<=', $end)
+                ->where('end', '>', $start)
+                ->get();
+        }
+
+        if($start != null)
+            return $this->events()->where('start', '>=' ,$start)->get();
+
+        if($end != null)
+            return $this->events()->where('end', '<=' ,$end)->get();
+    }
+
+    public static function getById($id, $user_id)
+    {
+        return Calendar::where('user_id', $user_id)->where('id', $id)->first();
+    }
+
 }
