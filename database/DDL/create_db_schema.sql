@@ -7,7 +7,7 @@ CONSTRAINT pk_nations PRIMARY KEY (id)
 
 CREATE TABLE roles (
 id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-name varchar(2) COLLATE utf8mb4_unicode_ci NOT NULL,
+name varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
 CONSTRAINT pk_roles PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

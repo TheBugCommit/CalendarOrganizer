@@ -1,14 +1,9 @@
-SET FOREIGN_KEY_CHECKS = 0;
 
-DROP TABLE IF EXISTS calendars,
-           calendar_user,
-           categories,
-           events,
-           migrations,
-           nations,
-           personal_access_tokens,
-           targets,
-           users,
-           roles;
-
-SET FOREIGN_KEY_CHECKS = 1;
+DROP TABLE IF EXISTS targets;
+DROP TABLE IF EXISTS events;
+DROP TABLE IF EXISTS categories;
+DROP TABLE IF EXISTS calendar_user;
+DROP TABLE IF EXISTS calendars;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS roles;
+DROP TABLE IF EXISTS nations;

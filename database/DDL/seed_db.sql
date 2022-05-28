@@ -1,14 +1,18 @@
-SET FOREIGN_KEY_CHECKS = 0;
-
-DELETE FROM categories;
-DELETE FROM users;
-DELETE FROM calendars;
 DELETE FROM targets;
-DELETE FROM calendar_user;
 DELETE FROM events;
+DELETE FROM categories;
+DELETE FROM calendars;
+DELETE FROM users;
 DELETE FROM roles;
 
-SET FOREIGN_KEY_CHECKS = 1;
+ALTER TABLE categories AUTO_INCREMENT = 1;
+ALTER TABLE users AUTO_INCREMENT = 1;
+ALTER TABLE calendars AUTO_INCREMENT = 1;
+ALTER TABLE targets AUTO_INCREMENT = 1;
+ALTER TABLE calendar_user AUTO_INCREMENT = 1;
+ALTER TABLE roles AUTO_INCREMENT = 1;
+ALTER TABLE events AUTO_INCREMENT = 1;
+
 
 INSERT INTO roles VALUES (NULL, 'ADMIN');
 INSERT INTO roles VALUES (NULL, 'CUSTOMER');
@@ -40,13 +44,14 @@ insert into targets values (2, 'servergerard@gmail.com');
 insert into calendar_user values (2, 2);
 insert into calendar_user values (3, 1);
 
-insert into events values (
-    (null,1, 1, 2, 'Partit Futbol', 'Partit de futobol igualada vs lleida bengemins',
-     'Les Comes (Pavelló d''Hoquei Patins de Les Comes)', 0, '#ff0000', datetime '2022-06-01 18:30:00',datetime '2022-06-01 20:30:00', NULL),
-    (null,1, 4, 3, 'Caminata esgabetalls', 'Caminata pensda per tota la família per el magnific paisatge dels esgavetalls',
-     'Vilanova del Camí', 0, '#ff0000', datetime '2022-06-07 08:30:00',datetime '2022-06-07 10:30:00', NULL),
-    (null,2, 6, 2, 'Reunió d''ajuda comunitaria', 'Reunió per ajuda generica a la communitat de veïns d''Igualada',
-    'Plaça Calfont Igualada', 0, '#ff0000', datetime '2022-06-03 17:30:00',datetime '2022-06-03 20:30:00', NULL),
-    (null,2, 5, 3, 'Reunó d''ajuda a persones alcoholiques', 'Reunió on es posen en comú coses d''alcholics',
-    'C/ Anglí, 54, 08017 Barcelona – España', 0, '#ff0000', datetime '2022-06-23 08:30:00',datetime '2022-06-23 23:30:00', NULL),
-);
+insert into events values (null,1, 1, 2, 'Partit Futbol', 'Partit de futobol igualada vs lleida bengemins',
+     'Les Comes (Pavelló d''Hoquei Patins de Les Comes)', 0, '#ff0000', '2022-06-01 18:30:00','2022-06-01 20:30:00', NULL);
+
+insert into events values (null,1, 4, 3, 'Caminata esgabetalls', 'Caminata pensda per tota la família per el magnific paisatge dels esgavetalls',
+     'Vilanova del Camí', 0, '#ff0000', '2022-06-07 08:30:00','2022-06-07 10:30:00', NULL);
+
+insert into events values (null,2, 6, 2, 'Reunió d''ajuda comunitaria', 'Reunió per ajuda generica a la communitat de veïns d''Igualada',
+    'Plaça Calfont Igualada', 0, '#ff0000', '2022-06-03 17:30:00','2022-06-03 20:30:00', NULL);
+
+insert into events values (null,2, 5, 3, 'Reunó d''ajuda a persones alcoholiques', 'Reunió on es posen en comú coses d''alcholics',
+    'C/ Anglí, 54, 08017 Barcelona – España', 0, '#ff0000', '2022-06-23 08:30:00','2022-06-23 23:30:00', NULL);
