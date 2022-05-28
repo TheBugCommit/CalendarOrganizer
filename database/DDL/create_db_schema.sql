@@ -26,6 +26,7 @@ role_id bigint(20) unsigned NOT NULL DEFAULT 2,
 nation_id bigint(20) unsigned NOT NULL,
 google_access_token_json text,
 remember_token varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+email_verified_at TIMESTAMP,
 created_at timestamp NULL DEFAULT NULL,
 updated_at timestamp NULL DEFAULT NULL,
 CONSTRAINT pk_users PRIMARY KEY (id),
@@ -339,6 +340,6 @@ INSERT INTO roles VALUES (NULL, 'ADMIN');
 INSERT INTO roles VALUES (NULL, 'CUSTOMER');
 
 -- Users initialization
-INSERT INTO users VALUES (NULL, 'Gerard','admin@admin.com', '$2y$10$HCzABbNv9skrPq2C1TncOeNhC2JQ0lFdq0UyfVeYlTzYDHRAQ2ZnC', 'Casas', 'Serarols', 0, date '2002-10-03', NULL, 'M', 1 ,193, NULL, NULL ,now(), now());
+INSERT INTO users VALUES (NULL, 'Gerard','admin@admin.com', '$2y$10$HCzABbNv9skrPq2C1TncOeNhC2JQ0lFdq0UyfVeYlTzYDHRAQ2ZnC', 'Casas', 'Serarols', 0, date '2002-10-03', NULL, 'M', 1 ,193, NULL, NULL, now() ,now(), now());
 
 

@@ -39,6 +39,8 @@ class UserController extends Controller
      */
     public function becomeHelper($token, JWT $jwt)
     {
+        $token = session()->get('become_helper_token') ?? $token;
+
         $payload = null;
         try{
             $jwt->setToken($token);

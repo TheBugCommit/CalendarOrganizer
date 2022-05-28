@@ -6,7 +6,9 @@ use App\Http\Requests\AuthenticateUserRequest;
 use App\Http\Requests\RegisterUserRequest;
 use App\Models\Nation;
 use App\Models\User;
+use App\Providers\RouteServiceProvider;
 use Carbon\Carbon;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -49,6 +51,8 @@ class AuthController extends Controller
      */
     public function authenticate(AuthenticateUserRequest $request)
     {
+        $redirect = $this->getRedirectUri();
+
         if (!Auth::attempt($request->except('_token'))) {
             return back()->withErrors(['email' => 'The provided credentials do not match our records.'])->withInput();
         }
@@ -65,7 +69,7 @@ class AuthController extends Controller
 
         Log::info("User $user->id logged at " . Carbon::now());
 
-        return redirect()->intended('/');
+        return redirect($redirect);
     }
 
     /**
@@ -78,15 +82,19 @@ class AuthController extends Controller
     {
         $userData = $request->except('_token', 'password_confirmation');
 
+        $redirect = $this->getRedirectUri();
+
         $user = null;
         try{
             $user = User::create($userData);
-            Auth::login($user, true);
+            event(new Registered($user));
+            Auth::login($user);
+            return redirect($redirect);
         } catch (QueryException $e) {
             Log::error($e->getMessage());
         }
 
-        return $user ? redirect()->intended('/') : back()->withErrors(['errors' => 'Can\'t register user something went wrong'])->withInput();
+        return back()->withErrors(['errors' => 'Can\'t register user something went wrong'])->withInput();
     }
 
     /**
@@ -101,5 +109,38 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect()->route('auth.login');
+    }
+
+    /**
+     * Generate the redirect uri
+     *
+     * @return string
+     */
+    protected function getRedirectUri() : string
+    {
+        $redirect = "";
+        if(($token = $this->getBecomeHelperToken()) != null)
+            $redirect = 'become_calendar_helper/' . $token;
+        else
+            $redirect = '/';
+
+        return $redirect;
+    }
+
+    /**
+     * Fetch the become helper token
+     *
+     * @return void
+     */
+    protected function getBecomeHelperToken()
+    {
+        $intended = redirect()->intended()->getTargetUrl();
+        $intended = explode('/', $intended);
+        if(count($intended) == 5 && $intended[3] == 'become_calendar_helper' && strlen($intended[4]) > 0){
+            session()->put('become_helper_token', $intended[4]);
+            return $intended[4];
+        } else{
+            return null;
+        }
     }
 }

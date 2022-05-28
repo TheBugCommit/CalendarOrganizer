@@ -16,4 +16,9 @@
             <calendar-component v-for="calendar in calendars" :key="calendar.id" :calendar="calendar" @redirect="redirect('/calendar_edit/' + calendar.id)" ></calendar-component>
         </div>
     </div>
+
+    <form action="{{ route('logout') }}" method="post">
+        @csrf
+        <input type="submit" value="Logot">
+    </form>
 @endsection

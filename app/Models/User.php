@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use App\Casts\HashCast;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -35,7 +36,7 @@ class User extends Authenticatable implements JWTSubject
         'gender',
         'nation_id',
         'role_id',
-        'google_access_token_json'
+        'google_access_token_json',
     ];
 
     /**
@@ -55,6 +56,7 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $casts = [
         'password' => HashCast::class,
+        'email_verified_at' => 'datetime',
     ];
 
     /**

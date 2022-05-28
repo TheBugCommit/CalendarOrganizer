@@ -17,13 +17,14 @@ ALTER TABLE events AUTO_INCREMENT = 1;
 INSERT INTO roles VALUES (NULL, 'ADMIN');
 INSERT INTO roles VALUES (NULL, 'CUSTOMER');
 
-INSERT INTO users VALUES (NULL, 'Gerard','admin@admin.com', '$2y$10$HCzABbNv9skrPq2C1TncOeNhC2JQ0lFdq0UyfVeYlTzYDHRAQ2ZnC', 'Casas', 'Serarols', 0, date '2002-10-03', NULL, 'M', 1 ,193, NULL, NULL ,now(), now());
+INSERT INTO users VALUES (NULL, 'Gerard','admin@admin.com', '$2y$10$HCzABbNv9skrPq2C1TncOeNhC2JQ0lFdq0UyfVeYlTzYDHRAQ2ZnC',
+'Casas', 'Serarols', 0, date '2002-10-03', NULL, 'M', 1 ,193, NULL, NULL, now() ,now(), now());
 
 INSERT INTO users VALUES (NULL, 'Albert','albert@gmail.com', '$2y$10$HCzABbNv9skrPq2C1TncOeNhC2JQ0lFdq0UyfVeYlTzYDHRAQ2ZnC',
-'Casas', 'Montagut', 0, date '2002-11-23', NULL, 'M', 2 ,193, NULL, NULL ,now(), now());
+'Casas', 'Montagut', 0, date '2002-11-23', NULL, 'M', 2 ,193, NULL, NULL, now() ,now(), now());
 
 INSERT INTO users VALUES (NULL, 'Janma','janma@gmail.com', '$2y$10$HCzABbNv9skrPq2C1TncOeNhC2JQ0lFdq0UyfVeYlTzYDHRAQ2ZnC',
-'Managut', 'Urlan', 0, date '2001-02-23', NULL, 'O', 2 ,193, NULL, NULL ,now(), now());
+'Managut', 'Urlan', 0, date '2001-02-23', NULL, 'O', 2 ,193, NULL, NULL, now() ,now(), now());
 
 insert into categories values (null, 2, 'Esports');
 insert into categories values (null, 2, 'Cinema');
