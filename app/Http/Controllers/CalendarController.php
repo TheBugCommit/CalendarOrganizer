@@ -41,6 +41,16 @@ class CalendarController extends Controller
     }
 
     /**
+     * Returns all calendars owner, helper
+     *
+     * @return ResponseJson
+     */
+    public function getAllMyCalendars()
+    {
+        return response()->json(array_merge(Auth::user()->helperCalendars->toArray(), Auth::user()->calendars->toArray()));
+    }
+
+    /**
      * Returns single calendar
      *
      * @param Request $request

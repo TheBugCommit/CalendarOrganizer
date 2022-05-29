@@ -39,6 +39,14 @@ const app = new Vue({
         categories: [],
         newCategory: "",
         selected_category: "",
+        date_range_export: {
+            start: null,
+            end: null,
+            calendar_id: null,
+        },
+        allCalendars: [],
+        user_password: "",
+        export_events: []
     },
 
     methods: {
@@ -69,6 +77,32 @@ const app = new Vue({
                 _this.helper_calendars = response;
             }).fail(function (error) {
                 Swal.fire("Error!", "Can\'t get helper calendars", "error");
+            }).always(() => {
+                this.show_loading = false;
+            });
+        },
+
+        getAllMyCalendars() {
+            let _this = this;
+            this.show_loading = true;
+            $.ajax({
+                url: "/all_calendars",
+                method: "GET",
+                dataType: "JSON",
+            }).done(function (response) {
+                _this.allCalendars = response;
+
+                _this.$nextTick(function () {
+                    let select_export = $('#export_range_calendar').selectize({
+                        create: false,
+                        sortField: 'text',
+                        onChange: function onChange(value) {
+                            _this.date_range_export.calendar_id = value;
+                        }
+                    })
+                })
+            }).fail(function (error) {
+                Swal.fire("Error!", "Can\'t get calendars", "error");
             }).always(() => {
                 this.show_loading = false;
             });
@@ -161,7 +195,7 @@ const app = new Vue({
         getMe() {
             let _this = this
             $.ajax({
-                url: route_user_me,
+                url: '/me',
                 dataType: 'JSON',
                 method: 'GET',
             }).done(function (response) {
@@ -171,19 +205,68 @@ const app = new Vue({
             })
         },
 
+        async getToken(){
+            let _this = this
+            try{
+                return await $.ajax({
+                    url: '/api/getToken',
+                    dataType: "JSON",
+                    method: 'POST',
+                    data: { email: _this.me.email, password: _this.user_password }
+                });
+            }catch(error){}
+        },
+
+        getExportEvents(){
+            let _this = this;
+            (async function(){
+                let token = (await _this.getToken())?.access_token
+                console.log(token)
+                _this.show_loading = true;
+                $.ajax({
+                    url: '/api/export_events',
+                    method: 'GET',
+                    data: _this.date_range_export,
+                    headers: { Authorization: `Bearer ${token}` },
+                }).done((response) => {
+                    _this.export_events = response
+                    _this.error = ''
+                }).fail((error) => {
+                    let message = typeof error?.responseJSON?.message == 'object' ? 'Invalid Data' :  error?.responseJSON?.message
+                    Swal.fire("Error!", message, "error");
+                    _this.error = message
+                }).always(() => {_this.show_loading = false;})
+            })(_this)
+        },
+
         redirect(url) {
             window.location.href = url
         },
 
+        generateDownload(filename, data) {
+            let element = document.createElement('a');
+            element.setAttribute('href', 'data:application/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(data)));
+            element.setAttribute('download', filename);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+
     },
 
     mounted() {
-        if (typeof route_user_me !== 'undefined')
-            this.getMe()
+        let _this = this
+
+        this.getMe()
 
         if (this.currentRoute == '/') {
-            this.getCalendars()
-            this.getHelperCalendars()
+            _this.getCalendars()
+            _this.getHelperCalendars()
+        }
+
+        if (this.currentRoute == '/export_events') {
+            _this.getAllMyCalendars()
         }
 
         if (typeof route_user_categories !== 'undefined')
@@ -210,6 +293,7 @@ const app = new Vue({
             sortField: "text",
         })
 
+
         document.querySelectorAll('input')?.forEach(input => {
             if (!input.classList.contains('validate'))
                 return;
@@ -219,6 +303,21 @@ const app = new Vue({
             })
         })
 
+        $('.datepickerrange').daterangepicker({
+            startDate: moment().format("YYYY-MM-DD"),
+            "showDropdowns": true,
+            autoApply: false,
+            autoUpdateInput: false,
+            locale: {
+                format: 'YYYY-MM-DD'
+            }
+        });
+
+        $('.datepickerrange').on('apply.daterangepicker', function (ev, picker) {
+            _this.date_range_export.start = picker.startDate.format('YYYY-MM-DD HH:mm:ss')
+            _this.date_range_export.end = picker.endDate.format('YYYY-MM-DD HH:mm:ss')
+            $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'))
+        })
 
         $('.datepicker').daterangepicker({
             singleDatePicker: true,
@@ -244,7 +343,6 @@ const app = new Vue({
             console.log(startDate)
         });
 
-        let _this = this
         $('.datepicker-years').on('apply.daterangepicker', function (ev, picker) {
             if ($(this).attr('id') == 'start-date') {
                 _this.newCalendarForm.start_date = picker.startDate.format('YYYY-MM-DD')

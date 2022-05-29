@@ -102,7 +102,7 @@
                                             <span class="input-error">{{ $message }}</span>
                                         @enderror
                                     </div>
-                                    <div class="input_group radio">
+                                    <div class="input_group">
                                         <label for="nation">Nation</label>
                                         <select id="nation_id" class="mt-2" name="nation_id">
                                             @foreach ($nations as $key => $nation)
