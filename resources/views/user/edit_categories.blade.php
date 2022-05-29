@@ -1,7 +1,12 @@
 @extends('layouts.main')
 
+@section('card-header')
+    <div class="card-header">
+        <h1 class="title">Categories</h1>
+    </div>
+@endsection
+
 @section('content')
-    <h4 class="title">Categories</h4>
     <div class="fullpage-loading" v-if="show_loading">
         <loading-component :loading="show_loading"></loading-component>
     </div>

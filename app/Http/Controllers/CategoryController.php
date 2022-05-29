@@ -19,7 +19,7 @@ class CategoryController extends Controller
      *
      * @return Illuminate\Support\Facades\View
      */
-    public function index() : \Illuminate\Contracts\View\View
+    public function index(): \Illuminate\Contracts\View\View
     {
         return view('user.edit_categories');
     }
@@ -83,11 +83,15 @@ class CategoryController extends Controller
      */
     public function destroy(Request $request)
     {
-        if(!isset($request->id))
+        if (!isset($request->id))
             return response()->json(['message' => 'Missing data']);
 
         $category = null;
         try {
+            $category = Category::findOrFail($request->id);
+            if ($category->events()->count() > 0)
+                return response()->json(['message' => 'This category is being used'], 401);
+
             $category = Category::destroy($request->id);
         } catch (Exception $ex) {
             return response()->json(['message' => 'Can\'t delete category'], 500);

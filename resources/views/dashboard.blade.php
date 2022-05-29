@@ -1,9 +1,15 @@
 @extends('layouts.main')
 
 @section('title', 'Dashboard - ' . Auth::user()->name)
+
+@section('card-header')
+    <div class="card-header">
+        <h1 class="title">My Calendars</h1>
+    </div>
+@endsection
+
 @section('content')
 
-    <h4 class="title">My Calendars</h4>
     <div class="fullpage-loading" v-if="show_loading">
         <loading-component :loading="show_loading"></loading-component>
     </div>

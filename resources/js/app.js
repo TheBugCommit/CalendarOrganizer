@@ -8,6 +8,7 @@ import CalendarListComponent from './components/CalendarListComponent.vue'
 import Calendar from './components/Calendar/Calendar.vue'
 import HelpersListComponent from './components/Calendar/Helpers/HelpersListComponent.vue'
 import Swal from "sweetalert2";
+import { message } from 'laravel-mix/src/Log';
 
 Vue.component('calendar', Calendar);
 Vue.component('loading-component', LoadingComponent);
@@ -169,7 +170,8 @@ const app = new Vue({
                 if (index != -1)
                     _this.categories.splice(index, 1)
             }).fail((response) => {
-                Swal.fire("Error!", "Can\'t delete category", "error");
+                let message = response?.responseJSON?.message != null ?  response.responseJSON.message : "Can\'t delete category";
+                Swal.fire("Error!", message , "error");
                 _this.categories = _this.categories || []
             })
         },

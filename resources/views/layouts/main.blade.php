@@ -58,6 +58,7 @@
 
         <div class="container main-container">
             <div class="card">
+                @yield('card-header')
                 <div class="card-body position-relative">
                     <main id="app" >
                         @yield('content')
