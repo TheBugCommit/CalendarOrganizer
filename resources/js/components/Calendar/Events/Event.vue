@@ -30,21 +30,26 @@
                                 </select>
                             </div>
                         </div>
-
+                        <div class="col-12 col-md-4">
+                            <div class="input_group">
+                                <label for="location" class="input_label">Location: </label>
+                                <input type="text" class="input_field" v-model="event.location" id="location">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="input_group">
+                                <label for="color" class="grey-text">Color</label>
+                                <button data-jscolor="{}" id="color"></button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="row justify-content-center">
+                    <div class="row justify-content-center mt-2">
                         <label for="date-range" class="grey-text text-start">Description</label>
                         <textarea class="col-10" id="description"></textarea>
                     </div>
-
-                    <label for="color">Color: </label>
-                    <button data-jscolor="{}" id="color"></button>
-
-                    <label for="location">Location: </label>
-                    <input type="text" v-model="event.location" id="location">
                 </div>
-
-                <div class="modal-footer">
+                <div class="modal-footer d-flex justify-content-between align-items-center">
+                    <span class="input-error"></span>
                     <button type="button" class="btn btn-save btn-primary" @click="saveEvent()">Save</button>
                 </div>
             </div>
@@ -53,6 +58,8 @@
 </template>
 
 <script>
+import Swal from "sweetalert2";
+
 export default {
     props: ["event", 'editing'],
     data() {
@@ -90,7 +97,6 @@ export default {
                 })
             }).fail((response) => {
                 _this.categories = _this.categories || []
-                console.log(response)
             })
         },
 
@@ -163,16 +169,11 @@ export default {
         $('#date-range').daterangepicker(config);
         $('#date-range').on('apply.daterangepicker', function (ev, picker) {
             if (!picker.startDate.isSame(picker.endDate)) {
-
-                if (picker.startDate.format('HH:mm') == '00:00') {
-                    picker.endDate.add('days', 1);
-                }
-
                 $('#date-range').val($('#date-range').data('daterangepicker').startDate.format('YYYY-MM-DD hh:mm:ss') + ' - ' + $('#date-range').data('daterangepicker').endDate.format('YYYY-MM-DD hh:mm:ss'));
                 _this.event.start = picker.startDate
                 _this.event.end = picker.endDate
             } else {
-                console.log('this dates are the same')
+                Swal.fire('Opss!', 'Dates are the same', 'warning')
             }
         })
 

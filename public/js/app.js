@@ -20872,6 +20872,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 
 
@@ -20896,8 +20897,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         editable: true,
         droppable: true,
         validRange: {
-          start: moment([moment().year()]).clone().format("YYYY-MM-DD hh:mm:ss"),
-          end: moment([moment().year()]).clone().endOf("year").format("YYYY-MM-DD hh:mm:ss")
+          start: moment([moment().year()]).clone().format("YYYY-MM-DD HH:mm:ss"),
+          end: moment([moment().year()]).clone().endOf("year").format("YYYY-MM-DD HH:mm:ss")
         },
         plugins: [_fullcalendar_daygrid__WEBPACK_IMPORTED_MODULE_2__["default"], _fullcalendar_interaction__WEBPACK_IMPORTED_MODULE_3__["default"], _fullcalendar_timegrid__WEBPACK_IMPORTED_MODULE_4__["default"], _fullcalendar_bootstrap5__WEBPACK_IMPORTED_MODULE_5__["default"]],
         eventDrop: this.handelEventDrop,
@@ -20931,11 +20932,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         published: 0
       },
       selected_target: null,
-      event_editing: false
+      event_editing: false,
+      slotLabelFormat: {
+        hour: 'numeric',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      }
     };
   },
   methods: {
     handleDateClick: function handleDateClick(date) {
+      console.log(date);
       this.event_editing = false;
       this.selected_target = null;
       this.selected_event = {
@@ -20946,11 +20954,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         description: '',
         location: '',
         color: '',
-        start: '',
-        end: '',
+        start: moment(date.date.getTime()),
+        end: moment(date.date.getTime()).add(1, 'hours'),
         user_id: '',
         published: 0
       };
+      $('#date-range').val(this.selected_event.start.format('YYYY-MM-DD HH:mm:ss') + ' - ' + this.selected_event.end.add(1, 'hours').format('YYYY-MM-DD HH:mm:ss'));
       this.$refs.eventManage.toggle();
     },
     handelEventDrop: function handelEventDrop(info) {
@@ -20996,7 +21005,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 7:
                 _context.prev = 7;
                 _context.t0 = _context["catch"](1);
-                console.error(_context.t0);
+                sweetalert2__WEBPACK_IMPORTED_MODULE_6___default().fire('Error!', 'Something went wrong trying to get events', 'error');
 
               case 10:
                 _this2.$root.show_loading = false;
@@ -21015,8 +21024,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       var event = _objectSpread({}, _this.selected_event);
 
-      event.start = event.start instanceof moment ? event.start.format('YYYY-MM-DD hh:mm:ss') : event.start;
-      event.end = event.end instanceof moment ? event.end.format('YYYY-MM-DD hh:mm:ss') : event.end;
+      event.start = event.start instanceof moment ? event.start.format('YYYY-MM-DD HH:mm:ss') : event.start;
+      event.end = event.end instanceof moment ? event.end.format('YYYY-MM-DD HH:mm:ss') : event.end;
       $.ajax({
         url: route_events_store,
         data: event,
@@ -21027,7 +21036,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
         _this.$refs.eventManage.toggle();
       }).fail(function (error) {
-        console.error(error);
+        sweetalert2__WEBPACK_IMPORTED_MODULE_6___default().fire('Error!', 'Something went wrong trying to save event, check your inputs, all fields are required', 'error');
       });
     },
     updateCalendarEvent: function updateCalendarEvent() {
@@ -21037,8 +21046,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       if (event == null) event = _objectSpread({}, this.selected_event);
-      event.start = event.start instanceof moment ? event.start.format('YYYY-MM-DD hh:mm:ss') : event.start;
-      event.end = event.end instanceof moment ? event.end.format('YYYY-MM-DD hh:mm:ss') : event.end;
+      event.start = event.start instanceof moment ? event.start.format('YYYY-MM-DD HH:mm:ss') : event.start;
+      event.end = event.end instanceof moment ? event.end.format('YYYY-MM-DD HH:mm:ss') : event.end;
       $.ajax({
         url: route_events_update,
         data: event,
@@ -21051,7 +21060,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
         _this.$refs.eventManage.hide();
       }).fail(function (error) {
-        console.error(error);
+        sweetalert2__WEBPACK_IMPORTED_MODULE_6___default().fire('Error!', 'Something went wrong trying to update event, check your inputs all fields are required', 'error');
       });
     },
     editEvent: function editEvent(id) {
@@ -21088,10 +21097,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         },
         dataType: "JSON",
         method: "DELETE"
-      }).done(function (response) {
-        console.log(response);
-      }).fail(function (error) {
-        console.error(error);
+      }).done(function (response) {}).fail(function (error) {
+        sweetalert2__WEBPACK_IMPORTED_MODULE_6___default().fire('Error!', 'Something went wrong trying to delete event. It\'s your event?', 'error');
       });
     },
     addEvent: function addEvent(event) {
@@ -21121,7 +21128,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 7:
                 _context2.prev = 7;
                 _context2.t0 = _context2["catch"](1);
-                console.error(_context2.t0);
+                sweetalert2__WEBPACK_IMPORTED_MODULE_6___default().fire('Error!', 'Something went wrong trying to load calendar', 'error');
 
               case 10:
                 return _context2.abrupt("return", []);
@@ -21232,6 +21239,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -21286,6 +21295,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ["event", 'editing'],
   data: function data() {
@@ -21321,7 +21336,6 @@ __webpack_require__.r(__webpack_exports__);
         });
       }).fail(function (response) {
         _this.categories = _this.categories || [];
-        console.log(response);
       });
     },
     saveEvent: function saveEvent() {
@@ -21383,15 +21397,11 @@ __webpack_require__.r(__webpack_exports__);
     $('#date-range').daterangepicker(config);
     $('#date-range').on('apply.daterangepicker', function (ev, picker) {
       if (!picker.startDate.isSame(picker.endDate)) {
-        if (picker.startDate.format('HH:mm') == '00:00') {
-          picker.endDate.add('days', 1);
-        }
-
         $('#date-range').val($('#date-range').data('daterangepicker').startDate.format('YYYY-MM-DD hh:mm:ss') + ' - ' + $('#date-range').data('daterangepicker').endDate.format('YYYY-MM-DD hh:mm:ss'));
         _this.event.start = picker.startDate;
         _this.event.end = picker.endDate;
       } else {
-        console.log('this dates are the same');
+        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire('Opss!', 'Dates are the same', 'warning');
       }
     });
     jscolor.presets["default"] = {
@@ -49840,55 +49850,72 @@ var render = function () {
                     ),
                   ]),
                 ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-12 col-md-4" }, [
+                  _c("div", { staticClass: "input_group" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass: "input_label",
+                        attrs: { for: "location" },
+                      },
+                      [_vm._v("Location: ")]
+                    ),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.event.location,
+                          expression: "event.location",
+                        },
+                      ],
+                      staticClass: "input_field",
+                      attrs: { type: "text", id: "location" },
+                      domProps: { value: _vm.event.location },
+                      on: {
+                        input: function ($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.event, "location", $event.target.value)
+                        },
+                      },
+                    }),
+                  ]),
+                ]),
+                _vm._v(" "),
+                _vm._m(1),
               ]),
               _vm._v(" "),
-              _vm._m(1),
-              _vm._v(" "),
-              _c("label", { attrs: { for: "color" } }, [_vm._v("Color: ")]),
-              _vm._v(" "),
-              _c("button", { attrs: { "data-jscolor": "{}", id: "color" } }),
-              _vm._v(" "),
-              _c("label", { attrs: { for: "location" } }, [
-                _vm._v("Location: "),
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.event.location,
-                    expression: "event.location",
-                  },
-                ],
-                attrs: { type: "text", id: "location" },
-                domProps: { value: _vm.event.location },
-                on: {
-                  input: function ($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.event, "location", $event.target.value)
-                  },
-                },
-              }),
+              _vm._m(2),
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "modal-footer" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-save btn-primary",
-                  attrs: { type: "button" },
-                  on: {
-                    click: function ($event) {
-                      return _vm.saveEvent()
+            _c(
+              "div",
+              {
+                staticClass:
+                  "modal-footer d-flex justify-content-between align-items-center",
+              },
+              [
+                _c("span", { staticClass: "input-error" }),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-save btn-primary",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function ($event) {
+                        return _vm.saveEvent()
+                      },
                     },
                   },
-                },
-                [_vm._v("Save")]
-              ),
-            ]),
+                  [_vm._v("Save")]
+                ),
+              ]
+            ),
           ]),
         ]
       ),
@@ -49919,7 +49946,21 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row justify-content-center" }, [
+    return _c("div", { staticClass: "col-12 col-md-4" }, [
+      _c("div", { staticClass: "input_group" }, [
+        _c("label", { staticClass: "grey-text", attrs: { for: "color" } }, [
+          _vm._v("Color"),
+        ]),
+        _vm._v(" "),
+        _c("button", { attrs: { "data-jscolor": "{}", id: "color" } }),
+      ]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row justify-content-center mt-2" }, [
       _c(
         "label",
         { staticClass: "grey-text text-start", attrs: { for: "date-range" } },

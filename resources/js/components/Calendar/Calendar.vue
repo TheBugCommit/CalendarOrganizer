@@ -1,7 +1,8 @@
 <template>
     <div class="container">
         <FullCalendar :options="calendarOptions" ref="fullCalendar" />
-        <EventPopup :event="selected_event" :target="selected_target" :calendar="calendar" :categories="$root.categories" :me="$root.me" ref="eventPopup" />
+        <EventPopup :event="selected_event" :target="selected_target" :calendar="calendar"
+            :categories="$root.categories" :me="$root.me" ref="eventPopup" />
         <Event :event="selected_event" :editing="event_editing" ref="eventManage" />
     </div>
 </template>
@@ -33,11 +34,11 @@ export default {
                 editable: true,
                 droppable: true,
                 validRange: {
-                    start: moment([moment().year()]).clone().format("YYYY-MM-DD hh:mm:ss"),
+                    start: moment([moment().year()]).clone().format("YYYY-MM-DD HH:mm:ss"),
                     end: moment([moment().year()])
                         .clone()
                         .endOf("year")
-                        .format("YYYY-MM-DD hh:mm:ss"),
+                        .format("YYYY-MM-DD HH:mm:ss"),
                 },
                 plugins: [
                     dayGridPlugin,
@@ -77,11 +78,14 @@ export default {
             },
             selected_target: null,
             event_editing: false,
+            slotLabelFormat: {hour: 'numeric', minute: '2-digit',second: '2-digit', hour12: false},
+
         };
     },
 
     methods: {
         handleDateClick(date) {
+            console.log(date)
             this.event_editing = false
             this.selected_target = null
             this.selected_event = {
@@ -92,16 +96,17 @@ export default {
                 description: '',
                 location: '',
                 color: '',
-                start: '',
-                end: '',
+                start: moment(date.date.getTime()),
+                end: moment(date.date.getTime()).add(1, 'hours'),
                 user_id: '',
                 published: 0,
             }
+            $('#date-range').val(this.selected_event.start.format('YYYY-MM-DD HH:mm:ss') + ' - ' + this.selected_event.end.add(1, 'hours').format('YYYY-MM-DD HH:mm:ss'));
             this.$refs.eventManage.toggle()
         },
 
         handelEventDrop(info) {
-            if(this.$root.me.id != this.calendar.user_id && this.$root.me.id != info.event.extendedProps.user_id){
+            if (this.$root.me.id != this.calendar.user_id && this.$root.me.id != info.event.extendedProps.user_id) {
                 info.revert();
                 return;
             }
@@ -127,7 +132,7 @@ export default {
                     dataType: 'JSON'
                 });
             } catch (error) {
-                console.error(error);
+                Swal.fire('Error!', 'Something went wrong trying to get events', 'error')
             }
 
             this.$root.show_loading = false
@@ -140,8 +145,8 @@ export default {
 
             let event = { ..._this.selected_event }
 
-            event.start = event.start instanceof moment ? event.start.format('YYYY-MM-DD hh:mm:ss') : event.start
-            event.end = event.end instanceof moment ? event.end.format('YYYY-MM-DD hh:mm:ss') : event.end
+            event.start = event.start instanceof moment ? event.start.format('YYYY-MM-DD HH:mm:ss') : event.start
+            event.end = event.end instanceof moment ? event.end.format('YYYY-MM-DD HH:mm:ss') : event.end
 
             $.ajax({
                 url: route_events_store,
@@ -154,7 +159,7 @@ export default {
                     _this.$refs.eventManage.toggle()
                 })
                 .fail((error) => {
-                    console.error(error);
+                    Swal.fire('Error!', 'Something went wrong trying to save event, check your inputs, all fields are required', 'error')
                 });
         },
 
@@ -165,8 +170,8 @@ export default {
             if (event == null)
                 event = { ...this.selected_event }
 
-            event.start = event.start instanceof moment ? event.start.format('YYYY-MM-DD hh:mm:ss') : event.start
-            event.end = event.end instanceof moment ? event.end.format('YYYY-MM-DD hh:mm:ss') : event.end
+            event.start = event.start instanceof moment ? event.start.format('YYYY-MM-DD HH:mm:ss') : event.start
+            event.end = event.end instanceof moment ? event.end.format('YYYY-MM-DD HH:mm:ss') : event.end
 
             $.ajax({
                 url: route_events_update,
@@ -182,7 +187,7 @@ export default {
                 _this.fullCalendar.addEvent(response);
                 _this.$refs.eventManage.hide()
             }).fail((error) => {
-                console.error(error);
+                Swal.fire('Error!', 'Something went wrong trying to update event, check your inputs all fields are required', 'error')
             });
         },
 
@@ -217,9 +222,8 @@ export default {
                 dataType: "JSON",
                 method: "DELETE",
             }).done((response) => {
-                console.log(response);
             }).fail((error) => {
-                console.error(error);
+                Swal.fire('Error!', 'Something went wrong trying to delete event. It\'s your event?', 'error')
             });
         },
 
@@ -237,7 +241,7 @@ export default {
                     data: { id: calendar_id }
                 })
             } catch (error) {
-                console.error(error);
+                Swal.fire('Error!', 'Something went wrong trying to load calendar', 'error')
             }
 
             return []

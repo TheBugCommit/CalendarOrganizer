@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -25,6 +26,7 @@ class Event extends Model
         'end',
         'google_event_id'
     ];
+
 
     protected static function boot()
     {
