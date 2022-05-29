@@ -30,7 +30,7 @@
     </ul>
 
     <div class="floating-container">
-        <button class="floating-button" @click="newCategory = ''" data-bs-toggle="modal" data-bs-target="#newCategoryModal">+</button>
+        <button class="floating-button" @click="newCategory = ''" data-bs-toggle="modal" data-bs-target="#newCategoryModal"><i class="fas fa-plus"></i></button>
     </div>
 
     @include('modals.new_category')

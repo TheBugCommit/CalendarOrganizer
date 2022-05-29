@@ -2,26 +2,45 @@
 
 @section('title', 'Calendar')
 
+@section('card-header')
+    <div class="card-header">
+        <h1 class="title">{{ $calendar->title }}</h1>
+    </div>
+@endsection
+
 @section('content')
+
+    <div class="fullpage-loading" v-if="show_loading">
+        <loading-component :loading="show_loading"></loading-component>
+    </div>
+
     <calendar></calendar>
-    <a class="btn btn-primary" href="{{ route('calendar.helpers.index', ['id' => $calendar_id]) }}">Manage Helpers</a>
-    <a class="btn btn-primary" href="{{ route('calendar.publish', ['id' => $calendar_id]) }}">Publish Calendar</a>
 
-    <form action="{{ route('calendar.targets.upload') }}" method="post" enctype="multipart/form-data">
+    <div class="adminActions">
+        <input type="checkbox" name="adminToggle" class="adminToggle" />
+        <a class="adminButton" href="#!"><i class="fa fa-cog"></i></a>
+        <div class="adminButtons">
+            <a href="{{ route('calendar.helpers.index', ['id' => $calendar->id]) }}" title="Calendar Helpers"><i
+                    class="fas fa-hands-helping"></i></a>
+            <button type="button" @click="openUpload" title="Upload Targets"><i class="fas fa-upload"></i></button>
+        </div>
+    </div>
+
+
+    <form action="{{ route('calendar.targets.upload') }}" method="post" class="d-none"
+        enctype="multipart/form-data">
         @csrf
-        Select file to upload:
-        <input type="hidden" name="id" value="{{ $calendar_id }}">
+        <input type="hidden" name="id" value="{{ $calendar->id }}">
         <input type="file" name="file" id="targets">
-        <input type="submit" value="Upload Targets" name="submit">
+        <input type="submit" value="Upload Targets" id="submit-targets-form" name="submit">
 
-        @if ($message = Session::get('success'))
-            <div class="alert alert-success">
-                <strong>{{ $message }}</strong>
-            </div>
+
+        @if (session()->has('success'))
+            <div class="d-none" id="upload-success">{{ session()->get('success') }}</div>
         @endif
         @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
+            <div class="d-none" id="upload-errors">
+                <ul class="list-unstyled">
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach

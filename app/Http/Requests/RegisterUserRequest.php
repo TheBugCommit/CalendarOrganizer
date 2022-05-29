@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class RegisterUserRequest extends FormRequest
 {
-    protected $redirectRoute = 'auth.signin';
+    protected $redirectRoute = 'auth.signup';
 
     /**
      * Determine if the user is authorized to make this request.

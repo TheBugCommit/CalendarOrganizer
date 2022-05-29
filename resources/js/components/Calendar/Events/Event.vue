@@ -7,20 +7,35 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <label for="title">Title: </label>
-                    <input type="text" v-model="event.title" id="title">
+                    <div class="row">
+                        <div class="col-12 col-md-4">
+                            <div class="input_group">
+                                <input type="text" class="input_field" v-model="event.title" id="title">
+                                <label for="title" class="input_label">Title</label>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="input_group">
+                                <input type="text" class="input_field" autocomplete="off" id="date-range">
+                                <label for="date-range" class="input_label">Date Range</label>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="input_group">
+                                <label for="date-range" class="input_label">Category</label>
+                                <select id="categories" class="mt-2">
+                                    <option v-for="category in categories" :key="category.id" :value="category.id">
+                                        {{ category.name }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
 
-                    <label for="date-range">Date Range: </label>
-                    <input type="text" autocomplete="off" id="date-range">
-
-
-                    <select id="categories">
-                        <option v-for="category in categories" :key="category.id" :value="category.id">
-                            {{ category.name }}
-                        </option>
-                    </select>
-
-                    <textarea id="description"></textarea>
+                    </div>
+                    <div class="row justify-content-center">
+                        <label for="date-range" class="grey-text text-start">Description</label>
+                        <textarea class="col-10" id="description"></textarea>
+                    </div>
 
                     <label for="color">Color: </label>
                     <button data-jscolor="{}" id="color"></button>
@@ -30,8 +45,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" @click="saveEvent()">Save</button>
+                    <button type="button" class="btn btn-save btn-primary" @click="saveEvent()">Save</button>
                 </div>
             </div>
         </div>
@@ -40,7 +54,7 @@
 
 <script>
 export default {
-    props: ["event", 'editing', 'categories'],
+    props: ["event", 'editing'],
     data() {
         return {
             categories: null,
@@ -175,7 +189,7 @@ export default {
             onChange: function () { _this.event.color = this.toHEXString() }
         };
 
-        $('#manageEvent').on('hidden.bs.modal', function(){
+        $('#manageEvent').on('hidden.bs.modal', function () {
             Object.keys(_this.event).forEach(key => {
                 _this.event[key] = ''
             })

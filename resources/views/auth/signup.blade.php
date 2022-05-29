@@ -18,7 +18,7 @@
                             </div>
                             <p class="login-card-description">Sign Up into your account</p>
 
-                            <form action="{{ route('auth.authenticate') }}" id="auth-form" method="post" class="row">
+                            <form action="{{ route('auth.register') }}" id="auth-form" method="post" class="row">
                                 @csrf
 
                                 <div class="col-12 col-md-6">
@@ -114,7 +114,7 @@
                                     </div>
 
                                     <div class="input_group field">
-                                        <input type="text" class="input_field validate @error('password') invalid @enderror"
+                                        <input type="password" class="input_field validate @error('password') invalid @enderror"
                                             placeholder="Password" value="{{ old('password') }}" name="password"
                                             id='password-reg' />
                                         <label for="password" class="input_label">Password</label>
@@ -125,11 +125,11 @@
 
                                     <div class="input_group field">
                                         <input type="password"
-                                            class="input_field validate @error('password_confirm') invalid @enderror"
-                                            placeholder="Password Confirmation" value="{{ old('password_confirm') }}"
-                                            name="password" id='password-confirm-reg' />
-                                        <label for="password_confirm" class="input_label">Password Confirmation</label>
-                                        @error('password_confirm')
+                                            class="input_field validate @error('password_confirmation') invalid @enderror"
+                                            placeholder="Password Confirmation" value="{{ old('password_confirmation') }}"
+                                            name="password_confirmation" id='password-confirm-reg' />
+                                        <label for="password_confirmation" class="input_label">Password Confirmation</label>
+                                        @error('password_confirmation')
                                             <span class="input-error">{{ $message }}</span>
                                         @enderror
                                     </div>

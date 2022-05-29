@@ -448,11 +448,14 @@ span.error::before {
   display: none;
 }
 .tippy-box {
-  background-color: #ff6347;
-  color: #ff0;
+  background-color: #6967ce;
+  color: #f7f6fb;
+  padding: 0.5rem;
+  box-shadow: rgba(0,0,0,0.25) 0px 54px 55px, rgba(0,0,0,0.12) 0px -12px 30px, rgba(0,0,0,0.12) 0px 4px 6px, rgba(0,0,0,0.17) 0px 12px 13px, rgba(0,0,0,0.09) 0px -3px 5px;
+  border-radius: 3%;
 }
 .tippy-box > .tippy-svg-arrow {
-  fill: #ff6347;
+  fill: #6967ce;
 }
 .clr-picker.clr-open,
 .clr-picker[data-inline=true] {
@@ -476,6 +479,9 @@ body {
 }
 a {
   text-decoration: none;
+}
+main {
+  height: 100%;
 }
 .header {
   width: 100%;
@@ -579,6 +585,9 @@ a {
 .height-100 {
   height: 100vh;
 }
+ul.nav {
+  height: unset !important;
+}
 .calendar-list .calendar {
   border-left: 4px solid #3be8b0;
   box-shadow: rgba(0,0,0,0.24) 0px 3px 8px;
@@ -623,7 +632,11 @@ a {
   -webkit-box-orient: vertical;
 }
 .blod-text {
-  font-weight: bold;
+  font-weight: bold !important;
+}
+.text {
+  color: #444;
+  font-size: 1rem;
 }
 .cursive-gray-text {
   font-style: italic;
@@ -632,6 +645,30 @@ a {
 }
 .grey-text {
   color: #acacac;
+}
+.font-medium {
+  font-size: 20px;
+}
+.green-text {
+  color: #3be8b0 !important;
+}
+.c-link {
+  font-size: 14px;
+  color: #9b9b9b;
+  transition: color 0.3s;
+  text-decoration: none;
+}
+.c-link:hover {
+  transition: color 0.3s;
+  color: #3be8b0 !important;
+}
+.verification-mail-box {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .floating-container {
   position: absolute;
@@ -668,6 +705,100 @@ a {
   box-shadow: 0 10px 25px -5px #6967ce;
   cursor: pointer;
 }
+.adminActions {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  z-index: 99;
+}
+.adminActions a i,
+.adminActions button i {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.adminActions button {
+  border: 0;
+}
+.adminButton {
+  height: 60px;
+  width: 60px;
+  background-color: #6967ce;
+  border-radius: 50%;
+  display: block;
+  color: #fff;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+.adminButton i {
+  font-size: 22px;
+}
+.adminButtons {
+  position: absolute;
+  width: 100%;
+  bottom: 120%;
+  text-align: center;
+}
+.adminButtons a,
+.adminButtons button {
+  display: block;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  text-decoration: none;
+  margin: 10px auto 0;
+  line-height: 1.15;
+  color: #fff;
+  opacity: 0;
+  visibility: hidden;
+  position: relative;
+  box-shadow: 0 0 5px 1px rgba(51,51,51,0.3);
+}
+.adminButtons a:nth-child(1),
+.adminButtons button:nth-child(1) {
+  background-color: #6967ce;
+  color: #f7f6fb;
+  transition: opacity 0.2s ease-in-out 0.3s, transform 0.15s ease-in-out, color 0.3s;
+}
+.adminButtons a:nth-child(2),
+.adminButtons button:nth-child(2) {
+  background-color: #6967ce;
+  color: #f7f6fb;
+  transition: opacity 0.2s ease-in-out 0.25s, transform 0.15s ease-in-out, color 0.3s;
+}
+.adminButtons a:hover,
+.adminButtons button:hover {
+  color: #3be8b0;
+  transition: color 0.3s;
+  transform: scale(1.05);
+}
+.adminToggle {
+  -webkit-appearance: none;
+  position: absolute;
+  border-radius: 50%;
+  top: 0;
+  left: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  z-index: 2;
+  transition: box-shadow 0.2s ease-in-out;
+  box-shadow: 0 3px 5px 1px rgba(51,51,51,0.3);
+}
+.adminToggle:hover {
+  box-shadow: 0 3px 6px 2px rgba(51,51,51,0.3);
+}
+.adminToggle:checked ~ .adminButtons a,
+.adminToggle:checked ~ .adminButtons button {
+  opacity: 1;
+  visibility: visible;
+}
 .btn:focus {
   outline: unset !important;
   box-shadow: unset !important;
@@ -698,16 +829,31 @@ a {
   transition: color 0.3s;
   color: #3be8b0 !important;
 }
+.btn-edit-popup {
+  background-color: transparent !important;
+  color: #f7f6fb !important;
+}
 .btn-delete {
   background-color: #fff !important;
 }
 .btn-delete:hover {
   color: #fd636b !important;
 }
+.btn-delete-popup {
+  color: #f7f6fb !important;
+  background-color: transparent !important;
+}
 .swal2-confirm {
   background-color: #6967ce !important;
 }
 .swal2-confirm:focus {
+  outline: unset !important;
+  box-shadow: unset !important;
+}
+.swal2-cancel {
+  background-color: #fd636b !important;
+}
+.swal2-cancel:focus {
   outline: unset !important;
   box-shadow: unset !important;
 }
@@ -751,6 +897,50 @@ a {
 #v-pills-tabContent >div {
   width: 100% !important;
 }
+.popup-event-info {
+  margin: 0 !important;
+  padding: 0.5rem !important;
+}
+.popup-event-info li {
+  display: flex;
+  gap: 1rem;
+}
+.fc .fc-col-header-cell-cushion,
+.fc-daygrid-day-number {
+  color: #444 !important;
+}
+.fc-view-harness.fc-view-harness-active {
+  height: 100vh !important;
+}
+.fc .fc-button {
+  color: #f7f6fb !important;
+  background-color: #6967ce !important;
+  transition: color 0.3s !important;
+  border: none;
+}
+.fc .fc-button:hover {
+  color: #3be8b0 !important;
+  transition: color 0.3s !important;
+}
+.fc .fc-button:focus {
+  outline: unset !important;
+  box-shadow: unset !important;
+}
+.fc-timegrid-slot {
+  background-color: #f7f6fb !important;
+}
+.fc-toolbar-title {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 130px;
+}
+.fc-daygrid-event-harness a {
+  color: #444 !important;
+}
+.tox.tox-tinymce {
+  width: 97% !important;
+}
 @media screen and (min-width: 768px) {
   .header {
     height: calc(var(--header-height) + 1rem);
@@ -772,6 +962,53 @@ a {
   }
   .body-pd {
     padding-left: calc(var(--nav-width) + 188px);
+  }
+}
+@media (max-width: 767px) {
+  .fc-toolbar.fc-header-toolbar {
+    display: flex;
+    flex-direction: column;
+  }
+  .fc-toolbar.fc-header-toolbar .fc-left {
+    order: 3;
+  }
+  .fc-toolbar.fc-header-toolbar .fc-center {
+    order: 1;
+  }
+  .fc-toolbar.fc-header-toolbar .fc-right {
+    order: 2;
+  }
+}
+@-webkit-keyframes come-in {
+  0% {
+    transform: translateX(100px);
+    opacity: 0;
+  }
+  30% {
+    transform: translateX(-50px) scale(0.4);
+  }
+  70% {
+    transform: translateX(0px) scale(1.2);
+  }
+  100% {
+    transform: translateX(0px) scale(1);
+    opacity: 1;
+  }
+}
+@keyframes come-in {
+  0% {
+    transform: translateX(100px);
+    opacity: 0;
+  }
+  30% {
+    transform: translateX(-50px) scale(0.4);
+  }
+  70% {
+    transform: translateX(0px) scale(1.2);
+  }
+  100% {
+    transform: translateX(0px) scale(1);
+    opacity: 1;
   }
 }
 

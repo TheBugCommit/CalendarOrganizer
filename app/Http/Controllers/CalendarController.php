@@ -110,8 +110,8 @@ class CalendarController extends Controller
      */
     public function edit(Request $request)
     {
-        $calendar_id = $request->id;
-        return view('calendars.calendars_edit', compact('calendar_id'));
+        $calendar = Calendar::find($request->id);
+        return view('calendars.calendars_edit', compact('calendar'));
     }
 
     /**
@@ -175,6 +175,7 @@ class CalendarController extends Controller
         if (!isset($request->users) || !isset($request->calendar_id))
             return response()->json(['message' => 'Missing data'], 400);
 
+        $calendar = Calendar::find($request->calendar_id);
         foreach ($request->users as $user) {
             $customClaims = ['calendar_id' => $request->calendar_id, 'user_email' => $user];
 
@@ -186,7 +187,11 @@ class CalendarController extends Controller
                 'subject' => 'Invitation to be part of a calendar',
                 'view'    => 'emails.helper_invitation',
                 'varname' => 'data',
-                'data'    => ['token' => route('user.become.helper', ['token' => $token])],
+                'data'    => [
+                    'token' => route('user.become.helper', ['token' => $token]),
+                    'calendar_title' => $calendar->title,
+                    'owner_name'    => Auth::user()->full_name,
+                ],
             ];
 
             try {

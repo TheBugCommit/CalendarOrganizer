@@ -170,8 +170,8 @@ const app = new Vue({
                 if (index != -1)
                     _this.categories.splice(index, 1)
             }).fail((response) => {
-                let message = response?.responseJSON?.message != null ?  response.responseJSON.message : "Can\'t delete category";
-                Swal.fire("Error!", message , "error");
+                let message = response?.responseJSON?.message != null ? response.responseJSON.message : "Can\'t delete category";
+                Swal.fire("Error!", message, "error");
                 _this.categories = _this.categories || []
             })
         },
@@ -207,21 +207,21 @@ const app = new Vue({
             })
         },
 
-        async getToken(){
+        async getToken() {
             let _this = this
-            try{
+            try {
                 return await $.ajax({
                     url: '/api/getToken',
                     dataType: "JSON",
                     method: 'POST',
                     data: { email: _this.me.email, password: _this.user_password }
                 });
-            }catch(error){}
+            } catch (error) { }
         },
 
-        getExportEvents(){
+        getExportEvents() {
             let _this = this;
-            (async function(){
+            (async function () {
                 let token = (await _this.getToken())?.access_token
                 console.log(token)
                 _this.show_loading = true;
@@ -234,10 +234,10 @@ const app = new Vue({
                     _this.export_events = response
                     _this.error = ''
                 }).fail((error) => {
-                    let message = typeof error?.responseJSON?.message == 'object' ? 'Invalid Data' :  error?.responseJSON?.message
+                    let message = typeof error?.responseJSON?.message == 'object' ? 'Invalid Data' : error?.responseJSON?.message
                     Swal.fire("Error!", message, "error");
                     _this.error = message
-                }).always(() => {_this.show_loading = false;})
+                }).always(() => { _this.show_loading = false; })
             })(_this)
         },
 
@@ -253,8 +253,11 @@ const app = new Vue({
             document.body.appendChild(element);
             element.click();
             document.body.removeChild(element);
-        }
+        },
 
+        openUpload() {
+            $('#targets').trigger('click')
+        }
     },
 
     mounted() {
@@ -388,5 +391,35 @@ const app = new Vue({
             }
         }
         showNavbar('header-toggle', 'nav-bar', 'body-pd', 'header')
+
+
+        //popup already or becomeHelper
+        if ($('#alreadyHelper').length)
+            Swal.fire('Warning!', 'You are already helper of calendar ' + $('#alreadyHelper').text(), 'warning')
+
+        if ($('#becomeHelper').length)
+            Swal.fire('Success!', 'You are now ' + $('#becomeHelper').text() + ' calendar helper', 'success')
+
+        //popup file upload
+        if ($('#upload-errors').length)
+            Swal.fire('Error!', $('#upload-errors').html(), 'error')
+
+        if ($('#upload-success').length)
+            Swal.fire('Success!', $('#upload-success').text(), 'success')
+
+        //targets upload
+        $('#targets').on('change', function (e) {
+            if (e.target.files.length == 0) return;
+            Swal.fire({
+                title: 'Are you sure to upload this file?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, upload it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#submit-targets-form').trigger('click')
+                }
+            })
+        })
     },
 });

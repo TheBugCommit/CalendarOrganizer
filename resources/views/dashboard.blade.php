@@ -43,8 +43,16 @@
     </div>
 
     <div class="floating-container">
-        <button class="floating-button" data-bs-toggle="modal" data-bs-target="#newCalendarModal">+</button>
+        <button class="floating-button" data-bs-toggle="modal" data-bs-target="#newCalendarModal"><i class="fas fa-plus"></i></button>
     </div>
+
+
+    @if(session()->has('alreadyHelper'))
+        <div class="d-none" id="alreadyHelper">{{ session()->get('alreadyHelper') }}</div>
+    @endif
+    @if (session()->has('becomeHelper'))
+        <div class="d-none" id="becomeHelper">{{ session()->get('becomeHelper') }}</div>
+    @endif
 
     @include('modals.new_calendar')
 @endsection

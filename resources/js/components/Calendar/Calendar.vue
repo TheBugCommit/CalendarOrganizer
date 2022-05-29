@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <FullCalendar :options="calendarOptions" ref="fullCalendar" />
-        <EventPopup :event="selected_event" :target="selected_target" :calendar="calendar" :me="$root.me" ref="eventPopup" />
+        <EventPopup :event="selected_event" :target="selected_target" :calendar="calendar" :categories="$root.categories" :me="$root.me" ref="eventPopup" />
         <Event :event="selected_event" :editing="event_editing" ref="eventManage" />
     </div>
 </template>
@@ -118,8 +118,9 @@ export default {
 
         async getCalendarEvents() {
             let _this = this;
+            let events
             try {
-                return await $.ajax({
+                events = await $.ajax({
                     url: route_events,
                     type: "GET",
                     data: { id: _this.calendar.id },
@@ -129,7 +130,9 @@ export default {
                 console.error(error);
             }
 
-            return [];
+            this.$root.show_loading = false
+
+            return events || [];
         },
 
         storeCalendarEvent() {
@@ -287,6 +290,7 @@ export default {
     mounted() {
         let _this = this;
 
+        this.$root.show_loading = true
         this.fullCalendar = this.$refs.fullCalendar.getApi();
 
         $("#createEvent .modal-footer button:last-child").on(
