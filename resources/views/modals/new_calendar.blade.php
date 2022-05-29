@@ -1,4 +1,4 @@
-<div class="modal fade" id="newCalendarModal" tabindex="-1" aria-labelledby="newCalendarModalLabel"
+<div class="modal fade" id="newCalendarModal" tabindex="-2" aria-labelledby="newCalendarModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <form class="modal-content" @submit.prevent="storeCalendar()">
@@ -31,7 +31,8 @@
                     <label for="title" class="input_label">Description</label>
                 </div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer justify-content-between">
+                <span class="input-error">@{{ error }}</span>
                 <button type="submit" class="btn btn-save">Save</button>
             </div>
         </form>

@@ -17,9 +17,6 @@ import Swal from "sweetalert2";
 import EventPopup from "./Events/EventPopup.vue";
 import Event from "./Events/Event.vue";
 
-import "bootstrap/dist/css/bootstrap.css";
-import "bootstrap-icons/font/bootstrap-icons.css";
-
 export default {
     components: {
         FullCalendar,
@@ -31,7 +28,6 @@ export default {
         return {
             calendarOptions: {
                 initialView: "dayGridMonth",
-                themeSystem: "bootstrap5",
                 timeZone: "local",
                 nextDayThreshold: '00:00',
                 editable: true,

@@ -79,6 +79,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::name('calendar.')->group(function () {
             Route::get('/calendars', [CalendarController::class, 'index'])->name('all');
+            Route::get('/helper_calendars', [CalendarController::class, 'getHelperCalendars'])->name('helper');
 
             Route::post('/calendar_store', [CalendarController::class, 'store'])->name('store');
 

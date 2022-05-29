@@ -242,6 +242,11 @@ a
         box-shadow 0 10px 25px -5px $button-color
         cursor pointer
 
+.btn
+    &:focus
+        outline unset !important
+        box-shadow: unset !important
+
 .btn-save
     color $white !important
     background-color $button-color !important
@@ -251,9 +256,51 @@ a
         color $green !important
         transition transform 0.3s !important
         transform scale(1.1)
+
+.btn-tab
+    background-color $white !important
+    color $text-color !important
+    &.active
+        background-color $button-color !important
+        color $white !important
+
+.btn-edit
+    background-color $white !important
+    color $button-color !important
+    &:hover
+        transition color 0.3s
+        color $green !important
+
+
+.btn-delete
+    background-color white !important
+    &:hover
+        color $red !important
+
+.swal2-confirm
+    background-color $button-color !important
     &:focus
         outline unset !important
         box-shadow: unset !important
+
+.category
+    width 100%
+    padding 10px 0px
+    background-color $white
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-left 4px solid $green
+    margin-top: 1.3rem
+    transition box-shadow 0.3s ease-in-out
+    transition border-left-color 0.3s ease-in-out
+    &:hover
+        border-left-color $button-color
+        transition box-shadow 0.3s ease-in-out, border-left-color 0.3s ease-in-out
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+
+#v-pills-tabContent
+    width: 100% !important;
+    >div
+        width: 100% !important;
 
 @media screen and (min-width: 768px)
     .header
@@ -267,8 +314,8 @@ a
     .l-navbar
         left 0
         padding 1rem 1rem 0 0
-    .show
-        width calc(var(--nav-width) + 156px)
+        &.show
+            width calc(var(--nav-width) + 156px)
     .body-pd
         padding-left calc(var(--nav-width) + 188px)
 
