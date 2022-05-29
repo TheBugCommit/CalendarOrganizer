@@ -1,7 +1,29 @@
 @import './colors.styl';
 @import './mixins.styl';
 @import './loader.styl';
-@import './login.styl';
+@import './fields.styl';
+
+@import './auth.styl';
+
+:root
+    --header-height 3rem
+    --nav-width 68px
+    --first-color $button-color
+    --first-color-light $white
+    --green-color $green
+    --body-font 'Nunito', sans-serif
+    --normal-font-size 1rem
+    --z-fixed 100
+
+.main-container
+    margin-top: 66px;
+    max-height: 97vh;
+    min-height: 87vh;
+    height: 87vh;
+    >.card
+        height 100%
+        overflow auto
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 
 #eventEditTooltip
     display  none
@@ -11,3 +33,242 @@
     color yellow
     > .tippy-svg-arrow
         fill tomato
+
+.clr-picker.clr-open, .clr-picker[data-inline=true]
+    z-index 9999
+
+.color-field
+    opacity 0
+    width 3rem
+
+*,::before,::after
+    box-sizing border-box
+
+body
+    position relative
+    margin var(--header-height) 0 0 0
+    padding 0 1rem
+    font-family var(--body-font)
+    font-size var(--normal-font-size)
+
+a
+    text-decoration none
+
+.header
+    width 100%
+    height var(--header-height)
+    position fixed
+    top 0
+    left 0
+    display flex
+    align-items center
+    justify-content space-between
+    padding 0 1rem
+    z-index var(--z-fixed)
+    transition .5s
+
+.header_toggle
+    color var(--first-color)
+    font-size 1.5rem
+    cursor pointer
+
+.header_img
+    width 35px
+    height 35px
+    display flex
+    justify-content center
+    border-radius 50%
+    overflow hidden
+    img
+        width 40px
+
+.l-navbar
+    position fixed
+    top 0
+    left -30%
+    width var(--nav-width)
+    height 100vh
+    background-color var(--first-color)
+    padding .5rem 1rem 0 0
+    transition .5s
+    z-index var(--z-fixed)
+
+.nav
+    height 100%
+    display flex
+    flex-direction column
+    justify-content space-between
+    overflow hidden
+
+.nav_logo, .nav_link
+    display grid
+    grid-template-columns max-content max-content
+    align-items center
+    column-gap 1rem
+    padding .5rem 0 .5rem 1.5rem
+
+.nav_logo
+    margin-bottom 2rem
+    text-decoration none
+
+.nav_logo-icon
+    width: 1.5rem
+    color var(--green-color)
+
+.nav_logo-name
+    color var(--first-color-light)
+    font-weight 700
+
+.nav_link
+    position relative
+    color var(--first-color-light)
+    margin-bottom 1.5rem
+    text-decoration none
+    transition .3s
+    &:hover
+        color var(--green-color)
+    &.active
+        color var(--green-color)
+        &::before
+            content ''
+            position absolute
+            left 0
+            width 2px
+            height 32px
+            background-color var(--green-color)
+
+.nav_icon
+    font-size 1.25rem
+
+.show
+    left 0
+
+.body-pd
+   padding-left calc(var(--nav-width) + 1rem)
+
+.height-100
+    height 100vh
+
+
+.calendar-list
+    .calendar
+        border-left 4px solid $green
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        &:hover
+            transform scale(1.01)
+            transition transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out
+            cursor pointer
+            box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+            border-left-color: $button-color
+
+.short-text-100 {
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow: ellipsis;
+    max-width: 100px
+}
+
+.short-text-120 {
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow: ellipsis;
+    max-width: 125px
+}
+
+.short-text-200 {
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow: ellipsis;
+    max-width: 200px
+}
+
+.short-text-350 {
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow: ellipsis;
+    max-width: 350px
+}
+
+.short-multiline-text {
+    overflow: hidden;
+   text-overflow: ellipsis;
+   display: -webkit-box;
+   -webkit-line-clamp: var(--lines);
+           line-clamp: var(--lines);
+   -webkit-box-orient: vertical;
+}
+
+.blod-text {
+    font-weight: bold
+}
+
+.cursive-gray-text {
+    font-style: italic
+    font-size: 12px
+    color $text-light
+}
+
+.floating-container
+    position absolute
+    width 100px
+    height 100px
+    bottom: 30px;
+    right: 10px;
+    &:hover
+        .floating-button
+            transition box-shadow .2s, font-size .3s
+            font-size 30px
+            box-shadow 0 10px 25px $button-color
+    .floating-button
+        display: flex
+        justify-content center
+        align-items center
+        position absolute
+        border: none
+        width 65px
+        height 65px
+        background $button-color
+        transition box-shadow .2s
+        bottom 0
+        border-radius 50%
+        left 0
+        right 0
+        margin auto
+        color white
+        line-height 65px
+        text-align center
+        font-size 25px
+        z-index 100
+        box-shadow 0 10px 25px -5px $button-color
+        cursor pointer
+
+.btn-save
+    color $white !important
+    background-color $button-color !important
+    transition transform 0.3s !important
+
+    &:hover
+        color $green !important
+        transition transform 0.3s !important
+        transform scale(1.1)
+    &:focus
+        outline unset !important
+        box-shadow: unset !important
+
+@media screen and (min-width: 768px)
+    .header
+        height calc(var(--header-height) + 1rem)
+        padding 0 2rem 0 calc(var(--nav-width) + 2rem)
+    .header_img
+        width 40px
+        height 40px
+        img
+            width 45px
+    .l-navbar
+        left 0
+        padding 1rem 1rem 0 0
+    .show
+        width calc(var(--nav-width) + 156px)
+    .body-pd
+        padding-left calc(var(--nav-width) + 188px)
+

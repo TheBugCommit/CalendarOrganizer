@@ -1,24 +1,22 @@
 @extends('layouts.main')
 
 @section('title', 'Dashboard - ' . Auth::user()->name)
-
 @section('content')
-    <form @submit.prevent="storeCalendar()">
-        <input type="text" id="title" v-model="newCalendarForm.title" required>
-        <input type="date" id="start_date" v-model="newCalendarForm.start_date" required>
-        <input type="date" id="end_date" v-model="newCalendarForm.end_date" required>
-        <input type="submit" value="Add">
-    </form>
+    <h4 class="title">My Calendars</h4>
 
-    <loading-component :loading="show_loading"></loading-component>
+    <div class="fullpage-loading" v-if="show_loading">
+        <loading-component :loading="show_loading"></loading-component>
+    </div>
     <div class="container">
-        <div class="row">
-            <calendar-component v-for="calendar in calendars" :key="calendar.id" :calendar="calendar" @redirect="redirect('/calendar_edit/' + calendar.id)" ></calendar-component>
+        <div class="row calendar-list">
+            <calendar-component v-for="calendar in calendars" :key="calendar.id" :calendar="calendar"
+                @redirect="redirect('/calendar_edit/' + calendar.id)"></calendar-component>
         </div>
     </div>
 
-    <form action="{{ route('logout') }}" method="post">
-        @csrf
-        <input type="submit" value="Logot">
-    </form>
+    <div class="floating-container">
+        <button class="floating-button" data-bs-toggle="modal" data-bs-target="#newCalendarModal">+</button>
+    </div>
+
+    @include('modals.new_calendar')
 @endsection

@@ -20708,6 +20708,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ["calendar"]
 });
@@ -20797,6 +20802,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         allDaySlot: false,
         initialDate: new Date(),
         nowIndicator: true,
+        expandRows: true,
+        aspectRatio: 2,
         headerToolbar: {
           left: "prev,next today",
           center: "title",
@@ -21644,14 +21651,10 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_4__["default"]({
     newCalendarForm: {
       title: "",
       start_date: "",
-      end_date: ""
+      end_date: "",
+      description: null
     },
     categories: []
-  },
-  mounted: function mounted() {
-    if (typeof route_user_me !== 'undefined') this.getMe();
-    if (this.currentRoute == '/') this.getCalendars();
-    if (typeof route_user_categories !== 'undefined') this.getCategories();
   },
   methods: {
     getCalendars: function getCalendars() {
@@ -21683,6 +21686,8 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_4__["default"]({
       }).done(function (response) {
         _this.calendars.push(response);
 
+        $('#newCalendarModal').modal('hide');
+        $('.modal-backdrop').hide();
         Object.keys(_this.newCalendarForm).forEach(function (elem) {
           _this.newCalendarForm[elem] = "";
         });
@@ -21719,7 +21724,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_4__["default"]({
             _this.categories = _this.categories || []
         })
     },
-      updateCategory(id){
+     updateCategory(id){
         let _this = this
         $.ajax({
             url: route_user_category_update,
@@ -21751,7 +21756,101 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_4__["default"]({
       window.location.href = url;
     }
   },
-  watch: {}
+  mounted: function mounted() {
+    var _document$querySelect, _document$querySelect2, _document$querySelect3, _document$querySelect4;
+
+    if (typeof route_user_me !== 'undefined') this.getMe();
+    if (this.currentRoute == '/') this.getCalendars();
+    if (typeof route_user_categories !== 'undefined') this.getCategories(); // Login
+
+    (_document$querySelect = document.querySelectorAll('input')) === null || _document$querySelect === void 0 ? void 0 : _document$querySelect.forEach(function (input) {
+      if (!input.classList.contains('validate')) return;
+      input.addEventListener('focusout', function (event) {
+        if (event.target.value.length < 1) {
+          event.target.classList.add('invalid');
+          event.target.classList.remove('active');
+        } else {
+          event.target.classList.add('active');
+          event.target.classList.remove('invalid');
+        }
+      });
+    });
+    $("#nation_id").selectize({
+      create: false,
+      sortField: "text"
+    });
+    (_document$querySelect2 = document.querySelectorAll('input')) === null || _document$querySelect2 === void 0 ? void 0 : _document$querySelect2.forEach(function (input) {
+      if (!input.classList.contains('validate')) return;
+      input.addEventListener('focusin', function (event) {
+        event.target.classList.remove('invalid');
+        event.target.classList.add('active');
+      });
+    });
+    $('.datepicker').daterangepicker({
+      singleDatePicker: true,
+      startDate: moment().subtract(18, 'years').format("YYYY-MM-DD"),
+      "maxDate": moment().subtract(18, 'years').format("YYYY-MM-DD"),
+      "showDropdowns": true,
+      locale: {
+        format: 'YYYY-MM-DD'
+      }
+    });
+    $('.datepicker-years').daterangepicker({
+      singleDatePicker: true,
+      startDate: moment().format("YYYY-MM-DD"),
+      "maxDate": moment().format("YYYY-MM-DD"),
+      "showDropdowns": true,
+      autoUpdateInput: false,
+      autoApply: false,
+      locale: {
+        format: 'YYYY-MM-DD'
+      }
+    }, function (startDate) {
+      console.log(startDate);
+    });
+
+    var _this = this;
+
+    $('.datepicker-years').on('apply.daterangepicker', function (ev, picker) {
+      if ($(this).attr('id') == 'start-date') {
+        _this.newCalendarForm.start_date = picker.startDate.format('YYYY-MM-DD');
+      } else if ($(this).attr('id') == 'end-date') {
+        _this.newCalendarForm.end_date = picker.startDate.format('YYYY-MM-DD');
+      }
+
+      $(this).val(picker.startDate.format('YYYY-MM-DD'));
+    });
+    (_document$querySelect3 = document.querySelector('#terms')) === null || _document$querySelect3 === void 0 ? void 0 : _document$querySelect3.addEventListener('change', function () {
+      if (this.checked) {
+        document.querySelector('#login').classList.add('btn-opacity-1');
+      } else {
+        document.querySelector('#login').classList.remove('btn-opacity-1');
+      }
+    });
+    (_document$querySelect4 = document.querySelector('#auth-form')) === null || _document$querySelect4 === void 0 ? void 0 : _document$querySelect4.addEventListener('submit', function (event) {
+      if (!document.querySelector('#terms').checked) event.preventDefault();
+    }); // Side Bar
+
+    var showNavbar = function showNavbar(toggleId, navId, bodyId, headerId) {
+      var toggle = document.getElementById(toggleId),
+          nav = document.getElementById(navId),
+          bodypd = document.getElementById(bodyId),
+          headerpd = document.getElementById(headerId); // Validate that all variables exist
+
+      if (toggle && nav && bodypd && headerpd) {
+        toggle.addEventListener('click', function () {
+          // show navbar
+          nav.classList.toggle('show'); // add padding to body
+
+          bodypd.classList.toggle('body-pd'); // add padding to header
+
+          headerpd.classList.toggle('body-pd');
+        });
+      }
+    };
+
+    showNavbar('header-toggle', 'nav-bar', 'body-pd', 'header');
+  }
 });
 
 /***/ }),
@@ -52501,32 +52600,43 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    {
-      staticClass: "card",
-      on: {
-        click: function ($event) {
-          return _vm.$emit("redirect")
+  return _c("div", { staticClass: "col-12 col-md-5 col-lg-4 col-xl-3 mt-3" }, [
+    _c(
+      "div",
+      {
+        staticClass: "card calendar",
+        on: {
+          click: function ($event) {
+            return _vm.$emit("redirect")
+          },
         },
       },
-    },
-    [
-      _c("div", { staticClass: "card-header" }, [
-        _vm._v(_vm._s(_vm.calendar.title)),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "card-body" }, [
-        _vm._v(
-          "\n    " +
-            _vm._s(_vm.calendar.start_date) +
-            " - " +
-            _vm._s(_vm.calendar.end_date) +
-            "\n  "
-        ),
-      ]),
-    ]
-  )
+      [
+        _c("div", { staticClass: "card-header" }, [
+          _vm._v(_vm._s(_vm.calendar.title)),
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "card-body" }, [
+          _c(
+            "p",
+            {
+              staticClass: "short-multiline-text",
+              staticStyle: { "--lines": "2" },
+            },
+            [_vm._v(_vm._s(_vm.calendar.description))]
+          ),
+          _vm._v(" "),
+          _c("p", { staticClass: "cursive-gray-text text-end m-0" }, [
+            _vm._v(
+              _vm._s(_vm.calendar.start_date) +
+                " - " +
+                _vm._s(_vm.calendar.end_date)
+            ),
+          ]),
+        ]),
+      ]
+    ),
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -53034,7 +53144,10 @@ var render = function () {
   return _vm.loading
     ? _c(
         "div",
-        { staticClass: "d-flex justify-content-center align-items-center" },
+        {
+          staticClass:
+            "d-flex justify-content-center align-items-center center-loader",
+        },
         [
           _c(
             "div",
@@ -65365,8 +65478,8 @@ module.exports = JSON.parse('{"name":"axios","version":"0.21.4","description":"P
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
 /******/ 			"/js/app": 0,
-/******/ 			"css/styles": 0,
-/******/ 			"css/app": 0
+/******/ 			"css/app": 0,
+/******/ 			"css/styles": 0
 /******/ 		};
 /******/ 		
 /******/ 		// no chunk on demand loading
@@ -65421,9 +65534,9 @@ module.exports = JSON.parse('{"name":"axios","version":"0.21.4","description":"P
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	__webpack_require__.O(undefined, ["css/styles","css/app"], () => (__webpack_require__("./resources/js/app.js")))
-/******/ 	__webpack_require__.O(undefined, ["css/styles","css/app"], () => (__webpack_require__("./resources/sass/app.scss")))
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/styles","css/app"], () => (__webpack_require__("./resources/css/styles.styl")))
+/******/ 	__webpack_require__.O(undefined, ["css/app","css/styles"], () => (__webpack_require__("./resources/js/app.js")))
+/******/ 	__webpack_require__.O(undefined, ["css/app","css/styles"], () => (__webpack_require__("./resources/sass/app.scss")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/app","css/styles"], () => (__webpack_require__("./resources/css/styles.styl")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

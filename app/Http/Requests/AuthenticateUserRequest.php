@@ -25,21 +25,8 @@ class AuthenticateUserRequest extends FormRequest
     {
         return [
             'email' => ['required', 'email'],
-            'password' => ['required'],
+            'password' => ['required', 'min:8', 'max:20'],
         ];
     }
 
-    /**
-     * Assign error messages for rules
-     *
-     * @return array
-     */
-    public function messages()
-    {
-        return [
-            'email.required' => 'Email is required',
-            'email.email' => 'Pleas enter a valid email',
-            'password'  =>  'Password is required'
-        ];
-    }
 }

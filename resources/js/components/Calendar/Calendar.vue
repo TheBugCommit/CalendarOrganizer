@@ -56,6 +56,8 @@ export default {
                 allDaySlot: false,
                 initialDate: new Date(),
                 nowIndicator: true,
+                expandRows: true,
+                aspectRatio: 2,
                 headerToolbar: {
                     left: "prev,next today",
                     center: "title",

@@ -9,7 +9,6 @@ use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventController;
-use App\Http\Controllers\MailerController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\CalendarVerify;
 use App\Http\Middleware\CategoryVerify;
@@ -31,7 +30,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['guest'])->group(function () {
     Route::name('auth.')->group(function () {
         Route::get('/login', [AuthController::class, 'index'])->name('login');
-        Route::get('/signin', [AuthController::class, 'signin'])->name('signin');
+        Route::get('/signup', [AuthController::class, 'signup'])->name('signup');
 
         Route::post('/register', [AuthController::class, 'register'])->name('register');
         Route::post('/authenticate', [AuthController::class, 'authenticate'])->name('authenticate');
@@ -39,7 +38,7 @@ Route::middleware(['guest'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::name('verification.')->group(function () {
         Route::get('verify-email', [EmailVerificationPromptController::class, '__invoke'])->name('notice');
@@ -50,8 +49,17 @@ Route::middleware(['auth'])->group(function () {
         });
     });
 
+
     Route::middleware('verified')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+        Route::get('/jasperreport', function(){
+            return view('jasperreport');
+        })->name('jasperreport.index');
+
+        Route::get('/export_events', function(){
+            return view('export_events');
+        })->name('export.events');
 
         Route::name('user.')->group(function () {
             Route::get('/me', [UserController::class, 'me'])->name('me');
@@ -67,8 +75,6 @@ Route::middleware(['auth'])->group(function () {
                     Route::delete('/category_delete', [CategoryController::class, 'destroy'])->name('delete');
                 });
             });
-
-            Route::post("/send_email", [MailerController::class, "send"])->name("send");
         });
 
         Route::name('calendar.')->group(function () {

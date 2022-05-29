@@ -36,11 +36,11 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function signin()
+    public function signup()
     {
         $nations = Nation::all();
 
-        return view('auth.signin', compact('nations'));
+        return view('auth.signup', compact('nations'));
     }
 
     /**

@@ -1,5 +1,5 @@
 <template>
-    <div v-if="loading" class="d-flex justify-content-center align-items-center">
+    <div v-if="loading" class="d-flex justify-content-center align-items-center center-loader">
         <div class="mosaic-loader">
             <span></span><span></span>
             <template v-for="(j, index_j) in 4">

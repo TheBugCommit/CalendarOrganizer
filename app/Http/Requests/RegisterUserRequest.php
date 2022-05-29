@@ -30,7 +30,7 @@ class RegisterUserRequest extends FormRequest
             'name'  => ['required','max:30'],
             'surname1' => ['required', 'max:30'],
             'surname2' => ['required', 'max:30'],
-            'birth_date' => ['required', 'before:today'],
+            'birth_date' => ['required', 'before:-18 years'],
             'phone' => ['numeric', 'digits:9', 'nullable'],
             'password' => ['required','min:8','max:20','confirmed'],
             'gender' => ['required'],
@@ -46,33 +46,10 @@ class RegisterUserRequest extends FormRequest
     public function messages()
     {
         return [
-            'email.required' => 'Your first name is required',
-            'email.max' => 'Your first name cannot be more than 255 characters',
-            'email.unique' => 'email',
-
-            'name.required' => 'Your last name is required',
-            'name.max' => 'Your last name cannot be more than 255 characters',
-
-            'surname1.required' => 'Your last 1 must be letters only',
-            'surname1.max' => 'Your last 1a must be letters only',
-
-            'surname2.required' => 'Your last 2 must be letters only',
-            'surname2.max' => 'Your last 2a must be letters only',
-
-            'birth_date.required' => 'Your date name must be letters only',
-            'birth_date.before' => 'Your last date must be letters only',
-
-            'phone.numeric' => 'Your phone number is required',
-            'phone.digits' => 'Your phone number cannot be more than 255 characters',
-
-            'password.required' => 'Your pass number cannot be more than 255 characters',
-            'password.min' => 'Your pass number cannot be more than 255 characters',
-            'password.max' => 'Your pass number cannot be more than 255 characters',
-            'password.confirmed' => 'Your pass number cannot be more than 255 characters',
-
-            'gender.required' => 'You must create a password',
-
-            'nation_id.required' => 'Your password must be at least 6 characters long',
+            'surname1.required' => 'First surname it\'s required',
+            'surname1.max' => 'First surname max length 30',
+            'surname2.required' => 'Second surname it\'s required',
+            'surname2.max' => 'Second surname max length 30',
         ];
     }
 }

@@ -9,10 +9,10 @@ body,
 input
     font-family "Poppins", sans-serif
 
-.container
+.c-container
     position relative
     width 100%
-    background-color #fff
+    background-color $white
     min-height 100vh
     overflow hidden
     &:before
@@ -46,21 +46,15 @@ input
             pointer-events all
 
 .forms-container
-    position absolute
     width 100%
     height 100%
     top 0
     left 0
 
 .signin-signup
-    position absolute
-    top 50%
     transform translate(-50%, -50%)
-    left 75%
     width 50%
     transition 1s 0.7s ease-in-out
-    display grid
-    grid-template-columns 1fr
     z-index 5
 
 form
@@ -68,7 +62,6 @@ form
     align-items center
     justify-content center
     flex-direction column
-    padding 0rem 5rem
     transition all 0.2s 0.7s
     overflow hidden
     grid-column 1 / 2
@@ -81,100 +74,110 @@ form
 
 .title
     font-size 2.2rem
-    color #444
+    color $text-color
     margin-bottom 10px
 
-.input-field
-    max-width 380px
-    width 100%
-    background-color #f0f0f0
-    margin 10px 0
-    height 55px
-    border-radius 55px
-    display grid
-    grid-template-columns 15% 85%
-    padding 0 0.4rem
+.input_group
     position relative
-    i
-        text-align center
-        line-height 55px
-        color #acacac
-        transition 0.5s
-        font-size 1.1rem
-    input
-        background none
-        outline none
-        border none
-        line-height 1
-        font-weight 600
-        font-size 1.1rem
-        color #333
-        border-bottom: 1px;
-        &::placeholder
-            color #aaa
-            font-weight 500
-        &::after
-            content: '';
-            display: block;
-            width: 100%;
-            height: 2px;
-            background: red;
-            transition: width .3s;
-        &::focus::after
-            width: 100%;
-    span.error
-        color: #f95959;
-        font-family: "Montserrat", sans-serif;
-        font-size: 12px;
-        position: absolute;
-        bottom: -20px;
-        right: 0;
-        display: none;
+    padding 15px 0 0
+    margin-top 10px
+    width 50%
 
-.social-text
-    padding 0.7rem 0
+.input_field
+    font-family inherit
+    width 100%
+    border 0
+    border-bottom 1px solid $grey
+    outline 0
+    font-size 14px
+    padding 7px 0
+    color $text-color
+    background transparent
+    transition border-color 0.2s
+    &::placeholder
+        color transparent
+    &:placeholder-shown
+        & ~ .input_label
+            font-size 14px
+            cursor text
+            top 20px
+    &.active
+        padding-bottom 6px
+        border-width 1px
+        border-color $green
+        & ~ .input_label
+            position absolute
+            top 0
+            display block
+            transition 0.2s
+            font-size 1rem
+            color $green
+            font-weight 700
+
+    &.invalid
+        border-color $red
+        & ~ .input_label
+            color $red
+
+    &:required, &:invalid
+        box-shadow none
+
+.input_label
+    position absolute
+    top 0
+    display block
+    transition 0.2s
     font-size 1rem
+    color $grey
+    z-index: -1;
 
-.social-media
-    display flex
-    justify-content center
+.input-error
+    color $red
+    font-size 12px
 
-.social-icon
-    height 46px
-    width 46px
-    display flex
-    justify-content center
-    align-items center
-    margin 0 0.45rem
-    color #333
-    border-radius 50%
-    border 1px solid #333
-    text-decoration none
-    font-size 1.1rem
-    transition 0.3s
-    &:hover
-        color #4481eb
-        border-color #4481eb
+.radio
+    color $text-color
+    >label
+        color $grey
 
-.btn
+.selectize-control {
+  width: 100% !important;
+}
+span.error
+    color: $red;
+    font-family: "Montserrat", sans-serif;
+    font-size: 12px;
+    position: absolute;
+    bottom: -20px;
+    right: 0;
+    display: none;
+    &::before
+        content ''
+        display block
+        width 100%
+        background-color $red
+        height 1px
+        transition: width .3s;
+
+.c-btn
     width 150px
-    background-color #5995fd
+    background-color $button-color
     border none
     outline none
     height 49px
     border-radius 49px
-    color #fff
+    color $white
     text-transform uppercase
     font-weight 600
     margin 10px 0
     cursor pointer
     transition 0.5s
     &:hover
-        background-color #4d84e2
+        background-color $button-hover
     &.transparent
         margin 0
         background none
-        border 2px solid #fff
+        border 2px solid $white
         width 130px
         height 41px
         font-weight 600
@@ -202,7 +205,7 @@ form
     text-align center
     z-index 6
     .content
-        color #fff
+        color $white
         transition transform 0.9s ease-in-out
         transition-delay 0.6s
     h3
@@ -225,76 +228,18 @@ form
 .right-panel .content
     transform translateX(800px)
 
-.container.sign-up-mode .left-panel .image,
-.container.sign-up-mode .left-panel .content
+.c-container.sign-up-mode .left-panel .image,
+.c-container.sign-up-mode .left-panel .content
     transform translateX(-800px)
 
-.container.sign-up-mode .right-panel .image,
-.container.sign-up-mode .right-panel .content
+.c-container.sign-up-mode .right-panel .image,
+.c-container.sign-up-mode .right-panel .content
     transform translateX(0%)
 
 @media (max-width: 870px)
-    .container
-        min-height 800px
-        height 100vh
-        &:before
-            width 1500px
-            height 1500px
-            transform translateX(-50%)
-            left 30%
-            bottom 68%
-            right initial
-            top initial
-            transition 2s ease-in-out
-        &.sign-up-mode
-            &:before
-                transform translate(-50%, 100%)
-                bottom 32%
-                right initial
-            .signin-signup
-                top 5%
-                transform translate(-50%, 0)
-    .signin-signup
-        width 100%
-        top 95%
-        transform translate(-50%, -100%)
-        transition 1s 0.8s ease-in-out
-    .panels-container
-        grid-template-columns 1fr
-        grid-template-rows 1fr 2fr 1fr
-    .panel
-        flex-direction row
-        justify-content space-around
-        align-items center
-        padding 2.5rem 8%
-        grid-column 1 / 2
-        .content
-            padding-right 15%
-            transition transform 0.9s ease-in-out
-            transition-delay 0.8s
-        h3
-            font-size 1.2rem
-        p
-            font-size 0.7rem
-            padding 0.5rem 0
-    .right-panel
-        grid-row 3 / 4
-    .left-panel
-        grid-row 1 / 2
-    .image
-        width 200px
-        transition transform 0.9s ease-in-out
-        transition-delay 0.6s
-    .btn
-        &.transparent
-            width 110px
-            height 35px
-            font-size 0.7rem
-
-@media (max-width: 870px)
-    .container
-        min-height 800px
-        height 100vh
+    .c-container
+        min-height 1000px
+        height 200vh
         &.sign-up-mode
             .signin-signup
                 left 50%
@@ -325,7 +270,7 @@ form
             transition 2s ease-in-out
     .signin-signup
         width 100%
-        top 95%
+        top 70%
         transform translate(-50%, -100%)
         transition 1s 0.8s ease-in-out
         left 50%
@@ -359,7 +304,7 @@ form
         width 200px
         transition transform 0.9s ease-in-out
         transition-delay 0.6s
-    .btn
+    .c-btn
         &.transparent
             width 110px
             height 35px
@@ -373,7 +318,7 @@ form
     .panel
         .content
             padding 0.5rem 1rem
-    .container
+    .c-container
         padding 1.5rem
         &:before
             bottom 72%

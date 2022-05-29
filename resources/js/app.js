@@ -30,22 +30,11 @@ const app = new Vue({
         newCalendarForm: {
             title: "",
             start_date: "",
-            end_date: ""
+            end_date: "",
+            description: null,
         },
         categories: [],
     },
-
-    mounted() {
-        if(typeof route_user_me !== 'undefined')
-            this.getMe()
-
-        if (this.currentRoute == '/')
-            this.getCalendars()
-
-        if(typeof route_user_categories !== 'undefined')
-            this.getCategories();
-    },
-
 
     methods: {
         getCalendars() {
@@ -73,6 +62,8 @@ const app = new Vue({
                 data: _this.newCalendarForm
             }).done(function (response) {
                 _this.calendars.push(response)
+                $('#newCalendarModal').modal('hide')
+                $('.modal-backdrop').hide();
                 Object.keys(_this.newCalendarForm).forEach((elem) => { _this.newCalendarForm[elem] = "" })
             }).fail(function (error) {
                 console.error(error)
@@ -141,9 +132,117 @@ const app = new Vue({
         redirect(url) {
             window.location.href = url
         },
+
     },
 
-    watch: {
+    mounted() {
+        if(typeof route_user_me !== 'undefined')
+            this.getMe()
 
-    }
+        if (this.currentRoute == '/')
+            this.getCalendars()
+
+        if(typeof route_user_categories !== 'undefined')
+            this.getCategories();
+
+        // Login
+        document.querySelectorAll('input')?.forEach(input => {
+            if(!input.classList.contains('validate'))
+                return;
+            input.addEventListener('focusout', (event) => {
+                if (event.target.value.length < 1){
+                    event.target.classList.add('invalid')
+                    event.target.classList.remove('active')
+                }else{
+                    event.target.classList.add('active')
+                    event.target.classList.remove('invalid')
+                }
+
+            })
+        })
+
+        $("#nation_id").selectize({
+            create: false,
+            sortField: "text",
+        })
+
+        document.querySelectorAll('input')?.forEach(input => {
+            if(!input.classList.contains('validate'))
+                return;
+            input.addEventListener('focusin', (event) => {
+                event.target.classList.remove('invalid')
+                event.target.classList.add('active')
+            })
+        })
+
+
+        $('.datepicker').daterangepicker({
+            singleDatePicker: true,
+            startDate: moment().subtract(18, 'years').format("YYYY-MM-DD"),
+            "maxDate": moment().subtract(18, 'years').format("YYYY-MM-DD"),
+            "showDropdowns": true,
+            locale: {
+                format: 'YYYY-MM-DD'
+            }
+        });
+
+        $('.datepicker-years').daterangepicker({
+            singleDatePicker: true,
+            startDate: moment().format("YYYY-MM-DD"),
+            "maxDate": moment().format("YYYY-MM-DD"),
+            "showDropdowns": true,
+            autoUpdateInput: false,
+            autoApply: false,
+            locale: {
+                format: 'YYYY-MM-DD'
+            }
+        }, function(startDate){
+            console.log(startDate)
+        });
+
+        let _this = this
+        $('.datepicker-years').on('apply.daterangepicker', function(ev, picker) {
+            if($(this).attr('id') == 'start-date'){
+                _this.newCalendarForm.start_date = picker.startDate.format('YYYY-MM-DD')
+            }else if($(this).attr('id') == 'end-date'){
+                _this.newCalendarForm.end_date = picker.startDate.format('YYYY-MM-DD')
+            }
+            $(this).val(picker.startDate.format('YYYY-MM-DD'))
+        })
+
+        document.querySelector('#terms')?.addEventListener('change', function(){
+            if(this.checked){
+                document.querySelector('#login').classList.add('btn-opacity-1')
+            }else{
+                document.querySelector('#login').classList.remove('btn-opacity-1')
+            }
+        })
+
+        document.querySelector('#auth-form')?.addEventListener('submit', function(event){
+            if(!document.querySelector('#terms').checked)
+                event.preventDefault()
+        })
+
+
+        // Side Bar
+        const showNavbar = (toggleId, navId, bodyId, headerId) => {
+            const toggle = document.getElementById(toggleId),
+                nav = document.getElementById(navId),
+                bodypd = document.getElementById(bodyId),
+                headerpd = document.getElementById(headerId)
+
+                // Validate that all variables exist
+            if (toggle && nav && bodypd && headerpd) {
+                toggle.addEventListener('click', () => {
+                    // show navbar
+                    nav.classList.toggle('show')
+                    // add padding to body
+                    bodypd.classList.toggle('body-pd')
+                    // add padding to header
+                    headerpd.classList.toggle('body-pd')
+                })
+            }
+        }
+        showNavbar('header-toggle', 'nav-bar', 'body-pd', 'header')
+    },
 });
