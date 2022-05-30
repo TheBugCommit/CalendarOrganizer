@@ -478,6 +478,9 @@ const app = new Vue({
         if ($('#upload-success').length)
             Swal.fire('Success!', $('#upload-success').text(), 'success')
 
+        if ($('#upload-warning').length)
+            Swal.fire('Warning!', $('#upload-warning').text(), 'warning')
+
         //targets upload
         $('#targets').on('change', function (e) {
             if (e.target.files.length == 0) return;

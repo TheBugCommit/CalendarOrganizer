@@ -21482,6 +21482,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -22481,7 +22483,8 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_6__["default"]({
     if ($('#becomeHelper').length) sweetalert2__WEBPACK_IMPORTED_MODULE_4___default().fire('Success!', 'You are now ' + $('#becomeHelper').text() + ' calendar helper', 'success'); //popup file upload
 
     if ($('#upload-errors').length) sweetalert2__WEBPACK_IMPORTED_MODULE_4___default().fire('Error!', $('#upload-errors').html(), 'error');
-    if ($('#upload-success').length) sweetalert2__WEBPACK_IMPORTED_MODULE_4___default().fire('Success!', $('#upload-success').text(), 'success'); //targets upload
+    if ($('#upload-success').length) sweetalert2__WEBPACK_IMPORTED_MODULE_4___default().fire('Success!', $('#upload-success').text(), 'success');
+    if ($('#upload-warning').length) sweetalert2__WEBPACK_IMPORTED_MODULE_4___default().fire('Warning!', $('#upload-warning').text(), 'warning'); //targets upload
 
     $('#targets').on('change', function (e) {
       if (e.target.files.length == 0) return;
@@ -50305,6 +50308,20 @@ var render = function () {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "d-flex justify-content-end gap-2" }, [
+          _vm.canEditDelete && _vm.event.published == 0
+            ? _c(
+                "a",
+                {
+                  staticClass: "btn btn-edit btn-edit-popup",
+                  attrs: {
+                    href: "/publish_event?id=" + _vm.event.id,
+                    id: "upload",
+                  },
+                },
+                [_c("i", { staticClass: "fas fa-upload" })]
+              )
+            : _vm._e(),
+          _vm._v(" "),
           _vm.canEditDelete
             ? _c(
                 "button",

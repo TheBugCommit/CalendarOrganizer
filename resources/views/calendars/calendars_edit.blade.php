@@ -29,7 +29,6 @@
     </div>
 </div>
 
-
 <form action="{{ route('calendar.targets.upload') }}" method="post" class="d-none"
     enctype="multipart/form-data">
     @csrf
@@ -40,6 +39,9 @@
 
     @if (session()->has('success'))
         <div class="d-none" id="upload-success">{{ session()->get('success') }}</div>
+    @endif
+    @if (session()->has('warning'))
+        <div class="d-none" id="upload-warning">{{ session()->get('warning') }}</div>
     @endif
     @if ($errors->any())
         <div class="d-none" id="upload-errors">

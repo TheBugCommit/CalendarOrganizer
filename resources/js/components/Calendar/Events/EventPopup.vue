@@ -29,6 +29,8 @@
                     </li>
                 </ul>
                 <div class="d-flex justify-content-end gap-2">
+                    <a :href="'/publish_event?id=' + event.id" class="btn btn-edit btn-edit-popup" v-if="canEditDelete && event.published == 0" id="upload">
+                    <i class="fas fa-upload"></i></a>
                     <button type="button" class="btn btn-edit btn-edit-popup" v-if="canEditDelete" id="edit"><i
                             class="fas fa-edit"></i></button>
                     <button type="button" class="btn btn-delete btn-delete-popup" v-if="canEditDelete" id="delete"><i

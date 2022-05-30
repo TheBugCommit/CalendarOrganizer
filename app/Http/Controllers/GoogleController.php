@@ -64,7 +64,6 @@ class GoogleController extends Controller
             $client->setAccessToken($accessToken);
         } catch (Exception $ex) {
             abort(500);
-           // return response()->json(['message' => 'Error feching token ' . $ex->getMessage()], 500);
         }
 
         try {
@@ -72,20 +71,19 @@ class GoogleController extends Controller
             $user->google_access_token_json = json_encode($accessToken);
             $user->save();
         } catch (Exception $ex) {
-            //return response()->json(['message' => 'Can\'t update user with fetched token'], 500);
             abort(500);
         }
 
-        return redirect()->intended('/');//response()->json($accessToken, 201);
+        return redirect(session()->get('action_google_url', '/'));
     }
 
     /**
      * Publish calendar to google calendar
      *
      * @param Request $request
-     * @return JsonResponse
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function publishGoogleCalendar(Request $request): JsonResponse
+    public function publishGoogleCalendar(Request $request): \Illuminate\Http\RedirectResponse
     {
         $client = $this->getUserClient();
         $createdCalendar = null;
@@ -95,7 +93,7 @@ class GoogleController extends Controller
         try {
             $modelCalendar = ModelsCalendar::findOrFail($request->calendar_id);
             if($modelCalendar->google_calendar_id != null)
-                return response()->json(['message' => 'Calendar already published'], 201);
+                return back()->with('warning', 'Calendar already published');
 
             $calendar = new Google_Service_Calendar_Calendar();
             $calendar->setSummary($modelCalendar->title);
@@ -112,7 +110,7 @@ class GoogleController extends Controller
 
             DB::commit();
         } catch (Google_Service_Exception $ex) {
-            return response()->json(['message' => 'Can\'t publish calendar'], 500);
+            return  back()->withErrors('Can\'t publish calendar');
         } catch (PDOException $ex) {
             try {
                 $service->calendars->delete($createdCalendar->getId());
@@ -120,12 +118,11 @@ class GoogleController extends Controller
             }
 
             DB::rollBack();
-            return response()->json(['message' => 'Can\'t publish calendar'], 500);
+            return  back()->withErrors('Can\'t publish calendar');
         } catch (Exception $ex) {
-            return response()->json(['message' => 'Can\'t publish calendar, error iviting targets' ], 500);
+            return back()->withErrors('Can\'t publish calendar, error iviting targets');
         }
-
-        return response()->json($createdCalendar->getId());
+        return back()->with('success', 'Calendar successfully published');
     }
 
     /**
@@ -191,16 +188,18 @@ class GoogleController extends Controller
      * Publish calendar event to google calendar
      *
      * @param Request $request
-     * @return JsonResponse
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function publishGoogleCalendarEvent(Request $request): JsonResponse //falta color
+    public function publishGoogleCalendarEvent(Request $request): \Illuminate\Http\RedirectResponse
     {
         $service = null;
         $googlEvent = null;
 
         DB::beginTransaction();
         try {
-            $modelEvent = Event::findOrFail($request->event_id);
+            $modelEvent = Event::findOrFail($request->id);
+            if($modelEvent->published)
+                return back()->with('warning','This event it\'s already published');
 
             $client = $this->getUserClient();
             $service = new Google_Service_Calendar($client);
@@ -209,11 +208,11 @@ class GoogleController extends Controller
                 'location' => $modelEvent->location,
                 'description' => $modelEvent->description,
                 'start' => [
-                  'dateTime' => Carbon::parse($modelEvent->start)->setTimezone('Europe/Madrid')->toISOString(),
+                  'dateTime' => $this->parseDate($modelEvent->start),
                   'timeZone' => 'Europe/Madrid',
                 ],
                 'end' => [
-                  'dateTime' => Carbon::parse($modelEvent->end)->setTimezone('Europe/Madrid')->toISOString(),
+                  'dateTime' => $this->parseDate($modelEvent->end),
                   'timeZone' => 'Europe/Madrid',
                 ],
                 'attendees' => $modelEvent->calendar->targets->map(function($target){return ['email' => $target->email];})->all(),
@@ -232,19 +231,16 @@ class GoogleController extends Controller
 
             DB::commit();
         } catch (Google_Exception $ex) {
-            return response()->json(['message' => 'Can\'t publish calendar event'. $ex->getMessage()], 500);
+            return back()->withErrors('Can\'t publish calendar event');
         } catch (PDOException $ex) {
             try{
                 $googlEvent = $service->events->delete($modelEvent->calendar->google_calendar_id, $googlEvent->getId());
-            }catch(Google_Service_Exception $gse){
-                return response()->json(['message' => $gse->getMessage() ], 500);
-
-            }
+            }catch(Google_Service_Exception $gse){}
             DB::rollBack();
-            return response()->json(['message' => 'Can\'t publish calendar event PDO'], 500);
+            return back()->withErrors('Can\'t publish calendar event');
         }
 
-        return response()->json();
+        return back()->with('success', 'Event published successfully');
     }
 
     /**
@@ -415,5 +411,10 @@ class GoogleController extends Controller
 
             $service->acl->insert($calendar->google_calendar_id, $rule);
         }
+    }
+
+    private function parseDate($date)
+    {
+        return Carbon::parse($date)->setTimezone('Europe/Madrid')->toDateString() . 'T' . Carbon::parse($date)->setTimezone('Europe/Madrid')->toTimeString();
     }
 }

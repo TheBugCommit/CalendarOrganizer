@@ -17,9 +17,10 @@ class CheckGoogleAuth
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::user()->google_access_token_json == null)
+        if(Auth::user()->google_access_token_json == null){
+            session()->put('action_google_url', $request->getRequestUri());
             return redirect()->route('calendar.google.login');
-
+        }
         return $next($request);
     }
 }
