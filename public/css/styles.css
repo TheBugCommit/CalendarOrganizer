@@ -858,9 +858,6 @@ ul.nav {
   background-color: transparent !important;
   color: #f7f6fb !important;
 }
-.btn-delete {
-  background-color: #fff !important;
-}
 .btn-delete:hover {
   color: #fd636b !important;
 }
@@ -953,12 +950,6 @@ ul.nav {
 }
 .fc-timegrid-slot {
   background-color: #f7f6fb !important;
-}
-.fc-toolbar-title {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  width: 130px;
 }
 .fc-daygrid-event-harness a {
   color: #444 !important;

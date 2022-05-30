@@ -27,8 +27,9 @@
                                             placeholder="Name" value="{{ old('name') }}" name="name" id='name-reg'
                                             required />
                                         <label for="name" class="input_label">Name</label>
+                                        <span class="input-error d-none caps-lock">Caps Lock activated</span>
                                         @error('name')
-                                            <span class="input-error">{{ $message }}</span>
+                                            <span class="input-error d-block">{{ $message }}</span>
                                         @enderror
                                     </div>
 
@@ -38,8 +39,9 @@
                                             placeholder="Email" value="{{ old('email') }}" name="email" id='email-reg'
                                             required />
                                         <label for="email" class="input_label">Email</label>
+                                        <span class="input-error d-none caps-lock">Caps Lock activated</span>
                                         @error('email')
-                                            <span class="input-error">{{ $message }}</span>
+                                            <span class="input-error d-block">{{ $message }}</span>
                                         @enderror
                                     </div>
 
@@ -48,8 +50,9 @@
                                         <input type="tel" class="input_field validate @error('phone') invalid @enderror"
                                             placeholder="Phone" value="{{ old('phone') }}" name="phone" id='phone-reg' />
                                         <label for="phone" class="input_label">Phone</label>
+                                        <span class="input-error d-none caps-lock">Caps Lock activated</span>
                                         @error('phone')
-                                            <span class="input-error">{{ $message }}</span>
+                                            <span class="input-error d-block">{{ $message }}</span>
                                         @enderror
                                     </div>
 
@@ -58,8 +61,9 @@
                                             placeholder="First surname" value="{{ old('surname1') }}" name="surname1"
                                             id='surname1-reg' />
                                         <label for="phone" class="input_label">First surname</label>
+                                        <span class="input-error d-none caps-lock">Caps Lock activated</span>
                                         @error('surname1')
-                                            <span class="input-error">{{ $message }}</span>
+                                            <span class="input-error d-block">{{ $message }}</span>
                                         @enderror
                                     </div>
 
@@ -68,8 +72,9 @@
                                             placeholder="Second surname" value="{{ old('surname2') }}" name="surname2"
                                             id='surname2-reg' />
                                         <label for="surname2" class="input_label">Second surname</label>
+                                        <span class="input-error d-none caps-lock">Caps Lock activated</span>
                                         @error('surname2')
-                                            <span class="input-error">{{ $message }}</span>
+                                            <span class="input-error d-block">{{ $message }}</span>
                                         @enderror
                                     </div>
 
@@ -81,7 +86,7 @@
                                             id='birth_date-reg' />
                                         <label for="birth_date" class="input_label">Birth date</label>
                                         @error('birth_date')
-                                            <span class="input-error">{{ $message }}</span>
+                                            <span class="input-error d-block">{{ $message }}</span>
                                         @enderror
                                     </div>
 
@@ -95,11 +100,11 @@
                                                     id="{{ $key }}" name="gender" value="{{ $key }}">
                                                 <label for="{{ $key }}"
                                                     class="radio-label">{{ $gender }}
-                                                </label><br>
+                                                </label>
                                             @endforeach
                                         </div>
                                         @error('gender')
-                                            <span class="input-error">{{ $message }}</span>
+                                            <span class="input-error d-block">{{ $message }}</span>
                                         @enderror
                                     </div>
                                     <div class="input_group">
@@ -118,8 +123,9 @@
                                             placeholder="Password" value="{{ old('password') }}" name="password"
                                             id='password-reg' />
                                         <label for="password" class="input_label">Password</label>
+                                        <span class="input-error d-none caps-lock">Caps Lock activated</span>
                                         @error('password')
-                                            <span class="input-error">{{ $message }}</span>
+                                            <span class="input-error d-block">{{ $message }}</span>
                                         @enderror
                                     </div>
 
@@ -129,8 +135,9 @@
                                             placeholder="Password Confirmation" value="{{ old('password_confirmation') }}"
                                             name="password_confirmation" id='password-confirm-reg' />
                                         <label for="password_confirmation" class="input_label">Password Confirmation</label>
+                                        <span class="input-error d-none caps-lock">Caps Lock activated</span>
                                         @error('password_confirmation')
-                                            <span class="input-error">{{ $message }}</span>
+                                            <span class="input-error d-block">{{ $message }}</span>
                                         @enderror
                                     </div>
                                 </div>
@@ -140,12 +147,11 @@
                                         <input type="checkbox" id="terms">
                                         <label for="terms">Accept terms & conditions</label>
                                     </div>
-                                    <input id="login" class="btn btn-block login-btn mt-4 mb-4 btn-opacity-0" type="submit"
+                                    <input id="login" class="btn btn-default mt-4 mb-4 btn-opacity-0" disabled type="submit"
                                         value="Sign Up">
                                 </div>
                             </form>
-                            <p class="login-card-footer-text">Already have an account? <a href="{{ route('auth.login') }}"
-                                    class="text-reset">Login here</a></p>
+                            <p class="text">Already have an account? <a href="{{ route('auth.login') }}" class="login-link">Login here</a></p>
                         </div>
                     </div>
                 </div>

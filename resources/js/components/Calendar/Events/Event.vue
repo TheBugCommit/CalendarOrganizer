@@ -10,13 +10,14 @@
                     <div class="row">
                         <div class="col-12 col-md-4">
                             <div class="input_group">
-                                <input type="text" class="input_field" v-model="event.title" id="title">
+                                <input type="text" class="input_field validate" v-model="event.title" id="title">
                                 <label for="title" class="input_label">Title</label>
+                                <span class="input-error d-none caps-lock">Caps Lock activated</span>
                             </div>
                         </div>
                         <div class="col-12 col-md-4">
                             <div class="input_group">
-                                <input type="text" class="input_field" autocomplete="off" id="date-range">
+                                <input type="text" class="input_field validate" autocomplete="off" id="date-range">
                                 <label for="date-range" class="input_label">Date Range</label>
                             </div>
                         </div>
@@ -32,8 +33,9 @@
                         </div>
                         <div class="col-12 col-md-4">
                             <div class="input_group">
+                                <input type="text" class="input_field validate" v-model="event.location" id="location">
                                 <label for="location" class="input_label">Location: </label>
-                                <input type="text" class="input_field" v-model="event.location" id="location">
+                                <span class="input-error d-none caps-lock">Caps Lock activated</span>
                             </div>
                         </div>
                         <div class="col-12 col-md-4">

@@ -23,9 +23,9 @@
                                     <input type="text" class="input_field validate @error('email') invalid @enderror"
                                         placeholder="Email" value="{{ old('email') }}" name="email" id='email' required />
                                     <label for="email" class="input_label">Email</label>
-                                    <span class="input-error d-none caps-lock">Caps Lock activated<br></span>
+                                    <span class="input-error d-none caps-lock">Caps Lock activated</span>
                                     @error('email')
-                                        <span class="input-error">{{ $message }}</span>
+                                        <span class="input-error d-block">{{ $message }}</span>
                                     @enderror
                                 </div>
 
@@ -33,9 +33,9 @@
                                     <input type="password" class="input_field validate @error('password') invalid @enderror"
                                         placeholder="Password" name="password" id='password' required />
                                     <label for="password" class="input_label">Password</label>
-                                    <span class="input-error d-none caps-lock">Caps Lock activated<br></span>
+                                    <span class="input-error d-none caps-lock">Caps Lock activated</span>
                                     @error('password')
-                                        <span class="input-error">{{ $message }}</span>
+                                        <span class="input-error d-block">{{ $message }}</span>
                                     @enderror
                                 </div>
 

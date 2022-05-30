@@ -21310,6 +21310,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ["event", 'editing'],
@@ -21685,6 +21687,12 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -50112,7 +50120,7 @@ var render = function () {
                           expression: "event.title",
                         },
                       ],
-                      staticClass: "input_field",
+                      staticClass: "input_field validate",
                       attrs: { type: "text", id: "title" },
                       domProps: { value: _vm.event.title },
                       on: {
@@ -50129,6 +50137,12 @@ var render = function () {
                       "label",
                       { staticClass: "input_label", attrs: { for: "title" } },
                       [_vm._v("Title")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "span",
+                      { staticClass: "input-error d-none caps-lock" },
+                      [_vm._v("Caps Lock activated")]
                     ),
                   ]),
                 ]),
@@ -50172,15 +50186,6 @@ var render = function () {
                 _vm._v(" "),
                 _c("div", { staticClass: "col-12 col-md-4" }, [
                   _c("div", { staticClass: "input_group" }, [
-                    _c(
-                      "label",
-                      {
-                        staticClass: "input_label",
-                        attrs: { for: "location" },
-                      },
-                      [_vm._v("Location: ")]
-                    ),
-                    _vm._v(" "),
                     _c("input", {
                       directives: [
                         {
@@ -50190,7 +50195,7 @@ var render = function () {
                           expression: "event.location",
                         },
                       ],
-                      staticClass: "input_field",
+                      staticClass: "input_field validate",
                       attrs: { type: "text", id: "location" },
                       domProps: { value: _vm.event.location },
                       on: {
@@ -50202,6 +50207,21 @@ var render = function () {
                         },
                       },
                     }),
+                    _vm._v(" "),
+                    _c(
+                      "label",
+                      {
+                        staticClass: "input_label",
+                        attrs: { for: "location" },
+                      },
+                      [_vm._v("Location: ")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "span",
+                      { staticClass: "input-error d-none caps-lock" },
+                      [_vm._v("Caps Lock activated")]
+                    ),
                   ]),
                 ]),
                 _vm._v(" "),
@@ -50249,7 +50269,7 @@ var staticRenderFns = [
     return _c("div", { staticClass: "col-12 col-md-4" }, [
       _c("div", { staticClass: "input_group" }, [
         _c("input", {
-          staticClass: "input_field",
+          staticClass: "input_field validate",
           attrs: { type: "text", autocomplete: "off", id: "date-range" },
         }),
         _vm._v(" "),
@@ -50485,8 +50505,8 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "row" }, [
-    _c("div", { staticClass: "col-12 col-md-4" }, [
+  return _c("div", { staticClass: "row p-4" }, [
+    _c("div", { staticClass: "col-12 col-md-4 " }, [
       _c("div", [
         _c("label", { staticClass: "grey-text", attrs: { for: "users" } }, [
           _vm._v("Registred Users"),
@@ -50511,12 +50531,6 @@ var render = function () {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "input_group" }, [
-        _c(
-          "label",
-          { staticClass: "input_label", attrs: { for: "custom-user" } },
-          [_vm._v("Non existent user")]
-        ),
-        _vm._v(" "),
         _c("input", {
           directives: [
             {
@@ -50526,7 +50540,7 @@ var render = function () {
               expression: "custom_user.email",
             },
           ],
-          staticClass: "input_field",
+          staticClass: "input_field validate",
           attrs: { type: "email", id: "custom-user" },
           domProps: { value: _vm.custom_user.email },
           on: {
@@ -50538,36 +50552,53 @@ var render = function () {
             },
           },
         }),
+        _vm._v(" "),
+        _c("span", { staticClass: "input-error d-none caps-lock" }, [
+          _vm._v("Caps Lock activated"),
+        ]),
+        _vm._v(" "),
+        _c(
+          "label",
+          { staticClass: "input_label", attrs: { for: "custom-user" } },
+          [_vm._v("Non existent user")]
+        ),
       ]),
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "col-12 col-md-4" }, [
-      _c(
-        "ul",
-        { staticClass: "list-unstyled" },
-        _vm._l(_vm.selected_users, function (user, index) {
-          return _c("li", { key: index }, [
-            _vm._v("\n                " + _vm._s(user) + "\n                "),
+      _vm.selected_users.length
+        ? _c("table", { staticClass: "table" }, [
+            _vm._m(0),
+            _vm._v(" "),
             _c(
-              "button",
-              {
-                staticClass: "btn btn-delete",
-                attrs: { type: "button" },
-                on: {
-                  click: function ($event) {
-                    return _vm.removeSelected({ email: user })
-                  },
-                },
-              },
-              [_c("i", { staticClass: "fas fa-times" })]
+              "tbody",
+              _vm._l(_vm.selected_users, function (user, index) {
+                return _c("tr", { key: index }, [
+                  _c("td", [
+                    _vm._v(_vm._s(user) + "\n                    "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-delete",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function ($event) {
+                            return _vm.removeSelected({ email: user })
+                          },
+                        },
+                      },
+                      [_c("i", { staticClass: "fas fa-times" })]
+                    ),
+                  ]),
+                ])
+              }),
+              0
             ),
           ])
-        }),
-        0
-      ),
+        : _vm._e(),
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "row justify-content-between mt-3" }, [
+    _c("div", { staticClass: "row justify-content-between mt-3 p-4" }, [
       _c(
         "button",
         {
@@ -50595,10 +50626,9 @@ var render = function () {
         : _vm._e(),
     ]),
     _vm._v(" "),
-    _c("hr", { staticClass: "mt-5" }),
-    _vm._v(" "),
     _c(
       "ul",
+      { staticClass: "mt-3" },
       _vm._l(_vm.helpers, function (helper) {
         return _c("helper-component", {
           key: helper.id,
@@ -50610,7 +50640,14 @@ var render = function () {
     ),
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [_c("tr", [_c("th", [_vm._v("Users")])])])
+  },
+]
 render._withStripped = true
 
 

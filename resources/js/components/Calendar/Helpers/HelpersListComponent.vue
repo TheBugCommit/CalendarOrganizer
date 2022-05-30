@@ -1,7 +1,7 @@
 <template>
-    <div class="row">
+    <div class="row p-4">
 
-        <div class="col-12 col-md-4">
+        <div class="col-12 col-md-4 ">
             <div>
                 <label for="users" class="grey-text">Registred Users</label>
                 <select class="selectize" id="users">
@@ -10,28 +10,34 @@
                 </select>
             </div>
             <div class="input_group">
+                <input type="email" id="custom-user" class="input_field validate" v-model="custom_user.email">
+                <span class="input-error d-none caps-lock">Caps Lock activated</span>
                 <label for="custom-user" class="input_label">Non existent user</label>
-                <input type="email" id="custom-user" class="input_field" v-model="custom_user.email">
             </div>
         </div>
         <div class="col-12 col-md-4">
-            <ul class="list-unstyled">
-                <li v-for="(user, index) in selected_users" :key="index">
-                    {{ user }}
-                    <button type="button" class="btn btn-delete" @click="removeSelected({ email: user })"><i
-                            class="fas fa-times"></i></button>
-                </li>
-            </ul>
+            <table class="table" v-if="selected_users.length">
+                <thead>
+                    <tr>
+                        <th>Users</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(user, index) in selected_users" :key="index">
+                        <td>{{ user }}
+                        <button type="button" class="btn btn-delete" @click="removeSelected({ email: user })"><i
+                                class="fas fa-times"></i></button></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        <div class="row justify-content-between mt-3">
+        <div class="row justify-content-between mt-3 p-4">
             <button type="button" class="col-4 col-md-2 btn btn-default" @click="appendCustomUser">Append</button>
             <button type="button" class="col-4 col-md-2 btn btn-default" v-if="selected_users.length"
                 @click="addHelpers()">Add selected Helpers</button>
         </div>
 
-        <hr class="mt-5"/>
-
-        <ul>
+        <ul class="mt-3">
             <helper-component v-for="helper in helpers" :key="helper.id" :user="helper" @remove="removeHelper">
             </helper-component>
         </ul>

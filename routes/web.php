@@ -38,17 +38,18 @@ Route::middleware(['guest'])->group(function () {
     });
 });
 
+Route::name('verification.')->group(function () {
+    Route::get('verify-email', [EmailVerificationPromptController::class, '__invoke'])->name('notice');
+
+    Route::middleware(['throttle:6,1'])->group(function () {
+        Route::get('verify-email/{id}/{hash}', [VerifyEmailController::class, '__invoke'])->middleware(['signed'])->name('verify');
+        Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])->name('send');
+    });
+});
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::name('verification.')->group(function () {
-        Route::get('verify-email', [EmailVerificationPromptController::class, '__invoke'])->name('notice');
-
-        Route::middleware(['throttle:6,1'])->group(function () {
-            Route::get('verify-email/{id}/{hash}', [VerifyEmailController::class, '__invoke'])->middleware(['signed'])->name('verify');
-            Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])->name('send');
-        });
-    });
 
 
     Route::middleware('verified')->group(function () {

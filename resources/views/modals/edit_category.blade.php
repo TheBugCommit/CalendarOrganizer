@@ -11,6 +11,7 @@
                     <input type="text" class="input_field validate" placeholder="Name" id='name-edit'
                         v-model="newCategory" required />
                     <label for="category" class="input_label">Name:</label>
+                    <span class="input-error d-none caps-lock">Caps Lock activated</span>
                 </div>
             </div>
             <div class="modal-footer justify-content-between">

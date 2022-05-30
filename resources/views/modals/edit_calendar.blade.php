@@ -12,6 +12,7 @@
                     <input type="text" class="input_field validate" placeholder="Title" id='title'
                         v-model="editCalendarForm.title" required />
                     <label for="title" class="input_label">Title</label>
+                    <span class="input-error d-none caps-lock">Caps Lock activated</span>
                 </div>
 
                 <div class="input_group field">
@@ -26,9 +27,10 @@
                     <label for="end-date-edit" class="input_label">End date</label>
                 </div>
 
-                <div class="input_group field">
-                    <input type="textarea" rows="3" v-model="editCalendarForm.description">
+                <div class="input_group">
+                    <input type="textarea" rows="3" class="input_field validate" v-model="editCalendarForm.description">
                     <label for="title" class="input_label">Description</label>
+                    <span class="input-error d-none caps-lock">Caps Lock activated</span>
                 </div>
             </div>
             <div class="modal-footer justify-content-between">

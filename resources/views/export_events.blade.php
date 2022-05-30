@@ -31,6 +31,7 @@
                 <div class="input_group">
                     <input type="password" class="input_field validate" v-model="user_password" id="password">
                     <label for="passowrd" class="input_label">Passoword:</label>
+                    <span class="input-error d-none caps-lock">Caps Lock activated</span>
                 </div>
             </div>
             <div class="align-items-center justify-content-between row col-12 mt-2 mt-md-0">
