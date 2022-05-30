@@ -813,6 +813,15 @@ ul.nav {
   transition: transform 0.3s !important;
   transform: scale(1.1);
 }
+.btn-default {
+  color: #f7f6fb !important;
+  background-color: #6967ce !important;
+  transition: color 0.3s !important;
+}
+.btn-default:hover {
+  color: #3be8b0 !important;
+  transition: color 0.3s !important;
+}
 .btn-tab {
   background-color: #f7f6fb !important;
   color: #444 !important;

@@ -2,11 +2,15 @@
 
 @section('title','Helpers Edit')
 
+@section('card-header')
+    <div class="card-header">
+        <h1 class="title">Helpers - {{ $calendar->title }}</h1>
+    </div>
+@endsection
+
 @section('content')
-    helpers edit
 
     <helpers-list></helpers-list>
-
 @endsection
 
 @section('js')

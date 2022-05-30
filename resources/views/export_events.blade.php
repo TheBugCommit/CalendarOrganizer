@@ -22,7 +22,7 @@
             <div class="col-12 col-md-3 mt-2 mt-md-0">
                 <label for="export_range_calendar" class="grey-text">Calendar:</label>
                 <select class="selectize" id="export_range_calendar">
-                    <option value="-1"></option>
+                    <option value=""></option>
                     <option v-for="calendar in allCalendars" :key="calendar.id" :value="calendar.id">
                         @{{ calendar.title }}</option>
                 </select>

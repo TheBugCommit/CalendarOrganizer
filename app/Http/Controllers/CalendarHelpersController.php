@@ -17,14 +17,14 @@ class CalendarHelpersController extends Controller
      */
     public function index($calendar_id)
     {
-        $helpers = null;
+        $calendar = null;
         try {
-            $helpers = Calendar::findOrFail($calendar_id)->helpers;
+            $calendar = Calendar::findOrFail($calendar_id);
         } catch (Exception $ex) {
             abort(404);
         }
 
-        return view('calendars.helpers_edit', compact('helpers'));
+        return view('calendars.helpers_edit', compact('calendar'));
     }
 
     /**

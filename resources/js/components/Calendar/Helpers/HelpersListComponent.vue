@@ -1,32 +1,47 @@
 <template>
-    <div>
-        <helper-component v-for="helper in helpers" :key="helper.id" :user="helper" @remove="removeHelper">
-        </helper-component>
+    <div class="row">
 
-        <div>
-            Selected
-            ----
-            <p v-for="(user, index) in selected_users" :key="index">{{ user }}</p>
-        </div>
-
-        <div>
-            Coose
-            ----
-            <div v-for="user in users" :key="user.id">
-                <label for="">{{ user.email }}</label>
-                <input type="checkbox" v-model="selected_users" :value="user.email" />
+        <div class="col-12 col-md-4">
+            <div>
+                <label for="users" class="grey-text">Registred Users</label>
+                <select class="selectize" id="users">
+                    <option value=""></option>
+                    <option v-for="user in users" :key="user.email" :value="user.email">{{ user.email }}</option>
+                </select>
             </div>
-            custom user
-            <input type="text" v-model="custom_user.email">
-            <button type="button" @click="appendCustomUser()"></button>
+            <div class="input_group">
+                <label for="custom-user" class="input_label">Non existent user</label>
+                <input type="email" id="custom-user" class="input_field" v-model="custom_user.email">
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <ul class="list-unstyled">
+                <li v-for="(user, index) in selected_users" :key="index">
+                    {{ user }}
+                    <button type="button" class="btn btn-delete" @click="removeSelected({ email: user })"><i
+                            class="fas fa-times"></i></button>
+                </li>
+            </ul>
+        </div>
+        <div class="row justify-content-between mt-3">
+            <button type="button" class="col-4 col-md-2 btn btn-default" @click="appendCustomUser">Append</button>
+            <button type="button" class="col-4 col-md-2 btn btn-default" v-if="selected_users.length"
+                @click="addHelpers()">Add selected Helpers</button>
         </div>
 
-        <button type="button" @click="addHelpers()">AddHelpers</button>
+        <hr class="mt-5"/>
+
+        <ul>
+            <helper-component v-for="helper in helpers" :key="helper.id" :user="helper" @remove="removeHelper">
+            </helper-component>
+        </ul>
     </div>
 </template>
 
 <script>
 import HelperComponent from './HelperComponent.vue';
+import Swal from "sweetalert2";
+
 export default {
     components: {
         HelperComponent
@@ -36,23 +51,23 @@ export default {
             helpers: [],
             users: [],
             selected_users: [],
-            custom_user: { email: ''},
+            custom_user: { email: '' },
+            selected_user: '',
         }
     },
     methods: {
-        getHelpers() {
-            let _this = this
+        async getHelpers() {
             let calendar_id = window.location.href.split("/").pop();
-            $.ajax({
+            let data = await $.ajax({
                 url: route_helpers_get,
                 method: "GET",
                 dataType: "JSON",
                 data: { id: calendar_id }
-            }).done((response) => {
-                _this.helpers = response || []
             }).fail((error) => {
-                console.error(error)
+                Swal.fire('Oppss!', 'Can not get helpers', 'error')
             })
+
+            this.helpers = data
         },
 
         getAllUsers() {
@@ -64,8 +79,21 @@ export default {
                 dataType: 'JSON',
             }).done((response) => {
                 _this.users = response
+                _this.users = _this.users.filter(user => {
+                    return !_this.helpers.find(elem => elem.email == user.email) && _this.$root?.me?.email != user.email
+                })
+                _this.$nextTick(function () {
+                    let select_users = $('#users').selectize({
+                        create: false,
+                        sortField: 'text',
+                        onChange: function onChange(value) {
+                            _this.selected_user = value;
+                        }
+                    })
+                })
+
             }).fail((error) => {
-                console.error(error)
+                Swal.fire('Oppss!', 'Can not get users', 'error')
             })
         },
 
@@ -73,17 +101,19 @@ export default {
             let _this = this
             let calendar_id = window.location.href.split("/").pop();
 
+            if (this.selected_users.length == 0)
+                Swal.fire('Oppss!', 'You doesn\'t select any helper', 'warning')
+
             $.ajax({
                 url: route_helpers_add,
                 method: "POST",
                 dataType: "JSON",
-                data: { users: _this.selected_users, calendar_id: calendar_id}
+                data: { users: _this.selected_users, calendar_id: calendar_id }
             }).done((response) => {
-                _this.helpers.push(_this.selected_users)
                 _this.selected_users = []
-                _this.getHelpers()
+                Swal.fire('Succes!', response?.responseJSON?.message, 'success')
             }).fail((error) => {
-                console.error(error)
+                Swal.fire('Oppss!', error?.responseJSON?.message, 'error')
             })
         },
 
@@ -99,19 +129,54 @@ export default {
                 let helper_id = _this.helpers.findIndex(helper => helper.id === id)
                 _this.helpers.splice(helper_id, 1)
             }).fail((error) => {
-                console.error(error)
+                Swal.fire('Oppss!', error?.responseJSON?.message, 'error')
             })
         },
 
-        appendCustomUser(){
-            if(this.custom_user.email != '')
+        appendCustomUser() {
+            if (this.selected_user != '') {
+                this.selected_users.push(this.selected_user)
+                const index = this.users.findIndex(elem => elem.email == this.selected_user)
+                if (index != -1)
+                    this.users.splice(index, 1);
+                this.selected_user = ''
+                this.$nextTick(() => {
+                    $('#users')[0].selectize.clearOptions()
+                    $('#users')[0].selectize.addOption(this.users.map(elem => { return { text: elem.email, value: elem.email } }))
+                })
+            } else if (this.custom_user.email != '' && this.validEmail(this.custom_user.email)) {
                 this.selected_users.push(this.custom_user.email)
-            this.custom_user.email = ''
+                this.custom_user.email = ''
+            } else if (this.custom_user.email != '' && !this.validEmail(this.custom_user.email)) {
+                Swal.fire('Oppss!', 'Pleas enter a valid email address', 'warning')
+            }
+            $('#users')[0].selectize.setValue('')
+        },
+
+        removeSelected(user) {
+            const index = this.selected_users.findIndex(elem => elem == user.email)
+            if (index > -1) {
+                this.selected_users.splice(index, 1);
+                this.users.push(user)
+
+                this.$nextTick(() => {
+                    $('#users')[0].selectize.clearOptions()
+                    $('#users')[0].selectize.addOption(this.users.map(elem => { return { text: elem.email, value: elem.email } }))
+                })
+            }
+        },
+
+        validEmail(email) {
+            return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)
         }
     },
+
     mounted() {
-        this.getHelpers()
-        this.getAllUsers()
+        let _this = this;
+        (async function () {
+            await _this.getHelpers()
+            _this.getAllUsers()
+        })(_this)
     }
 };
 </script>

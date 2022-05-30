@@ -154,9 +154,15 @@ class CalendarController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function editHelpers()
+    public function editHelpers($id)
     {
-        return view('calendars.helpers_edit');
+        $calendar = null;
+        try {
+            $calendar = Calendar::findOrFail($id);
+        } catch (Exception $ex) {
+            abort(404);
+        }
+        return view('calendars.helpers_edit', compact('calendar'));
     }
 
     /**
