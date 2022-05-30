@@ -24,7 +24,15 @@ class CalendarEventRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "category_id" => ['required', 'numeric','exists:categories,id'],
+            "calendar_id" => ['required', 'numeric' ,'exists:calendars,id'],
+            "title" => ['required', 'max:30'],
+            "description" => ['required', 'max:1000'],
+            "location" => ['required', 'max:300'],
+            "color" => ['required', 'min:7'],
+            'start' => ['required', 'date', 'date_format:Y-m-d H:i:s' ,'before:end_date'],
+            'end' => ['required', 'date', 'date_format:Y-m-d H:i:s' ,'after:start_date'],
+            "published" => ['required'],
         ];
     }
 }

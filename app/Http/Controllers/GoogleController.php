@@ -24,9 +24,7 @@ use Google_Service_Exception;
 use Google_Service_Calendar_AclRule;
 use Google_Service_Calendar_AclRuleScope;
 use Google_Service_Calendar_EventDateTime;
-use Illuminate\Support\Facades\Redirect;
-
-//https://dev.to/gbhorwood/accessing-googles-api-from-your-laravel-api-4ck7
+use RuntimeException;
 
 /**
  * [Description GoogleController]
@@ -36,12 +34,11 @@ class GoogleController extends Controller
     /**
      * Return the url of the google auth.
      *
-     * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function getAuthUrl(Request $request): \Illuminate\Http\RedirectResponse
+    public function getAuthUrl(): \Illuminate\Http\RedirectResponse
     {
-        $client = $this->getClient();
+        $client = self::getClient();
         $authUrl = $client->createAuthUrl();
 
         return redirect($authUrl);
@@ -59,7 +56,7 @@ class GoogleController extends Controller
 
         $accessToken = null;
         try {
-            $client = $this->getClient();
+            $client = self::getClient();
             $accessToken = $client->fetchAccessTokenWithAuthCode($authCode); //'access type' to 'force' and our access is 'offline', we get a refresh token
             $client->setAccessToken($accessToken);
         } catch (Exception $ex) {
@@ -85,12 +82,14 @@ class GoogleController extends Controller
      */
     public function publishGoogleCalendar(Request $request): \Illuminate\Http\RedirectResponse
     {
-        $client = $this->getUserClient();
+        $client = null;
         $createdCalendar = null;
         $service = null;
 
         DB::beginTransaction();
         try {
+            $client = self::getUserClient();
+
             $modelCalendar = ModelsCalendar::findOrFail($request->calendar_id);
             if($modelCalendar->google_calendar_id != null)
                 return back()->with('warning', 'Calendar already published');
@@ -106,7 +105,7 @@ class GoogleController extends Controller
             $modelCalendar->google_calendar_id = $createdCalendar->getId();
             $modelCalendar->save();
 
-            $this->shareGoogleCalendarTargets($modelCalendar);
+            self::shareGoogleCalendarTargets($modelCalendar);
 
             DB::commit();
         } catch (Google_Service_Exception $ex) {
@@ -128,18 +127,16 @@ class GoogleController extends Controller
     /**
      * Update google calendar
      *
-     * @param Request $request
-     * @return JsonResponse
+     * @param ModelsCalendar $modelCalendar
+     * @return void
      */
-    public function updateGoogleCalendar(Request $request): JsonResponse
+    public static function updateGoogleCalendar(ModelsCalendar $modelCalendar): void
     {
         try {
+            if($modelCalendar->google_calendar_id == null)
+                throw new RuntimeException('First publish calendar');
 
-            $modelCalendar = ModelsCalendar::find($request->calendar_id);
-            if(!$modelCalendar)
-                return response()->json(['message' => 'Calendar not found'], 404);
-
-            $client = $this->getUserClient();
+            $client = self::getUserClient();
             $service = new Google_Service_Calendar($client);
 
             $calendar = $service->calendars->get($modelCalendar->google_calendar_id);
@@ -149,39 +146,29 @@ class GoogleController extends Controller
 
             $service->calendars->update($modelCalendar->google_calendar_id, $calendar);
         } catch (Google_Service_Exception $ex) {
-            return response()->json(['message' => 'Can\'t update calendar' . $ex->getMessage()], 500);
-        } catch (Exception $ex) {
-            return response()->json(['message' => 'Can\'t update calendar' . $ex->getMessage()], 500);
+            throw new RuntimeException('Can\'t update calendar');
         }
-
-        return response()->json();
     }
 
     /**
      * Destroy google calendar
      *
-     * @param Request $request
-     * @return JsonResponse
+     * @param ModelsCalendar $modelCalendar
+     * @return void
      */
-    public function destroyGoogleCalendar(Request $request): JsonResponse
+    public static function destroyGoogleCalendar(ModelsCalendar $modelCalendar): void
     {
         try {
+            if($modelCalendar->google_calendar_id == null)
+                throw new RuntimeException('First publish calendar');
 
-            $modelCalendar = ModelsCalendar::find($request->calendar_id);
-            if(!$modelCalendar)
-                return response()->json(['message' => 'Calendar not found'], 404);
-
-            $client = $this->getUserClient();
+            $client = self::getUserClient();
             $service = new Google_Service_Calendar($client);
 
             $service->calendars->delete($modelCalendar->google_calendar_id);
         } catch (Google_Service_Exception $ex) {
-            return response()->json(['message' => 'Can\'t delete calendar' . $ex->getMessage()], 500);
-        } catch (Exception $ex) {
-            return response()->json(['message' => 'Can\'t delete calendar' . $ex->getMessage()], 500);
+            throw new RuntimeException('Can\'t delete calendar');
         }
-
-        return response()->json();
     }
 
     /**
@@ -201,7 +188,7 @@ class GoogleController extends Controller
             if($modelEvent->published)
                 return back()->with('warning','This event it\'s already published');
 
-            $client = $this->getUserClient();
+            $client = self::getUserClient();
             $service = new Google_Service_Calendar($client);
             $event = new Google_Service_Calendar_Event([
                 'summary' => $modelEvent->title,
@@ -246,21 +233,20 @@ class GoogleController extends Controller
     /**
      * Updates google calendar event
      *
-     * @param Request $request
-     * @return JsonResponse
+     * @param Event $event
+     * @throws RuntimeException if can't update event for some reason
+     * @return void
      */
-    public function updateGoogleCalendarEvent(Request $request): JsonResponse // falta color
+    public static function updateGoogleCalendarEvent(Event $modelEvent): void
     {
         try {
-            $modelEvent = Event::findOrFail($request->event_id);
-
             if($modelEvent->google_event_id == null)
-                return response()->json(['message' => 'First publish event'], 401);
+                throw new Google_Exception('Can\'t update calendar event');
 
             $google_calendar_id = $modelEvent->calendar->google_calendar_id;
             $google_event_id = $modelEvent->google_event_id;
 
-            $client = $this->getUserClient();
+            $client = self::getUserClient();
             $service = new Google_Service_Calendar($client);
             $event = $service->events->get($google_calendar_id, $google_event_id);
 
@@ -281,38 +267,28 @@ class GoogleController extends Controller
 
             $service->events->update($modelEvent->calendar->google_calendar_id, $google_event_id, $event, ['sendUpdates' => "all"]);
         } catch (Google_Exception $ex) {
-            return response()->json(['message' => 'Can\'t update calendar event'. $ex->getMessage()], 500);
-        } catch (Exception $ex) {
-            return response()->json(['message' => 'Event not found'], 404);
+            throw new RuntimeException('Can\'t update calendar event');
         }
-
-        return response()->json();
     }
 
     /**
      * Destroy google calendar event
      *
-     * @param Request $request
-     * @return JsonResponse
+     * @param Event $modelEvent
+     * @return void
      */
-    public function destroyGoogleCalendarEvent(Request $request): JsonResponse // falta color
+    public static function destroyGoogleCalendarEvent(Event $modelEvent): void
     {
         try {
-            $modelEvent = Event::findOrFail($request->event_id);
-
             if($modelEvent->google_event_id == null)
-                return response()->json(['message' => 'First publish event'], 401);
+                throw new Google_Exception('First publish event');
 
-            $client = $this->getUserClient();
+            $client = self::getUserClient();
             $service = new Google_Service_Calendar($client);
             $service->events->delete($modelEvent->calendar->google_calendar_id, $modelEvent->google_event_id, ['sendUpdates' => "all"]);
         } catch (Google_Exception $ex) {
-            return response()->json(['message' => 'Can\'t delete calendar event'. $ex->getMessage()], 500);
-        } catch (Exception $ex) {
-            return response()->json(['message' => 'Event not found'], 404);
+            throw new RuntimeException('Can\'t delete calendar event');
         }
-
-        return response()->json();
     }
 
     /**
@@ -325,7 +301,7 @@ class GoogleController extends Controller
     {
         $colors = [];
         try {
-            $client = $this->getUserClient();
+            $client = self::getUserClient();
             $service = new Google_Service_Calendar($client);
 
             $allColors = $service->colors->get();
@@ -345,7 +321,7 @@ class GoogleController extends Controller
      *
      * @return Google_Client
      */
-    private function getClient(): Google_Client
+    private static function getClient(): Google_Client
     {
         $configJson = storage_path() . '/app/private/credentials.json';
 
@@ -370,13 +346,13 @@ class GoogleController extends Controller
      *
      * @return Google_Client
      */
-    private function getUserClient(): Google_Client
+    private static function getUserClient(): Google_Client
     {
         $user = User::find(Auth::user()->id);
 
         $accessTokenJson = stripslashes($user->google_access_token_json);
 
-        $client = $this->getClient();
+        $client = self::getClient();
         $client->setAccessToken($accessTokenJson);
 
         if ($client->isAccessTokenExpired()) {
@@ -391,12 +367,12 @@ class GoogleController extends Controller
         return $client;
     }
 
-    private function shareGoogleCalendarTargets(ModelsCalendar $calendar) //pendent de posar camp a la base de dades controlant si ja s li ha enviat la invitacio
+    public static function shareGoogleCalendarTargets(ModelsCalendar $calendar)
     {
         if($calendar->targets == null)
             return;
 
-        $client = $this->getUserClient();
+        $client = self::getUserClient();
         $service = new Google_Service_Calendar($client);
 
         foreach($calendar->targets as $target){

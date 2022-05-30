@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use PDOException;
 use JWTFactory;
 use JWTAuth;
+use RuntimeException;
 use Tymon\JWTAuth\JWT;
 
 class CalendarController extends Controller
@@ -124,18 +125,32 @@ class CalendarController extends Controller
     public function update(Request $request)
     {
         $calendar = null;
+        $original_calendar = null;
         try {
             $calendar = Calendar::find($request->id);
+            $original_calendar = $calendar;
 
             $calendar->description = $request->description ?? $calendar->description;
             $calendar->title = $request->title ?? $calendar->title;
             $calendar->start_date = $request->start_date ?? $calendar->start_date;
             $calendar->end_date    = $request->end_date ?? $calendar->end_date;
 
+            if($calendar->google_calendar_id != null)
+                GoogleController::updateGoogleCalendar($calendar);
+
             $calendar->save();
 
         } catch (Exception $ex) {
             return response()->json(['message' => 'Can\'t update calendar'], 500);
+        } catch (PDOException $pdoe) {
+            try{
+                if($original_calendar->google_calendar_id != null)
+                    GoogleController::updateGoogleCalendar($original_calendar);
+            }catch(Exception $ex){}
+
+            return response()->json(['message' => 'Can\'t update event'], 500);
+        } catch (RuntimeException $ex) {
+            return response()->json(['message' => 'Can\'t update event on google'], 500);
         }
 
         return response()->json($calendar);
@@ -149,13 +164,25 @@ class CalendarController extends Controller
      */
     public function destroy(Request $request)
     {
+        DB::beginTransaction();
         try {
-            $calendar = Calendar::destroy($request->id);
-        } catch (Exception $ex) {
-            return response()->json(['message' => 'Can\'t remove calendar'], 500);
+            $calendar = Calendar::findOrFail($request->id);
+
+            Calendar::destroy($request->id);
+
+            if($calendar->google_calendar_id != null)
+                GoogleController::destroyGoogleCalendar($calendar);
+
+            DB::commit();
+        } catch (PDOException $pdoe) {
+            return response()->json(['message' => 'Can\'t delete calendar'], 500);
+        } catch (RuntimeException $ex) {
+            DB::rollBack();
+            return response()->json(['message' => 'Can\'t delete google calendar'], 500);
         }
 
         return response()->json(['message' => 'Calendar removed']);
+
     }
 
     public function getHelpers(Request $request)
