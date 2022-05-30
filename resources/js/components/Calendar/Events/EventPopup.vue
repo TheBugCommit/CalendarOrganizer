@@ -29,7 +29,7 @@
                     </li>
                 </ul>
                 <div class="d-flex justify-content-end gap-2">
-                    <a :href="'/publish_event?id=' + event.id" class="btn btn-edit btn-edit-popup" v-if="canEditDelete && event.published == 0" id="upload">
+                    <a :href="'/publish_event?id=' + event.id" class="btn btn-edit btn-edit-popup" v-if="canEditDelete && event.published == 0 && isowner" id="upload">
                     <i class="fas fa-upload"></i></a>
                     <button type="button" class="btn btn-edit btn-edit-popup" v-if="canEditDelete" id="edit"><i
                             class="fas fa-edit"></i></button>
@@ -120,6 +120,9 @@ export default {
         eventEnd() {
             return typeof this.event.end != 'string' ? this.event.end.format('YYYY-MM-DD hh:mm:ss') :
                 this.event.end == null ? '' : moment(this.event.end).format('YYYY-MM-DD hh:mm:ss');
+        },
+        isowner(){
+            return this.me.id == this.calendar.user_id;
         }
     },
 

@@ -21566,6 +21566,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     eventEnd: function eventEnd() {
       return typeof this.event.end != 'string' ? this.event.end.format('YYYY-MM-DD hh:mm:ss') : this.event.end == null ? '' : moment(this.event.end).format('YYYY-MM-DD hh:mm:ss');
+    },
+    isowner: function isowner() {
+      return this.me.id == this.calendar.user_id;
     }
   },
   watch: {
@@ -22075,27 +22078,36 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_6__["default"]({
     removeCalendar: function removeCalendar(calendar_id) {
       var _this = this;
 
-      $.ajax({
-        url: '/calendar_destroy',
-        method: "DELETE",
-        dataType: "JSON",
-        data: {
-          id: calendar_id
+      sweetalert2__WEBPACK_IMPORTED_MODULE_4___default().fire({
+        title: 'Are you sure to delete this calendar?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!'
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: '/calendar_destroy',
+            method: "DELETE",
+            dataType: "JSON",
+            data: {
+              id: calendar_id
+            }
+          }).done(function (response) {
+            var index = _this.calendars.findIndex(function (cal) {
+              return cal.id == calendar_id;
+            });
+
+            if (index > -1) _this.calendars.splice(index, 1);
+            index = _this.allCalendars.findIndex(function (cal) {
+              return cal.id == calendar_id;
+            });
+            if (index > -1) _this.allCalendars.splice(index, 1);
+          }).fail(function (error) {
+            var _error$responseJSON;
+
+            sweetalert2__WEBPACK_IMPORTED_MODULE_4___default().fire("Error!", error === null || error === void 0 ? void 0 : (_error$responseJSON = error.responseJSON) === null || _error$responseJSON === void 0 ? void 0 : _error$responseJSON.message, "error");
+          });
         }
-      }).done(function (response) {
-        var index = _this.calendars.findIndex(function (cal) {
-          return cal.id == calendar_id;
-        });
-
-        if (index > -1) _this.calendars.splice(index, 1);
-        index = _this.allCalendars.findIndex(function (cal) {
-          return cal.id == calendar_id;
-        });
-        if (index > -1) _this.allCalendars.splice(index, 1);
-      }).fail(function (error) {
-        var _error$responseJSON;
-
-        sweetalert2__WEBPACK_IMPORTED_MODULE_4___default().fire("Error!", error === null || error === void 0 ? void 0 : (_error$responseJSON = error.responseJSON) === null || _error$responseJSON === void 0 ? void 0 : _error$responseJSON.message, "error");
       });
     },
     editCalendar: function editCalendar(calendar_id) {
@@ -50304,7 +50316,7 @@ var render = function () {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "d-flex justify-content-end gap-2" }, [
-          _vm.canEditDelete && _vm.event.published == 0
+          _vm.canEditDelete && _vm.event.published == 0 && _vm.isowner
             ? _c(
                 "a",
                 {

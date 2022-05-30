@@ -134,21 +134,31 @@ const app = new Vue({
 
         removeCalendar(calendar_id) {
             let _this = this
-            $.ajax({
-                url: '/calendar_destroy',
-                method: "DELETE",
-                dataType: "JSON",
-                data: {id: calendar_id}
-            }).done((response) => {
-                let index = _this.calendars.findIndex(cal => cal.id == calendar_id)
-                if (index > -1)
-                    _this.calendars.splice(index, 1)
 
-                index = _this.allCalendars.findIndex(cal => cal.id == calendar_id)
-                if (index > -1)
-                    _this.allCalendars.splice(index, 1)
-            }).fail((error) => {
-                Swal.fire("Error!", error?.responseJSON?.message, "error");
+            Swal.fire({
+                title: 'Are you sure to delete this calendar?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/calendar_destroy',
+                        method: "DELETE",
+                        dataType: "JSON",
+                        data: {id: calendar_id}
+                    }).done((response) => {
+                        let index = _this.calendars.findIndex(cal => cal.id == calendar_id)
+                        if (index > -1)
+                            _this.calendars.splice(index, 1)
+
+                        index = _this.allCalendars.findIndex(cal => cal.id == calendar_id)
+                        if (index > -1)
+                            _this.allCalendars.splice(index, 1)
+                    }).fail((error) => {
+                        Swal.fire("Error!", error?.responseJSON?.message, "error");
+                    })
+                }
             })
         },
 
