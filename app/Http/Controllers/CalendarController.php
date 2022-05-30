@@ -19,6 +19,28 @@ use JWTAuth;
 use RuntimeException;
 use Tymon\JWTAuth\JWT;
 
+ /**
+ * Takes care of calendar
+ *
+ * @method ResponseJson index()
+ * @method ResponseJson getHelperCalendars()
+ * @method ResponseJson getAllMyCalendars()
+ * @method ResponseJson getCalendar(Request $request)
+ * @method ResponseJson getCalendarEvents(Request $request)
+ * @method ResponseJson store(CalendarStoreRequest $request)
+ * @method \Illuminate\Contracts\View\View edit(Request $request)
+ * @method ResponseJson update(Request $request)
+ * @method ResponseJson destroy(Request $request)
+ * @method ResponseJson getHelpers(Request $request)
+ * @method \Illuminate\Contracts\View\View editHelpers($id)
+ * @method ResponseJson uploadTargets(TargetsUploadRequest $request)
+ * @method ResponseJson removeHelper(Request $request)
+ * @method ResponseJson addHelpers(Request $request, JWT $jwt)
+ * @method bool validateJSON(&$array)
+ *
+ * @package App\Http\Controllers
+ * @author Gerard Casas
+ */
 class CalendarController extends Controller
 {
     /**
@@ -107,7 +129,7 @@ class CalendarController extends Controller
     /**
      * Display the calendar.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
     public function edit(Request $request)
     {

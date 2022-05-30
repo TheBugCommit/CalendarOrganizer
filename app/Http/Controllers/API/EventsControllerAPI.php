@@ -9,6 +9,13 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Controller to export events
+ *
+ * @method ResponseJson export(ExportEventsRequest $request)
+ * @package App\Http\Controllers\API
+ * @author Gerard Casas
+ */
 class EventsControllerAPI extends Controller
 {
     public function export(ExportEventsRequest $request)

@@ -14,10 +14,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
-/**
+ /**
  * Takes care of authenticating and registering users
  *
+ * @method \Illuminate\Contracts\View\View index()
+ * @method \Illuminate\Contracts\View\View signup()
+ * @method \Illuminate\Http\RedirectResponse authenticate(AuthenticateUserRequest $request)
+ * @method \Illuminate\Http\RedirectResponse register(RegisterUserRequest $request)
+ * @method \Illuminate\Http\RedirectResponse logout(Request $request)
+ * @method string getRedirectUri()
+ * @method null|array getBecomeHelperToken()
+ *
  * @package App\Http\Controllers
+ * @author Gerard Casas
  */
 class AuthController extends Controller
 {
@@ -130,7 +139,7 @@ class AuthController extends Controller
     /**
      * Fetch the become helper token
      *
-     * @return void
+     * @return null|array
      */
     protected function getBecomeHelperToken()
     {

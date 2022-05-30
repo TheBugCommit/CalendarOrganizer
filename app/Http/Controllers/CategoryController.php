@@ -9,7 +9,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * [Description CategoryController]
+ * Manage Categories
+ *
+ * @method View index()
+ * @method ResponseJson getCategories()
+ * @method ResponseJson store(CategoryRequest $request)
+ * @method ResponseJson update(CategoryRequest $request)
+ * @method ResponseJson destroy(Request $request)
+ *
+ * @package App\Http\Controllers
+ * @author Gerard Casas
  */
 class CategoryController extends Controller
 {

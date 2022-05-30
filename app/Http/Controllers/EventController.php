@@ -13,6 +13,16 @@ use Illuminate\Support\Facades\DB;
 use PDOException;
 use RuntimeException;
 
+/**
+ * Manage Events
+ *
+ * @method ResponseJson store(CalendarEventRequest $request)
+ * @method ResponseJson update(CalendarEventRequest $request)
+ * @method ResponseJson destroy(Request $request)
+ *
+ * @package App\Http\Controllers
+ * @author Gerard Casas
+ */
 class EventController extends Controller
 {
     /**

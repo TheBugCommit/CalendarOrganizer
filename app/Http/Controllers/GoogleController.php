@@ -27,7 +27,23 @@ use Google_Service_Calendar_EventDateTime;
 use RuntimeException;
 
 /**
- * [Description GoogleController]
+ * Sync calendar and calendar events with google calendar
+ *
+ * @method RedirectResponse getAuthUrl()
+ * @method RedirectResponse postLogin(Request $request)
+ * @method RedirectResponse publishGoogleCalendar($token, JWT $jwt)
+ * @method static void updateGoogleCalendar(ModelsCalendar $modelCalendar)
+ * @method static void destroyGoogleCalendar(ModelsCalendar $modelCalendar)
+ * @method RedirectResponse publishGoogleCalendarEvent(Request $request)
+ * @method static void updateGoogleCalendarEvent(Event $modelEvent)
+ * @method static void destroyGoogleCalendarEvent(Event $modelEvent)
+ * @method static Google_Client getClient()
+ * @method static Google_Client getUserClient()
+ * @method static void shareGoogleCalendarTargets(ModelsCalendar $calendar)
+ * @method string parseDate($date)
+ *
+ * @package App\Http\Controllers
+ * @author Gerard Casas
  */
 class GoogleController extends Controller
 {
@@ -373,7 +389,7 @@ class GoogleController extends Controller
         return $client;
     }
 
-    public static function shareGoogleCalendarTargets(ModelsCalendar $calendar)
+    public static function shareGoogleCalendarTargets(ModelsCalendar $calendar) : void
     {
         if ($calendar->targets == null)
             return;
@@ -400,7 +416,7 @@ class GoogleController extends Controller
         }
     }
 
-    private function parseDate($date)
+    private function parseDate($date) : string
     {
         return Carbon::parse($date)->setTimezone('Europe/Madrid')->toDateString() . 'T' . Carbon::parse($date)->setTimezone('Europe/Madrid')->toTimeString();
     }

@@ -10,6 +10,16 @@ use Illuminate\Support\Facades\Auth;
 use PDOException;
 use Tymon\JWTAuth\JWT;
 
+/**
+ * Manage User
+ *
+ * @method ResponseJson me()
+ * @method ResponseJson getAllUsers(Request $request)
+ * @method ResponseRedirect becomeHelper($token, JWT $jwt)
+ *
+ * @package App\Http\Controllers
+ * @author Gerard Casas
+ */
 class UserController extends Controller
 {
     /**
@@ -22,7 +32,7 @@ class UserController extends Controller
     }
 
     /**
-     * Returns all users (only email, full_name)
+     * Returns all users (only email, id)
      *
      * @return JsonResponse
      */

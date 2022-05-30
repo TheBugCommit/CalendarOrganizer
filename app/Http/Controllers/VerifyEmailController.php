@@ -7,6 +7,14 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
+/**
+ * Redirects depending on whether users are authenticated or not
+ *
+ * @method ResponseRedirect __invoke(CalendarEventRequest $request)
+ *
+ * @package App\Http\Controllers
+ * @author Gerard Casas
+ */
 class VerifyEmailController extends Controller
 {
     /**

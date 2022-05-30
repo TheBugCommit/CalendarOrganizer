@@ -6,6 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 
+/**
+ * Returns verification email view
+ *
+ * @method mixed _invoke(Request $request)
+ *
+ * @package App\Http\Controllers
+ * @author Gerard Casas
+ */
 class EmailVerificationPromptController extends Controller
 {
     /**

@@ -8,6 +8,16 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Controller to validate users through jwts
+ *
+ * @method ResponseJson getToken()
+ * @method ResponseJson logout()
+ * @method ResponseJson respondWithToken()
+ *
+ * @package App\Http\Controllers\API
+ * @author Gerard Casas
+ */
 class AuthControllerAPI extends Controller
 {
     /**
@@ -15,7 +25,7 @@ class AuthControllerAPI extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getToken(Request $request) : JsonResponse
+    public function getToken(Request $request): JsonResponse
     {
         $credentials = $request->only('email', 'password');
 
@@ -37,26 +47,6 @@ class AuthControllerAPI extends Controller
         return response()->json(['message' => 'Successfully logged out']);
     }
 
-    /**
-     * Generate JWT
-     *
-     * @param array $data
-     * @return string
-     */
-    /*public function generateToken(array $data) : string
-    {
-        $time = time();
-        $payload = [
-            'iat' => $time,
-            'nbf' => $time,
-            'exp' => $time+7200,
-            'data' => $data
-        ];
-        $key =  env('JWT_SECRET');
-        $alg = 'HS256';
-        $token = JWT::encode($payload,$key,$alg);
-        return $token;
-    }*/
 
     /**
      * Get the token array structure.

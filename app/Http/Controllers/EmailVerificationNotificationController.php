@@ -6,6 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 
+/**
+ * Email Verifiaction
+ *
+ * @method RedirectResponse store(Request $request)
+ *
+ * @package App\Http\Controllers
+ * @author Gerard Casas
+ */
 class EmailVerificationNotificationController extends Controller
 {
     /**
