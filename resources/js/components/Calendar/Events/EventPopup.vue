@@ -28,13 +28,18 @@
                         <p v-html="event.location"></p>
                     </li>
                 </ul>
-                <div class="d-flex justify-content-end gap-2">
-                    <a :href="'/publish_event?id=' + event.id" class="btn btn-edit btn-edit-popup" v-if="canEditDelete && event.published == 0 && isowner" id="upload">
-                    <i class="fas fa-upload"></i></a>
-                    <button type="button" class="btn btn-edit btn-edit-popup" v-if="canEditDelete" id="edit"><i
-                            class="fas fa-edit"></i></button>
-                    <button type="button" class="btn btn-delete btn-delete-popup" v-if="canEditDelete" id="delete"><i
-                            class="fas fa-trash"></i></button>
+
+                <div class="align-items-center d-flex mb-2">
+                    <i class="event-published fa-calendar-check far ms-2" v-show="event.published == 1"></i>
+                    <div class="d-flex justify-content-end w-100">
+                        <button type="button" class="btn btn-edit btn-edit-popup"
+                            v-if="canEditDelete && event.published == 0 && isowner" :id="'publish-'+event.id">
+                            <i class="fa-calendar-check far"></i></button>
+                        <button type="button" id="edit" v-if="canEditDelete"
+                            class="btn btn-edit btn-edit-popup"><i class="fas fa-edit"></i></button>
+                        <button type="button" id="delete" v-if="canEditDelete"
+                            class="btn btn-delete btn-delete-popup"><i class="fas fa-trash"></i></button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -45,6 +50,7 @@
 import tippy, { roundArrow } from "tippy.js";
 import "tippy.js/dist/svg-arrow.css";
 import "tippy.js/animations/perspective.css";
+import Swal from "sweetalert2";
 
 export default {
     props: ["event", "target", "me", "calendar", "categories"],
@@ -66,6 +72,10 @@ export default {
         setInstance() {
             if (this.target == null) return;
             let _this = this;
+            if (this.tippyInsance != null) {
+                this.tippyInsance?.destroy()
+                this.tippyInsance = null
+            }
             this.$nextTick(() => {
                 this.tippyInsance = tippy(this.target, {
                     content: $("#eventEditTooltip").html(),
@@ -78,6 +88,12 @@ export default {
                     placement: "auto-end",
                     appendTo: () => document.body,
                     onMount(instance) {
+                        $(".tippy-box button[id^='publish']").on("click", function (event) {
+                            _this.hide();
+                            setTimeout(() => {
+                                _this.publishEvent($(this).attr('id').split('-')[1]);
+                            }, 500);
+                        });
                         $(".tippy-box #edit").on("click", function (event) {
                             _this.hide();
                             setTimeout(() => {
@@ -104,11 +120,25 @@ export default {
         destroyEvent() {
             this.$parent.deleteEvent(this.event.id);
         },
+
+        publishEvent(event_id) {
+            Swal.fire({
+                title: 'Are you sure to publish this event?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, publish it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const url = window.location.origin + '/publish_event?id=' + event_id;
+                    window.location.href = url
+                }
+            })
+        }
     },
 
     computed: {
         canEditDelete() {
-            return this.me.id == this.calendar.user_id || this.me.id == this.event.user_id
+            return  (this.me.id == this.calendar.user_id && this.event.published == 1) || this.me.id == this.calendar.user_id || (this.me.id == this.event.user_id && this.event.published == 0)
         },
         categoryName() {
             return this.categories.find(elem => elem.id == this.event.category_id)?.name
@@ -121,7 +151,7 @@ export default {
             return typeof this.event.end != 'string' ? this.event.end.format('YYYY-MM-DD hh:mm:ss') :
                 this.event.end == null ? '' : moment(this.event.end).format('YYYY-MM-DD hh:mm:ss');
         },
-        isowner(){
+        isowner() {
             return this.me.id == this.calendar.user_id;
         }
     },
@@ -131,6 +161,10 @@ export default {
             if (value == null) return;
             this.setInstance();
         },
+        target: function (value) {
+            this.tippyInsance?.destroy()
+            this.tippyInsance = null
+        }
     },
 };
 </script>

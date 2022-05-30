@@ -20947,7 +20947,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   methods: {
     handleDateClick: function handleDateClick(date) {
-      console.log(date);
       this.event_editing = false;
       this.selected_target = null;
       this.selected_event = {
@@ -20967,7 +20966,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.$refs.eventManage.toggle();
     },
     handelEventDrop: function handelEventDrop(info) {
-      if (this.$root.me.id != this.calendar.user_id && this.$root.me.id != info.event.extendedProps.user_id) {
+      if (this.$root.me.id != this.calendar.user_id && this.$root.me.id != info.event.extendedProps.user_id || info.event.extendedProps.published == 1 && this.$root.me.id != this.calendar.user_id) {
         info.revert();
         return;
       }
@@ -21438,9 +21437,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var tippy_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! tippy.js */ "./node_modules/tippy.js/dist/tippy.esm.js");
+/* harmony import */ var tippy_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! tippy.js */ "./node_modules/tippy.js/dist/tippy.esm.js");
 /* harmony import */ var tippy_js_dist_svg_arrow_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tippy.js/dist/svg-arrow.css */ "./node_modules/tippy.js/dist/svg-arrow.css");
 /* harmony import */ var tippy_js_animations_perspective_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! tippy.js/animations/perspective.css */ "./node_modules/tippy.js/animations/perspective.css");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_2__);
 //
 //
 //
@@ -21484,6 +21485,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+
 
 
 
@@ -21508,20 +21515,36 @@ __webpack_require__.r(__webpack_exports__);
 
       var _this = this;
 
+      if (this.tippyInsance != null) {
+        var _this$tippyInsance;
+
+        (_this$tippyInsance = this.tippyInsance) === null || _this$tippyInsance === void 0 ? void 0 : _this$tippyInsance.destroy();
+        this.tippyInsance = null;
+      }
+
       this.$nextTick(function () {
-        _this2.tippyInsance = (0,tippy_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_this2.target, {
+        _this2.tippyInsance = (0,tippy_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_this2.target, {
           content: $("#eventEditTooltip").html(),
           allowHTML: true,
           hideOnClick: true,
           trigger: "click",
           interactive: true,
-          arrow: tippy_js__WEBPACK_IMPORTED_MODULE_2__.roundArrow,
+          arrow: tippy_js__WEBPACK_IMPORTED_MODULE_3__.roundArrow,
           animation: "perspective-extreme",
           placement: "auto-end",
           appendTo: function appendTo() {
             return document.body;
           },
           onMount: function onMount(instance) {
+            $(".tippy-box button[id^='publish']").on("click", function (event) {
+              var _this3 = this;
+
+              _this.hide();
+
+              setTimeout(function () {
+                _this.publishEvent($(_this3).attr('id').split('-')[1]);
+              }, 500);
+            });
             $(".tippy-box #edit").on("click", function (event) {
               _this.hide();
 
@@ -21547,18 +21570,31 @@ __webpack_require__.r(__webpack_exports__);
     },
     destroyEvent: function destroyEvent() {
       this.$parent.deleteEvent(this.event.id);
+    },
+    publishEvent: function publishEvent(event_id) {
+      sweetalert2__WEBPACK_IMPORTED_MODULE_2___default().fire({
+        title: 'Are you sure to publish this event?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, publish it!'
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          var url = window.location.origin + '/publish_event?id=' + event_id;
+          window.location.href = url;
+        }
+      });
     }
   },
   computed: {
     canEditDelete: function canEditDelete() {
-      return this.me.id == this.calendar.user_id || this.me.id == this.event.user_id;
+      return this.me.id == this.calendar.user_id && this.event.published == 1 || this.me.id == this.calendar.user_id || this.me.id == this.event.user_id && this.event.published == 0;
     },
     categoryName: function categoryName() {
       var _this$categories$find,
-          _this3 = this;
+          _this4 = this;
 
       return (_this$categories$find = this.categories.find(function (elem) {
-        return elem.id == _this3.event.category_id;
+        return elem.id == _this4.event.category_id;
       })) === null || _this$categories$find === void 0 ? void 0 : _this$categories$find.name;
     },
     eventStart: function eventStart() {
@@ -21575,6 +21611,12 @@ __webpack_require__.r(__webpack_exports__);
     event: function event(value) {
       if (value == null) return;
       this.setInstance();
+    },
+    target: function target(value) {
+      var _this$tippyInsance2;
+
+      (_this$tippyInsance2 = this.tippyInsance) === null || _this$tippyInsance2 === void 0 ? void 0 : _this$tippyInsance2.destroy();
+      this.tippyInsance = null;
     }
   }
 });
@@ -50315,42 +50357,53 @@ var render = function () {
           ]),
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "d-flex justify-content-end gap-2" }, [
-          _vm.canEditDelete && _vm.event.published == 0 && _vm.isowner
-            ? _c(
-                "a",
-                {
-                  staticClass: "btn btn-edit btn-edit-popup",
-                  attrs: {
-                    href: "/publish_event?id=" + _vm.event.id,
-                    id: "upload",
+        _c("div", { staticClass: "align-items-center d-flex mb-2" }, [
+          _c("i", {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.event.published == 1,
+                expression: "event.published == 1",
+              },
+            ],
+            staticClass: "event-published fa-calendar-check far ms-2",
+          }),
+          _vm._v(" "),
+          _c("div", { staticClass: "d-flex justify-content-end w-100" }, [
+            _vm.canEditDelete && _vm.event.published == 0 && _vm.isowner
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-edit btn-edit-popup",
+                    attrs: { type: "button", id: "publish-" + _vm.event.id },
                   },
-                },
-                [_c("i", { staticClass: "fas fa-upload" })]
-              )
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.canEditDelete
-            ? _c(
-                "button",
-                {
-                  staticClass: "btn btn-edit btn-edit-popup",
-                  attrs: { type: "button", id: "edit" },
-                },
-                [_c("i", { staticClass: "fas fa-edit" })]
-              )
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.canEditDelete
-            ? _c(
-                "button",
-                {
-                  staticClass: "btn btn-delete btn-delete-popup",
-                  attrs: { type: "button", id: "delete" },
-                },
-                [_c("i", { staticClass: "fas fa-trash" })]
-              )
-            : _vm._e(),
+                  [_c("i", { staticClass: "fa-calendar-check far" })]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.canEditDelete
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-edit btn-edit-popup",
+                    attrs: { type: "button", id: "edit" },
+                  },
+                  [_c("i", { staticClass: "fas fa-edit" })]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.canEditDelete
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-delete btn-delete-popup",
+                    attrs: { type: "button", id: "delete" },
+                  },
+                  [_c("i", { staticClass: "fas fa-trash" })]
+                )
+              : _vm._e(),
+          ]),
         ]),
       ]),
     ]),

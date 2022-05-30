@@ -85,7 +85,6 @@ export default {
 
     methods: {
         handleDateClick(date) {
-            console.log(date)
             this.event_editing = false
             this.selected_target = null
             this.selected_event = {
@@ -106,7 +105,8 @@ export default {
         },
 
         handelEventDrop(info) {
-            if (this.$root.me.id != this.calendar.user_id && this.$root.me.id != info.event.extendedProps.user_id) {
+            if ((this.$root.me.id != this.calendar.user_id && this.$root.me.id != info.event.extendedProps.user_id) ||
+                (info.event.extendedProps.published == 1 && this.$root.me.id != this.calendar.user_id)) {
                 info.revert();
                 return;
             }
