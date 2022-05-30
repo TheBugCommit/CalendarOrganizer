@@ -403,7 +403,6 @@ const app = new Vue({
         const config = {
             singleDatePicker: true,
             startDate: moment().format("YYYY-MM-DD"),
-            "maxDate": moment().format("YYYY-MM-DD"),
             "showDropdowns": true,
             autoUpdateInput: false,
             autoApply: false,

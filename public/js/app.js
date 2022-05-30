@@ -20877,6 +20877,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -20897,13 +20903,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       calendarOptions: {
         initialView: "dayGridMonth",
         timeZone: "local",
-        nextDayThreshold: '00:00',
+        nextDayThreshold: "00:00",
         editable: true,
         droppable: true,
-        validRange: {
-          start: moment([moment().year()]).clone().format("YYYY-MM-DD HH:mm:ss"),
-          end: moment([moment().year()]).clone().endOf("year").format("YYYY-MM-DD HH:mm:ss")
-        },
         plugins: [_fullcalendar_daygrid__WEBPACK_IMPORTED_MODULE_2__["default"], _fullcalendar_interaction__WEBPACK_IMPORTED_MODULE_3__["default"], _fullcalendar_timegrid__WEBPACK_IMPORTED_MODULE_4__["default"], _fullcalendar_bootstrap5__WEBPACK_IMPORTED_MODULE_5__["default"]],
         eventDrop: this.handelEventDrop,
         dateClick: this.handleDateClick,
@@ -20923,24 +20925,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       fullCalendar: null,
       calendar: {},
       selected_event: {
-        id: '',
-        category_id: '',
-        calendar_id: '',
-        title: '',
-        description: '',
-        location: '',
-        color: '',
-        start: '',
-        end: '',
-        user_id: '',
+        id: "",
+        category_id: "",
+        calendar_id: "",
+        title: "",
+        description: "",
+        location: "",
+        color: "",
+        start: "",
+        end: "",
+        user_id: "",
         published: 0
       },
       selected_target: null,
       event_editing: false,
       slotLabelFormat: {
-        hour: 'numeric',
-        minute: '2-digit',
-        second: '2-digit',
+        hour: "numeric",
+        minute: "2-digit",
+        second: "2-digit",
         hour12: false
       }
     };
@@ -20950,19 +20952,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.event_editing = false;
       this.selected_target = null;
       this.selected_event = {
-        id: '',
+        id: "",
         category_id: null,
         calendar_id: this.calendar.id,
-        title: '',
-        description: '',
-        location: '',
-        color: '',
+        title: "",
+        description: "",
+        location: "",
+        color: "",
         start: moment(date.date.getTime()),
-        end: moment(date.date.getTime()).add(1, 'hours'),
-        user_id: '',
+        end: moment(date.date.getTime()).add(1, "hours"),
+        user_id: "",
         published: 0
       };
-      $('#date-range').val(this.selected_event.start.format('YYYY-MM-DD HH:mm:ss') + ' - ' + this.selected_event.end.add(1, 'hours').format('YYYY-MM-DD HH:mm:ss'));
+      $("#date-range").val(this.selected_event.start.format("YYYY-MM-DD HH:mm:ss") + " - " + this.selected_event.end.add(1, "hours").format("YYYY-MM-DD HH:mm:ss"));
       this.$refs.eventManage.toggle();
     },
     handelEventDrop: function handelEventDrop(info) {
@@ -20997,7 +20999,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   data: {
                     id: _this.calendar.id
                   },
-                  dataType: 'JSON'
+                  dataType: "JSON"
                 });
 
               case 4:
@@ -21008,7 +21010,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 7:
                 _context.prev = 7;
                 _context.t0 = _context["catch"](1);
-                sweetalert2__WEBPACK_IMPORTED_MODULE_6___default().fire('Error!', 'Something went wrong trying to get events', 'error');
+                sweetalert2__WEBPACK_IMPORTED_MODULE_6___default().fire("Error!", "Something went wrong trying to get events", "error");
 
               case 10:
                 _this2.$root.show_loading = false;
@@ -21027,8 +21029,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       var event = _objectSpread({}, _this.selected_event);
 
-      event.start = event.start instanceof moment ? event.start.format('YYYY-MM-DD HH:mm:ss') : event.start;
-      event.end = event.end instanceof moment ? event.end.format('YYYY-MM-DD HH:mm:ss') : event.end;
+      event.start = event.start instanceof moment ? event.start.format("YYYY-MM-DD HH:mm:ss") : event.start;
+      event.end = event.end instanceof moment ? event.end.format("YYYY-MM-DD HH:mm:ss") : event.end;
       $.ajax({
         url: route_events_store,
         data: event,
@@ -21039,7 +21041,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
         _this.$refs.eventManage.toggle();
       }).fail(function (error) {
-        sweetalert2__WEBPACK_IMPORTED_MODULE_6___default().fire('Error!', 'Something went wrong trying to save event, check your inputs, all fields are required', 'error');
+        sweetalert2__WEBPACK_IMPORTED_MODULE_6___default().fire("Error!", "Something went wrong trying to save event, check your inputs, all fields are required", "error");
       });
     },
     updateCalendarEvent: function updateCalendarEvent() {
@@ -21049,8 +21051,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       if (event == null) event = _objectSpread({}, this.selected_event);
-      event.start = event.start instanceof moment ? event.start.format('YYYY-MM-DD HH:mm:ss') : event.start;
-      event.end = event.end instanceof moment ? event.end.format('YYYY-MM-DD HH:mm:ss') : event.end;
+      event.start = event.start instanceof moment ? event.start.format("YYYY-MM-DD HH:mm:ss") : event.start;
+      event.end = event.end instanceof moment ? event.end.format("YYYY-MM-DD HH:mm:ss") : event.end;
       $.ajax({
         url: route_events_update,
         data: event,
@@ -21063,7 +21065,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
         _this.$refs.eventManage.hide();
       }).fail(function (error) {
-        sweetalert2__WEBPACK_IMPORTED_MODULE_6___default().fire('Error!', 'Something went wrong trying to update event, check your inputs all fields are required', 'error');
+        sweetalert2__WEBPACK_IMPORTED_MODULE_6___default().fire("Error!", "Something went wrong trying to update event, check your inputs all fields are required", "error");
       });
     },
     editEvent: function editEvent(id) {
@@ -21101,7 +21103,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         dataType: "JSON",
         method: "DELETE"
       }).done(function (response) {}).fail(function (error) {
-        sweetalert2__WEBPACK_IMPORTED_MODULE_6___default().fire('Error!', 'Something went wrong trying to delete event. It\'s your event?', 'error');
+        sweetalert2__WEBPACK_IMPORTED_MODULE_6___default().fire("Error!", "Something went wrong trying to delete event. It's your event?", "error");
       });
     },
     addEvent: function addEvent(event) {
@@ -21131,7 +21133,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 7:
                 _context2.prev = 7;
                 _context2.t0 = _context2["catch"](1);
-                sweetalert2__WEBPACK_IMPORTED_MODULE_6___default().fire('Error!', 'Something went wrong trying to load calendar', 'error');
+                sweetalert2__WEBPACK_IMPORTED_MODULE_6___default().fire("Error!", "Something went wrong trying to load calendar", "error");
 
               case 10:
                 return _context2.abrupt("return", []);
@@ -21153,8 +21155,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         description: info.event.extendedProps.description,
         location: info.event.extendedProps.location,
         color: info.event.backgroundColor,
-        start: moment(info.event.start).format('Y-MM-DD HH:mm:ss'),
-        end: moment(info.event.end).format('Y-MM-DD HH:mm:ss'),
+        start: moment(info.event.start).format("Y-MM-DD HH:mm:ss"),
+        end: moment(info.event.end).format("Y-MM-DD HH:mm:ss"),
         published: info.event.extendedProps.published,
         user_id: info.event.extendedProps.user_id
       };
@@ -21205,21 +21207,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 2:
               _this.calendar = _context3.sent;
 
+              _this.fullCalendar.setOption("validRange", {
+                start: moment(_this.calendar.start_date).format("YYYY-MM-DD HH:mm:ss"),
+                end: moment(_this.calendar.end_date).format("YYYY-MM-DD HH:mm:ss")
+              });
+
               if (!(_this.calendar != null && _this.calendar.length != 0)) {
-                _context3.next = 9;
+                _context3.next = 10;
                 break;
               }
 
-              _context3.next = 6;
+              _context3.next = 7;
               return _this.getCalendarEvents();
 
-            case 6:
+            case 7:
               events = _context3.sent;
               _this.calendar.events = events;
 
               _this.fullCalendar.addEventSource(_this.calendar.events);
 
-            case 9:
+            case 10:
             case "end":
               return _context3.stop();
           }
@@ -22468,7 +22475,6 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_6__["default"]({
     var config = {
       singleDatePicker: true,
       startDate: moment().format("YYYY-MM-DD"),
-      "maxDate": moment().format("YYYY-MM-DD"),
       "showDropdowns": true,
       autoUpdateInput: false,
       autoApply: false,
