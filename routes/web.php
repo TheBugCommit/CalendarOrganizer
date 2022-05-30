@@ -112,8 +112,8 @@ Route::middleware(['auth'])->group(function () {
 
                 Route::get('/calendar_publish/{id}', [CalendarController::class, 'publishCalendar'])->name('publish');
                 Route::post('/upload_targets', [CalendarController::class, 'uploadTargets'])->name('targets.upload');
-                Route::patch('/calendar_update/{id}', [CalendarController::class, 'update'])->name('update');
-                Route::delete('/calendar_destroy/{id}', [CalendarController::class, 'destory'])->name('destroy');
+                Route::patch('/calendar_update', [CalendarController::class, 'update'])->name('update');
+                Route::delete('/calendar_destroy', [CalendarController::class, 'destroy'])->name('destroy');
 
                 Route::name('helpers.')->group(function () {
                     Route::get('/editHelpers/{id}', [CalendarController::class, 'editHelpers'])->name('index');

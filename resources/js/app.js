@@ -36,6 +36,12 @@ const app = new Vue({
             end_date: "",
             description: null,
         },
+        editCalendarForm: {
+            title: "",
+            start_date: "",
+            end_date: "",
+            description: null,
+        },
         error: "",
         categories: [],
         newCategory: "",
@@ -121,6 +127,62 @@ const app = new Vue({
                 _this.calendars.push(response)
                 $('#newCalendarModal').modal('hide')
                 Object.keys(_this.newCalendarForm).forEach((elem) => { _this.newCalendarForm[elem] = "" })
+            }).fail(function (error) {
+                _this.error = error.responseJSON.message
+            })
+        },
+
+        removeCalendar(calendar_id) {
+            let _this = this
+            $.ajax({
+                url: '/calendar_destroy',
+                method: "DELETE",
+                dataType: "JSON",
+                data: {id: calendar_id}
+            }).done((response) => {
+                let index = _this.calendars.findIndex(cal => cal.id == calendar_id)
+                if (index > -1)
+                    _this.calendars.splice(index, 1)
+
+                index = _this.allCalendars.findIndex(cal => cal.id == calendar_id)
+                if (index > -1)
+                    _this.allCalendars.splice(index, 1)
+            }).fail((error) => {
+                Swal.fire("Error!", error?.responseJSON?.message, "error");
+            })
+        },
+
+        editCalendar(calendar_id){
+            let calendar = this.calendars.find(cal => cal.id == calendar_id)
+
+            if(!calendar)
+                return
+
+            this.editCalendarForm.id = calendar_id
+            this.editCalendarForm.title = calendar.title
+            this.editCalendarForm.start_date = calendar.start_date
+            this.editCalendarForm.end_date = calendar.end_date
+            this.editCalendarForm.description = calendar.description
+
+            $('#end-date-edit').val(calendar.end_date)
+            $('#start-date-edit').val(calendar.start_date)
+
+            $('#editCalendarModal').modal('show')
+        },
+
+        updateCalendar(){
+            let _this = this
+            this.error = ""
+            $.ajax({
+                url: '/calendar_update',
+                dataType: 'JSON',
+                method: 'PATCH',
+                data: _this.editCalendarForm
+            }).done(function (response) {
+                let index = _this.calendars.findIndex(cal => cal.id == _this.editCalendarForm.id)
+                _this.calendars[index] = response
+                $('#editCalendarModal').modal('hide')
+                Object.keys(_this.editCalendarForm).forEach((elem) => { _this.editCalendarForm[elem] = "" })
             }).fail(function (error) {
                 _this.error = error.responseJSON.message
             })
@@ -334,7 +396,7 @@ const app = new Vue({
             }
         });
 
-        $('.datepicker-years').daterangepicker({
+        const config = {
             singleDatePicker: true,
             startDate: moment().format("YYYY-MM-DD"),
             "maxDate": moment().format("YYYY-MM-DD"),
@@ -344,15 +406,24 @@ const app = new Vue({
             locale: {
                 format: 'YYYY-MM-DD'
             }
-        }, function (startDate) {
-            console.log(startDate)
-        });
+        }
+        $('.datepicker-years').daterangepicker(config);
 
         $('.datepicker-years').on('apply.daterangepicker', function (ev, picker) {
             if ($(this).attr('id') == 'start-date') {
                 _this.newCalendarForm.start_date = picker.startDate.format('YYYY-MM-DD')
             } else if ($(this).attr('id') == 'end-date') {
                 _this.newCalendarForm.end_date = picker.startDate.format('YYYY-MM-DD')
+            }
+            $(this).val(picker.startDate.format('YYYY-MM-DD'))
+        })
+
+        $('#end-date-edit,#start-date-edit').daterangepicker(config);
+        $('#end-date-edit,#start-date-edit').on('apply.daterangepicker', function (ev, picker) {
+            if ($(this).attr('id') == 'start-date-edit') {
+                _this.editCalendarForm.start_date = picker.startDate.format('YYYY-MM-DD')
+            } else if ($(this).attr('id') == 'end-date-edit') {
+                _this.editCalendarForm.end_date = picker.startDate.format('YYYY-MM-DD')
             }
             $(this).val(picker.startDate.format('YYYY-MM-DD'))
         })

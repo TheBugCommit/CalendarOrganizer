@@ -20823,8 +20823,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ["calendar"]
+  props: ["calendar", "owner"]
 });
 
 /***/ }),
@@ -21962,6 +21966,12 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_6__["default"]({
       end_date: "",
       description: null
     },
+    editCalendarForm: {
+      title: "",
+      start_date: "",
+      end_date: "",
+      description: null
+    },
     error: "",
     categories: [],
     newCategory: "",
@@ -22055,6 +22065,69 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_6__["default"]({
         $('#newCalendarModal').modal('hide');
         Object.keys(_this.newCalendarForm).forEach(function (elem) {
           _this.newCalendarForm[elem] = "";
+        });
+      }).fail(function (error) {
+        _this.error = error.responseJSON.message;
+      });
+    },
+    removeCalendar: function removeCalendar(calendar_id) {
+      var _this = this;
+
+      $.ajax({
+        url: '/calendar_destroy',
+        method: "DELETE",
+        dataType: "JSON",
+        data: {
+          id: calendar_id
+        }
+      }).done(function (response) {
+        var index = _this.calendars.findIndex(function (cal) {
+          return cal.id == calendar_id;
+        });
+
+        if (index > -1) _this.calendars.splice(index, 1);
+        index = _this.allCalendars.findIndex(function (cal) {
+          return cal.id == calendar_id;
+        });
+        if (index > -1) _this.allCalendars.splice(index, 1);
+      }).fail(function (error) {
+        var _error$responseJSON;
+
+        sweetalert2__WEBPACK_IMPORTED_MODULE_4___default().fire("Error!", error === null || error === void 0 ? void 0 : (_error$responseJSON = error.responseJSON) === null || _error$responseJSON === void 0 ? void 0 : _error$responseJSON.message, "error");
+      });
+    },
+    editCalendar: function editCalendar(calendar_id) {
+      var calendar = this.calendars.find(function (cal) {
+        return cal.id == calendar_id;
+      });
+      if (!calendar) return;
+      this.editCalendarForm.id = calendar_id;
+      this.editCalendarForm.title = calendar.title;
+      this.editCalendarForm.start_date = calendar.start_date;
+      this.editCalendarForm.end_date = calendar.end_date;
+      this.editCalendarForm.description = calendar.description;
+      $('#end-date-edit').val(calendar.end_date);
+      $('#start-date-edit').val(calendar.start_date);
+      $('#editCalendarModal').modal('show');
+    },
+    updateCalendar: function updateCalendar() {
+      var _this = this;
+
+      this.error = "";
+      $.ajax({
+        url: '/calendar_update',
+        dataType: 'JSON',
+        method: 'PATCH',
+        data: _this.editCalendarForm
+      }).done(function (response) {
+        var index = _this.calendars.findIndex(function (cal) {
+          return cal.id == _this.editCalendarForm.id;
+        });
+
+        _this.calendars[index] = response;
+        $('#editCalendarModal').modal('hide');
+        Object.keys(_this.editCalendarForm).forEach(function (elem) {
+          _this.editCalendarForm[elem] = "";
         });
       }).fail(function (error) {
         _this.error = error.responseJSON.message;
@@ -22244,9 +22317,9 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_6__["default"]({
                   _this.export_events = response;
                   _this.error = '';
                 }).fail(function (error) {
-                  var _error$responseJSON, _error$responseJSON2;
+                  var _error$responseJSON2, _error$responseJSON3;
 
-                  var message = _typeof(error === null || error === void 0 ? void 0 : (_error$responseJSON = error.responseJSON) === null || _error$responseJSON === void 0 ? void 0 : _error$responseJSON.message) == 'object' ? 'Invalid Data' : error === null || error === void 0 ? void 0 : (_error$responseJSON2 = error.responseJSON) === null || _error$responseJSON2 === void 0 ? void 0 : _error$responseJSON2.message;
+                  var message = _typeof(error === null || error === void 0 ? void 0 : (_error$responseJSON2 = error.responseJSON) === null || _error$responseJSON2 === void 0 ? void 0 : _error$responseJSON2.message) == 'object' ? 'Invalid Data' : error === null || error === void 0 ? void 0 : (_error$responseJSON3 = error.responseJSON) === null || _error$responseJSON3 === void 0 ? void 0 : _error$responseJSON3.message;
                   sweetalert2__WEBPACK_IMPORTED_MODULE_4___default().fire("Error!", message, "error");
                   _this.error = message;
                 }).always(function () {
@@ -22342,7 +22415,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_6__["default"]({
         format: 'YYYY-MM-DD'
       }
     });
-    $('.datepicker-years').daterangepicker({
+    var config = {
       singleDatePicker: true,
       startDate: moment().format("YYYY-MM-DD"),
       "maxDate": moment().format("YYYY-MM-DD"),
@@ -22352,14 +22425,23 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_6__["default"]({
       locale: {
         format: 'YYYY-MM-DD'
       }
-    }, function (startDate) {
-      console.log(startDate);
-    });
+    };
+    $('.datepicker-years').daterangepicker(config);
     $('.datepicker-years').on('apply.daterangepicker', function (ev, picker) {
       if ($(this).attr('id') == 'start-date') {
         _this.newCalendarForm.start_date = picker.startDate.format('YYYY-MM-DD');
       } else if ($(this).attr('id') == 'end-date') {
         _this.newCalendarForm.end_date = picker.startDate.format('YYYY-MM-DD');
+      }
+
+      $(this).val(picker.startDate.format('YYYY-MM-DD'));
+    });
+    $('#end-date-edit,#start-date-edit').daterangepicker(config);
+    $('#end-date-edit,#start-date-edit').on('apply.daterangepicker', function (ev, picker) {
+      if ($(this).attr('id') == 'start-date-edit') {
+        _this.editCalendarForm.start_date = picker.startDate.format('YYYY-MM-DD');
+      } else if ($(this).attr('id') == 'end-date-edit') {
+        _this.editCalendarForm.end_date = picker.startDate.format('YYYY-MM-DD');
       }
 
       $(this).val(picker.startDate.format('YYYY-MM-DD'));
@@ -49773,14 +49855,40 @@ var render = function () {
         staticClass: "card calendar",
         on: {
           click: function ($event) {
+            if ($event.target !== $event.currentTarget) {
+              return null
+            }
             return _vm.$emit("redirect")
           },
         },
       },
       [
-        _c("div", { staticClass: "card-header" }, [
-          _vm._v(_vm._s(_vm.calendar.title)),
-        ]),
+        _c(
+          "div",
+          {
+            staticClass:
+              "card-header justify-content-between align-items-center d-flex",
+          },
+          [
+            _c("span", [_vm._v(_vm._s(_vm.calendar.title))]),
+            _vm._v(" "),
+            _vm.owner
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn col-3 btn-edit",
+                    attrs: { type: "button", id: "edit" },
+                    on: {
+                      click: function ($event) {
+                        return _vm.$emit("edit", _vm.calendar.id)
+                      },
+                    },
+                  },
+                  [_c("i", { staticClass: "fas fa-edit" })]
+                )
+              : _vm._e(),
+          ]
+        ),
         _vm._v(" "),
         _c("div", { staticClass: "card-body" }, [
           _c(
@@ -49792,12 +49900,30 @@ var render = function () {
             [_vm._v(_vm._s(_vm.calendar.description))]
           ),
           _vm._v(" "),
-          _c("p", { staticClass: "cursive-gray-text text-end m-0" }, [
-            _vm._v(
-              _vm._s(_vm.calendar.start_date) +
-                " - " +
-                _vm._s(_vm.calendar.end_date)
-            ),
+          _c("div", { staticClass: "row align-items-center" }, [
+            _vm.owner
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn col-3 btn-delete",
+                    attrs: { type: "button", id: "delete" },
+                    on: {
+                      click: function ($event) {
+                        return _vm.$emit("remove", _vm.calendar.id)
+                      },
+                    },
+                  },
+                  [_c("i", { staticClass: "fas fa-trash" })]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _c("p", { staticClass: "cursive-gray-text col-9 text-end m-0" }, [
+              _vm._v(
+                _vm._s(_vm.calendar.start_date) +
+                  " - " +
+                  _vm._s(_vm.calendar.end_date)
+              ),
+            ]),
           ]),
         ]),
       ]

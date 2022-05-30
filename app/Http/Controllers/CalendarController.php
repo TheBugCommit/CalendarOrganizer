@@ -121,9 +121,24 @@ class CalendarController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $calendar = null;
+        try {
+            $calendar = Calendar::find($request->id);
+
+            $calendar->description = $request->description ?? $calendar->description;
+            $calendar->title = $request->title ?? $calendar->title;
+            $calendar->start_date = $request->start_date ?? $calendar->start_date;
+            $calendar->end_date    = $request->end_date ?? $calendar->end_date;
+
+            $calendar->save();
+
+        } catch (Exception $ex) {
+            return response()->json(['message' => 'Can\'t update calendar'], 500);
+        }
+
+        return response()->json($calendar);
     }
 
     /**
@@ -132,8 +147,15 @@ class CalendarController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
+        try {
+            $calendar = Calendar::destroy($request->id);
+        } catch (Exception $ex) {
+            return response()->json(['message' => 'Can\'t remove calendar'], 500);
+        }
+
+        return response()->json(['message' => 'Calendar removed']);
     }
 
     public function getHelpers(Request $request)
@@ -243,19 +265,19 @@ class CalendarController extends Controller
         $targets = $request->file()["file"]->get();
         $targets = json_decode($targets, true);
 
-        if($targets == null || !$this->validateJSON($targets))
+        if ($targets == null || !$this->validateJSON($targets))
             return back()->withErrors(['Invalid Json']);
 
         DB::beginTransaction();
-        try{
-            foreach($targets['targets'] as $target){
+        try {
+            foreach ($targets['targets'] as $target) {
                 Target::firstOrCreate([
                     'email'       => $target,
                     'calendar_id' => $request->id
                 ]);
             }
             DB::commit();
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
             DB::rollBack();
             return back()->withErrors('Something went wrong creating targets');
         }
@@ -265,11 +287,11 @@ class CalendarController extends Controller
 
     protected function validateJSON(&$array)
     {
-        if(!array_key_exists('targets',$array) || !is_array($array['targets']))
+        if (!array_key_exists('targets', $array) || !is_array($array['targets']))
             return false;
 
-        foreach($array['targets'] as $key => $value){
-            if(is_array($value))
+        foreach ($array['targets'] as $key => $value) {
+            if (is_array($value))
                 return false;
         }
 

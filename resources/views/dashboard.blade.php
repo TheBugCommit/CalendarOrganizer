@@ -30,14 +30,14 @@
             <div class="container">
                 <div class="row calendar-list">
                     <calendar-component v-for="calendar in calendars" :key="calendar.id" :calendar="calendar"
-                        @redirect="redirect('/calendar_edit/' + calendar.id)"></calendar-component>
+                        @redirect="redirect('/calendar_edit/' + calendar.id)" :owner="true" @remove="removeCalendar" @edit="editCalendar"></calendar-component>
                 </div>
             </div>
         </div>
         <div class="tab-pane fade" id="v-pills-helper" role="tabpanel" aria-labelledby="v-pills-helper-tab">
             <div class="row calendar-list">
                 <calendar-component v-for="calendar in helper_calendars" :key="calendar.id" :calendar="calendar"
-                    @redirect="redirect('/calendar_edit/' + calendar.id)"></calendar-component>
+                    @redirect="redirect('/calendar_edit/' + calendar.id)" :owner="false"></calendar-component>
             </div>
         </div>
     </div>
@@ -55,4 +55,5 @@
     @endif
 
     @include('modals.new_calendar')
+    @include('modals.edit_calendar')
 @endsection
