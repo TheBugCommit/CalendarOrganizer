@@ -87,6 +87,7 @@ CONSTRAINT events_category_id_foreign FOREIGN KEY (category_id) REFERENCES categ
 CREATE TABLE targets (
 calendar_id bigint(20) unsigned NOT NULL,
 email varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+notifyed tinyint(1) NOT NULL DEFAULT 0,
 CONSTRAINT pk_targets PRIMARY KEY (calendar_id,email),
 CONSTRAINT targets_calendar_id_foreign FOREIGN KEY (calendar_id) REFERENCES calendars (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -340,6 +341,6 @@ INSERT INTO roles VALUES (NULL, 'ADMIN');
 INSERT INTO roles VALUES (NULL, 'CUSTOMER');
 
 -- Users initialization
-INSERT INTO users VALUES (NULL, 'Gerard','admin@admin.com', '$2y$10$HCzABbNv9skrPq2C1TncOeNhC2JQ0lFdq0UyfVeYlTzYDHRAQ2ZnC', 'Casas', 'Serarols', 0, date '2002-10-03', NULL, 'M', 1 ,193, NULL, NULL, now() ,now(), now());
+INSERT INTO users VALUES (NULL, 'Gerard','admin@admin.com', '$2y$10$x.KW5kCkn/k9iD6GDEOv3.Aa7ZtpQm/9oJNktMnm/s2vpi1V3ShNa', 'Casas', 'Serarols', 0, date '2002-10-03', NULL, 'M', 1 ,193, NULL, NULL, now() ,now(), now());
 
 

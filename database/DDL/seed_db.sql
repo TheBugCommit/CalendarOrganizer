@@ -17,13 +17,13 @@ ALTER TABLE events AUTO_INCREMENT = 1;
 INSERT INTO roles VALUES (NULL, 'ADMIN');
 INSERT INTO roles VALUES (NULL, 'CUSTOMER');
 
-INSERT INTO users VALUES (NULL, 'Gerard','admin@admin.com', '$2y$10$HCzABbNv9skrPq2C1TncOeNhC2JQ0lFdq0UyfVeYlTzYDHRAQ2ZnC',
+INSERT INTO users VALUES (NULL, 'Gerard','admin@admin.com', '$2y$10$x.KW5kCkn/k9iD6GDEOv3.Aa7ZtpQm/9oJNktMnm/s2vpi1V3ShNa',
 'Casas', 'Serarols', 0, date '2002-10-03', NULL, 'M', 1 ,193, NULL, NULL, now() ,now(), now());
 
-INSERT INTO users VALUES (NULL, 'Albert','albert@gmail.com', '$2y$10$HCzABbNv9skrPq2C1TncOeNhC2JQ0lFdq0UyfVeYlTzYDHRAQ2ZnC',
+INSERT INTO users VALUES (NULL, 'Albert','albert@gmail.com', '$2y$10$x.KW5kCkn/k9iD6GDEOv3.Aa7ZtpQm/9oJNktMnm/s2vpi1V3ShNa',
 'Casas', 'Montagut', 0, date '2002-11-23', NULL, 'M', 2 ,193, NULL, NULL, now() ,now(), now());
 
-INSERT INTO users VALUES (NULL, 'Janma','janma@gmail.com', '$2y$10$HCzABbNv9skrPq2C1TncOeNhC2JQ0lFdq0UyfVeYlTzYDHRAQ2ZnC',
+INSERT INTO users VALUES (NULL, 'Janma','janma@gmail.com', '$2y$10$x.KW5kCkn/k9iD6GDEOv3.Aa7ZtpQm/9oJNktMnm/s2vpi1V3ShNa',
 'Managut', 'Urlan', 0, date '2001-02-23', NULL, 'O', 2 ,193, NULL, NULL, now() ,now(), now());
 
 insert into categories values (null, 2, 'Esports');
@@ -37,10 +37,10 @@ insert into categories values (null, 3, 'Grup ajuda drogadictes');
 insert into calendars values (null,1, 'Esportiueig 2022', 'Calendari d''events esportius per l''estiu del 2022' ,NULL, curdate(),  curdate());
 insert into calendars values(null,2, 'Ajudes Communitaries', 'Calendari de les sessions d''ajuda del 2022' ,NULL, curdate(),  curdate());
 
-insert into targets values (1, 'servergerard@gmail.com');
-insert into targets values (1, 'g3casas@gmail.com');
-insert into targets values (2, 'g3casas@gmail.com');
-insert into targets values (2, 'servergerard@gmail.com');
+insert into targets values (1, 'servergerard@gmail.com', 0);
+insert into targets values (1, 'g3casas@gmail.com', 0);
+insert into targets values (2, 'g3casas@gmail.com', 0);
+insert into targets values (2, 'servergerard@gmail.com', 0);
 
 insert into calendar_user values (2, 2);
 insert into calendar_user values (3, 1);

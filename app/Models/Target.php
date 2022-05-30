@@ -16,7 +16,8 @@ class Target extends Model
 
     protected $fillable = [
         'email',
-        'calendar_id'
+        'calendar_id',
+        'notifyed'
     ];
 
     public function calendar(){

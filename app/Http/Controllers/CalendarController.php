@@ -291,6 +291,7 @@ class CalendarController extends Controller
     {
         $targets = $request->file()["file"]->get();
         $targets = json_decode($targets, true);
+        $calendar = Calendar::find($request->id);
 
         if ($targets == null || !$this->validateJSON($targets))
             return back()->withErrors(['Invalid Json']);
@@ -298,15 +299,20 @@ class CalendarController extends Controller
         DB::beginTransaction();
         try {
             foreach ($targets['targets'] as $target) {
+                if($target == $calendar->owner->email) continue;
                 Target::firstOrCreate([
                     'email'       => $target,
                     'calendar_id' => $request->id
                 ]);
             }
+
+            if($calendar->google_calendar_id != null)
+                GoogleController::shareGoogleCalendarTargets($calendar);
+
             DB::commit();
         } catch (Exception $ex) {
             DB::rollBack();
-            return back()->withErrors('Something went wrong creating targets');
+            return back()->withErrors('Something went wrong creating targets' . $ex->getMessage());
         }
 
         return back()->with('success', 'File has been uploaded.');

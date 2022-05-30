@@ -19,13 +19,14 @@
         <input type="checkbox" name="adminToggle" class="adminToggle" />
         <a class="adminButton" href="#!"><i class="fa fa-cog"></i></a>
         <div class="adminButtons">
+            @if ($calendar->google_calendar_id == null)
+                <a href="{{ route('calendar.google.calendar.publish', ['calendar_id' => $calendar->id]) }}" title="Publish Calendar">
+                    <i class="far fa-calendar-check"></i>
+                </a>
+            @endif
             <a href="{{ route('calendar.helpers.index', ['id' => $calendar->id]) }}" title="Calendar Helpers"><i
                     class="fas fa-hands-helping"></i></a>
             <button type="button" @click="openUpload" title="Upload Targets"><i class="fas fa-upload"></i></button>
-            @if ($calendar->google_calendar_id == null)
-                <a href="{{ route('calendar.google.calendar.publish', ['calendar_id' => $calendar->id]) }}" title="Publish Calendar"><i
-                        class="fas fa-hands-helping"></i></a>
-            @endif
     </div>
 </div>
 

@@ -55,19 +55,20 @@ class GoogleController extends Controller
         $authCode = urldecode($request->input('code'));
 
         $accessToken = null;
+        DB::beginTransaction();
         try {
             $client = self::getClient();
             $accessToken = $client->fetchAccessTokenWithAuthCode($authCode); //'access type' to 'force' and our access is 'offline', we get a refresh token
-            $client->setAccessToken($accessToken);
-        } catch (Exception $ex) {
-            abort(500);
-        }
 
-        try {
+            $client->setAccessToken(stripslashes(json_encode($accessToken)));
+
             $user = User::find(Auth::user()->id);
             $user->google_access_token_json = json_encode($accessToken);
             $user->save();
+            DB::commit();
         } catch (Exception $ex) {
+            DB::rollBack();
+            dd($ex->getMessage());
             abort(500);
         }
 
@@ -91,8 +92,8 @@ class GoogleController extends Controller
             $client = self::getUserClient();
 
             $modelCalendar = ModelsCalendar::findOrFail($request->calendar_id);
-            if($modelCalendar->google_calendar_id != null)
-                return back()->with('warning', 'Calendar already published');
+            if ($modelCalendar->google_calendar_id != null)
+                return  redirect('/calendar_edit/' . $modelCalendar->id)->with('warning', 'Calendar already published');
 
             $calendar = new Google_Service_Calendar_Calendar();
             $calendar->setSummary($modelCalendar->title);
@@ -109,7 +110,7 @@ class GoogleController extends Controller
 
             DB::commit();
         } catch (Google_Service_Exception $ex) {
-            return  back()->withErrors('Can\'t publish calendar');
+            return redirect('/calendar_edit/' . $modelCalendar->id)->withErrors('Can\'t publish calendar' . $ex->getMessage());
         } catch (PDOException $ex) {
             try {
                 $service->calendars->delete($createdCalendar->getId());
@@ -117,11 +118,11 @@ class GoogleController extends Controller
             }
 
             DB::rollBack();
-            return  back()->withErrors('Can\'t publish calendar');
+            return  redirect('/calendar_edit/' . $modelCalendar->id)->withErrors('Can\'t publish calendar');
         } catch (Exception $ex) {
-            return back()->withErrors('Can\'t publish calendar, error iviting targets');
+            return redirect('/calendar_edit/' . $modelCalendar->id)->withErrors('Can\'t publish calendar, error iviting targets');
         }
-        return back()->with('success', 'Calendar successfully published');
+        return redirect('/calendar_edit/' . $modelCalendar->id)->with('success', 'Calendar successfully published');
     }
 
     /**
@@ -133,7 +134,7 @@ class GoogleController extends Controller
     public static function updateGoogleCalendar(ModelsCalendar $modelCalendar): void
     {
         try {
-            if($modelCalendar->google_calendar_id == null)
+            if ($modelCalendar->google_calendar_id == null)
                 throw new RuntimeException('First publish calendar');
 
             $client = self::getUserClient();
@@ -159,7 +160,7 @@ class GoogleController extends Controller
     public static function destroyGoogleCalendar(ModelsCalendar $modelCalendar): void
     {
         try {
-            if($modelCalendar->google_calendar_id == null)
+            if ($modelCalendar->google_calendar_id == null)
                 throw new RuntimeException('First publish calendar');
 
             $client = self::getUserClient();
@@ -185,8 +186,8 @@ class GoogleController extends Controller
         DB::beginTransaction();
         try {
             $modelEvent = Event::findOrFail($request->id);
-            if($modelEvent->published)
-                return back()->with('warning','This event it\'s already published');
+            if ($modelEvent->published)
+                return back()->with('warning', 'This event it\'s already published');
 
             $client = self::getUserClient();
             $service = new Google_Service_Calendar($client);
@@ -195,20 +196,22 @@ class GoogleController extends Controller
                 'location' => $modelEvent->location,
                 'description' => $modelEvent->description,
                 'start' => [
-                  'dateTime' => $this->parseDate($modelEvent->start),
-                  'timeZone' => 'Europe/Madrid',
+                    'dateTime' => $this->parseDate($modelEvent->start),
+                    'timeZone' => 'Europe/Madrid',
                 ],
                 'end' => [
-                  'dateTime' => $this->parseDate($modelEvent->end),
-                  'timeZone' => 'Europe/Madrid',
+                    'dateTime' => $this->parseDate($modelEvent->end),
+                    'timeZone' => 'Europe/Madrid',
                 ],
-                'attendees' => $modelEvent->calendar->targets->map(function($target){return ['email' => $target->email];})->all(),
+                'attendees' => $modelEvent->calendar->targets->map(function ($target) {
+                    return ['email' => $target->email];
+                })->all(),
                 'reminders' => [
-                  'useDefault' => TRUE,
+                    'useDefault' => TRUE,
                 ],
                 'guestsCanInviteOthers' => false,
                 'guestsCanModify' => false,
-              ]);
+            ]);
 
             $googlEvent = $service->events->insert($modelEvent->calendar->google_calendar_id, $event, ['sendUpdates' => "all"]);
 
@@ -218,11 +221,12 @@ class GoogleController extends Controller
 
             DB::commit();
         } catch (Google_Exception $ex) {
-            return back()->withErrors('Can\'t publish calendar event');
+            return back()->withErrors('Can\'t publish calendar event, you publish the calendar?');
         } catch (PDOException $ex) {
-            try{
+            try {
                 $googlEvent = $service->events->delete($modelEvent->calendar->google_calendar_id, $googlEvent->getId());
-            }catch(Google_Service_Exception $gse){}
+            } catch (Google_Service_Exception $gse) {
+            }
             DB::rollBack();
             return back()->withErrors('Can\'t publish calendar event');
         }
@@ -240,7 +244,7 @@ class GoogleController extends Controller
     public static function updateGoogleCalendarEvent(Event $modelEvent): void
     {
         try {
-            if($modelEvent->google_event_id == null)
+            if ($modelEvent->google_event_id == null)
                 throw new Google_Exception('Can\'t update calendar event');
 
             $google_calendar_id = $modelEvent->calendar->google_calendar_id;
@@ -263,7 +267,9 @@ class GoogleController extends Controller
             $start->setTimeZone('Europe/Madrid');
             $event->setstart($start);
 
-            $event->attendees = $modelEvent->calendar->targets->map(function($target){return ['email' => $target->email];})->all();
+            $event->attendees = $modelEvent->calendar->targets->map(function ($target) {
+                return ['email' => $target->email];
+            })->all();
 
             $service->events->update($modelEvent->calendar->google_calendar_id, $google_event_id, $event, ['sendUpdates' => "all"]);
         } catch (Google_Exception $ex) {
@@ -280,7 +286,7 @@ class GoogleController extends Controller
     public static function destroyGoogleCalendarEvent(Event $modelEvent): void
     {
         try {
-            if($modelEvent->google_event_id == null)
+            if ($modelEvent->google_event_id == null)
                 throw new Google_Exception('First publish event');
 
             $client = self::getUserClient();
@@ -369,13 +375,15 @@ class GoogleController extends Controller
 
     public static function shareGoogleCalendarTargets(ModelsCalendar $calendar)
     {
-        if($calendar->targets == null)
+        if ($calendar->targets == null)
             return;
 
         $client = self::getUserClient();
         $service = new Google_Service_Calendar($client);
 
-        foreach($calendar->targets as $target){
+        foreach ($calendar->targets as $target) {
+            if($target->notifyed) continue;
+
             $rule = new Google_Service_Calendar_AclRule();
             $scope = new Google_Service_Calendar_AclRuleScope();
 
@@ -386,6 +394,9 @@ class GoogleController extends Controller
             $rule->setRole("reader");
 
             $service->acl->insert($calendar->google_calendar_id, $rule);
+
+            $target->notifyed = true;
+            $target->save();
         }
     }
 
