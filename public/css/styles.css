@@ -768,6 +768,12 @@ ul.nav {
   color: #f7f6fb;
   transition: opacity 0.2s ease-in-out 0.25s, transform 0.15s ease-in-out, color 0.3s;
 }
+.adminButtons a:nth-child(3),
+.adminButtons button:nth-child(3) {
+  background-color: #6967ce;
+  color: #f7f6fb;
+  transition: opacity 0.2s ease-in-out 0.45s, transform 0.15s ease-in-out, color 0.3s;
+}
 .adminButtons a:hover,
 .adminButtons button:hover {
   color: #3be8b0;

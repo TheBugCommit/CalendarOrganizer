@@ -12,6 +12,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\CalendarVerify;
 use App\Http\Middleware\CategoryVerify;
+use App\Http\Middleware\CheckGoogleAuth;
 use App\Http\Middleware\OwnerCalendarVerify;
 use App\Http\Middleware\EventVerify;
 use Illuminate\Support\Facades\Route;
@@ -91,22 +92,24 @@ Route::middleware(['auth'])->group(function () {
                 Route::post('/calendar_event_store', [EventController::class, 'store'])->name('event.store');
             });
 
+            Route::get('/google_login', [GoogleController::class, 'getAuthUrl'])->name('google.login');
+            Route::get('/postLogin', [GoogleController::class, 'postLogin'])->name('google.postLogin');
+
             Route::middleware(OwnerCalendarVerify::class)->group(function () {
                 Route::name('google.')->group(function() {
-                    Route::get('/google_login', [GoogleController::class, 'getAuthUrl'])->name('login');
-                    Route::get('/post_login', [GoogleController::class, 'postLogin'])->name('postLogin');
+                    Route::middleware(CheckGoogleAuth::class)->group(function () {
+                        Route::name('calendar.')->group(function () {
+                            Route::get('/publish_calendar', [GoogleController::class, 'publishGoogleCalendar'])->name('publish');
+                            Route::get('/update_calendar', [GoogleController::class, 'updateGoogleCalendar'])->name('update');
+                            Route::get('/delete_calendar', [GoogleController::class, 'destroyGoogleCalendar'])->name('delete');
+                            Route::get('/calendar_colors', [GoogleController::class, 'getGoogleCalendarColors'])->name('colors');
+                        });
 
-                    Route::name('calendar.')->group(function () {
-                        Route::get('/publish_calendar', [GoogleController::class, 'publishGoogleCalendar'])->name('publish');
-                        Route::get('/update_calendar', [GoogleController::class, 'updateGoogleCalendar'])->name('update');
-                        Route::get('/delete_calendar', [GoogleController::class, 'destroyGoogleCalendar'])->name('delete');
-                        Route::get('/calendar_colors', [GoogleController::class, 'getGoogleCalendarColors'])->name('colors');
-                    });
-
-                    Route::name('event.')->group(function () {
-                        Route::get('/publish_event', [GoogleController::class, 'publishGoogleCalendarEvent'])->name('publish');
-                        Route::get('/delete_event_google', [GoogleController::class, 'destroyGoogleCalendarEvent'])->name('destroy');
-                        Route::get('/update_event_google', [GoogleController::class, 'updateGoogleCalendarEvent'])->name('update');
+                        Route::name('event.')->group(function () {
+                            Route::get('/publish_event', [GoogleController::class, 'publishGoogleCalendarEvent'])->name('publish');
+                            Route::get('/delete_event_google', [GoogleController::class, 'destroyGoogleCalendarEvent'])->name('destroy');
+                            Route::get('/update_event_google', [GoogleController::class, 'updateGoogleCalendarEvent'])->name('update');
+                        });
                     });
                 });
 

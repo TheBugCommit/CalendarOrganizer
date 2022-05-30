@@ -49855,9 +49855,6 @@ var render = function () {
         staticClass: "card calendar",
         on: {
           click: function ($event) {
-            if ($event.target !== $event.currentTarget) {
-              return null
-            }
             return _vm.$emit("redirect")
           },
         },
@@ -49880,6 +49877,9 @@ var render = function () {
                     attrs: { type: "button", id: "edit" },
                     on: {
                       click: function ($event) {
+                        if ($event.target !== $event.currentTarget) {
+                          return null
+                        }
                         return _vm.$emit("edit", _vm.calendar.id)
                       },
                     },
@@ -49909,6 +49909,9 @@ var render = function () {
                     attrs: { type: "button", id: "delete" },
                     on: {
                       click: function ($event) {
+                        if ($event.target !== $event.currentTarget) {
+                          return null
+                        }
                         return _vm.$emit("remove", _vm.calendar.id)
                       },
                     },

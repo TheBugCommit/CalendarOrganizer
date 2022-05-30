@@ -24,6 +24,7 @@ use Google_Service_Exception;
 use Google_Service_Calendar_AclRule;
 use Google_Service_Calendar_AclRuleScope;
 use Google_Service_Calendar_EventDateTime;
+use Illuminate\Support\Facades\Redirect;
 
 //https://dev.to/gbhorwood/accessing-googles-api-from-your-laravel-api-4ck7
 
@@ -36,23 +37,23 @@ class GoogleController extends Controller
      * Return the url of the google auth.
      *
      * @param Request $request
-     * @return JsonResponse
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function getAuthUrl(Request $request): JsonResponse
+    public function getAuthUrl(Request $request): \Illuminate\Http\RedirectResponse
     {
         $client = $this->getClient();
         $authUrl = $client->createAuthUrl();
 
-        return response()->json($authUrl, 200);
+        return redirect($authUrl);
     }
 
     /**
      * Save google access token
      *
      * @param Request $request
-     * @return JsonResponse
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function postLogin(Request $request): JsonResponse
+    public function postLogin(Request $request): \Illuminate\Http\RedirectResponse
     {
         $authCode = urldecode($request->input('code'));
 
@@ -62,7 +63,8 @@ class GoogleController extends Controller
             $accessToken = $client->fetchAccessTokenWithAuthCode($authCode); //'access type' to 'force' and our access is 'offline', we get a refresh token
             $client->setAccessToken($accessToken);
         } catch (Exception $ex) {
-            return response()->json(['message' => 'Error feching token ' . $ex->getMessage()], 500);
+            abort(500);
+           // return response()->json(['message' => 'Error feching token ' . $ex->getMessage()], 500);
         }
 
         try {
@@ -70,10 +72,11 @@ class GoogleController extends Controller
             $user->google_access_token_json = json_encode($accessToken);
             $user->save();
         } catch (Exception $ex) {
-            return response()->json(['message' => 'Can\'t update user with fetched token'], 500);
+            //return response()->json(['message' => 'Can\'t update user with fetched token'], 500);
+            abort(500);
         }
 
-        return response()->json($accessToken, 201);
+        return redirect()->intended('/');//response()->json($accessToken, 201);
     }
 
     /**
