@@ -295,7 +295,6 @@ const app = new Vue({
             let _this = this;
             (async function () {
                 let token = (await _this.getToken())?.access_token
-                console.log(token)
                 _this.show_loading = true;
                 $.ajax({
                     url: '/api/export_events',

@@ -15,6 +15,9 @@ class EventsControllerAPI extends Controller
     {
         try{
             $calendar = Calendar::getById($request->calendar_id, Auth::guard('api')->user()->id);
+            if(!$calendar)
+                return response()->json(['message' => 'You doesn\'t have this calendar'], 500);
+
             $events   = $calendar->getEventsByRange($request->start, $request->end);
             $events = $events->map(function($event){
                 return [

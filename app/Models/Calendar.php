@@ -73,7 +73,9 @@ class Calendar extends Model
 
     public static function getById($id, $user_id)
     {
-        return Calendar::where('user_id', $user_id)->where('id', $id)->first();
+        $user = User::find($user_id);
+        $calendars = $user->helperCalendars->merge($user->calendars);
+        return $calendars->where('id', $id)->first();
     }
 
 }

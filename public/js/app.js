@@ -22360,7 +22360,6 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_6__["default"]({
 
               case 11:
                 token = _context2.t2;
-                console.log(token);
                 _this.show_loading = true;
                 $.ajax({
                   url: '/api/export_events',
@@ -22382,7 +22381,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_6__["default"]({
                   _this.show_loading = false;
                 });
 
-              case 15:
+              case 14:
               case "end":
                 return _context2.stop();
             }
