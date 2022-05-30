@@ -152,7 +152,7 @@ class CalendarController extends Controller
             $calendar = Calendar::find($request->id);
             $original_calendar = $calendar;
 
-            $calendar->description = $request->description ?? $calendar->description;
+            $calendar->description = $request->description;
             $calendar->title = $request->title ?? $calendar->title;
             $calendar->start_date = $request->start_date ?? $calendar->start_date;
             $calendar->end_date    = $request->end_date ?? $calendar->end_date;

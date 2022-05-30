@@ -50,8 +50,6 @@ Route::name('verification.')->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-
-
     Route::middleware('verified')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -62,6 +60,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/export_events', function(){
             return view('export_events');
         })->name('export.events');
+
+        Route::get('/help', function(){
+            return view('help');
+        })->name('help');
 
         Route::name('user.')->group(function () {
             Route::get('/me', [UserController::class, 'me'])->name('me');

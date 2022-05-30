@@ -49,6 +49,12 @@
                             <i class="fas fa-file-invoice nav_icon"></i>
                             <span class="nav_name">Report JasperReport</span>
                         </a>
+                        <a href="{{ route('help') }}"
+                            class="nav_link {{ Request::path() == 'help' ? 'active' : '' }}">
+                            <i class="fas fa-question nav_icon"></i>
+                            <span class="nav_name">Help</span>
+                        </a>
+
                     </div>
                 </div>
                 <a href="{{ route('logout') }}" class="nav_link"> <i class="fas fa-sign-out-alt nav_icon"></i>
