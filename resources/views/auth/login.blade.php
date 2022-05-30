@@ -23,6 +23,7 @@
                                     <input type="text" class="input_field validate @error('email') invalid @enderror"
                                         placeholder="Email" value="{{ old('email') }}" name="email" id='email' required />
                                     <label for="email" class="input_label">Email</label>
+                                    <span class="input-error d-none caps-lock">Caps Lock activated<br></span>
                                     @error('email')
                                         <span class="input-error">{{ $message }}</span>
                                     @enderror
@@ -32,6 +33,7 @@
                                     <input type="password" class="input_field validate @error('password') invalid @enderror"
                                         placeholder="Password" name="password" id='password' required />
                                     <label for="password" class="input_label">Password</label>
+                                    <span class="input-error d-none caps-lock">Caps Lock activated<br></span>
                                     @error('password')
                                         <span class="input-error">{{ $message }}</span>
                                     @enderror
@@ -42,12 +44,11 @@
                                         <input type="checkbox" id="terms">
                                         <label for="terms">Accept terms & conditions</label>
                                     </div>
-                                    <input id="login" class="btn btn-block login-btn mt-4 mb-4 btn-opacity-0" type="submit"
+                                    <input id="login" class="btn btn-default mt-4 mb-4 btn-opacity-0" disabled type="submit"
                                         value="Login">
                                 </div>
                             </form>
-                            <p class="login-card-footer-text">Don't have an account? <a href="{{ route('auth.signup') }}"
-                                    class="text-reset">Register here</a></p>
+                            <p class="text">Don't have an account? <a class="login-link" href="{{ route('auth.signup') }}">Register here</a></p>
                         </div>
                     </div>
                 </div>

@@ -22410,7 +22410,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_6__["default"]({
 
     var _this = this;
 
-    this.getMe();
+    if (this.currentRoute != '/login' && this.currentRoute != '/signup') this.getMe();
 
     if (this.currentRoute == '/') {
       _this.getCalendars();
@@ -22425,15 +22425,8 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_6__["default"]({
     if (typeof route_user_categories !== 'undefined') this.getCategories(); // Login
 
     (_document$querySelect = document.querySelectorAll('input')) === null || _document$querySelect === void 0 ? void 0 : _document$querySelect.forEach(function (input) {
-      if (!input.classList.contains('validate')) return;
       input.addEventListener('focusout', function (event) {
-        if (event.target.value.length < 1) {
-          event.target.classList.add('invalid');
-          event.target.classList.remove('active');
-        } else {
-          event.target.classList.add('active');
-          event.target.classList.remove('invalid');
-        }
+        event.target.classList.remove('active');
       });
     });
     $("#nation_id").selectize({
@@ -22441,7 +22434,9 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_6__["default"]({
       sortField: "text"
     });
     (_document$querySelect2 = document.querySelectorAll('input')) === null || _document$querySelect2 === void 0 ? void 0 : _document$querySelect2.forEach(function (input) {
-      if (!input.classList.contains('validate')) return;
+      input.addEventListener('keydown', function (event) {
+        if (event.getModifierState('CapsLock')) $(event.target.parentElement).find('.caps-lock').removeClass('d-none');else $(event.target.parentElement).find('.caps-lock').addClass('d-none');
+      });
       input.addEventListener('focusin', function (event) {
         event.target.classList.remove('invalid');
         event.target.classList.add('active');
@@ -22504,7 +22499,9 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_6__["default"]({
     (_document$querySelect3 = document.querySelector('#terms')) === null || _document$querySelect3 === void 0 ? void 0 : _document$querySelect3.addEventListener('change', function () {
       if (this.checked) {
         document.querySelector('#login').classList.add('btn-opacity-1');
+        document.querySelector('#login').disabled = false;
       } else {
+        document.querySelector('#login').disabled = true;
         document.querySelector('#login').classList.remove('btn-opacity-1');
       }
     });

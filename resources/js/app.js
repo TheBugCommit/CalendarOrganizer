@@ -334,7 +334,8 @@ const app = new Vue({
     mounted() {
         let _this = this
 
-        this.getMe()
+        if (this.currentRoute != '/login' && this.currentRoute != '/signup')
+            this.getMe()
 
         if (this.currentRoute == '/') {
             _this.getCalendars()
@@ -350,17 +351,8 @@ const app = new Vue({
 
         // Login
         document.querySelectorAll('input')?.forEach(input => {
-            if (!input.classList.contains('validate'))
-                return;
             input.addEventListener('focusout', (event) => {
-                if (event.target.value.length < 1) {
-                    event.target.classList.add('invalid')
-                    event.target.classList.remove('active')
-                } else {
-                    event.target.classList.add('active')
-                    event.target.classList.remove('invalid')
-                }
-
+                event.target.classList.remove('active')
             })
         })
 
@@ -369,10 +361,13 @@ const app = new Vue({
             sortField: "text",
         })
 
-
         document.querySelectorAll('input')?.forEach(input => {
-            if (!input.classList.contains('validate'))
-                return;
+            input.addEventListener('keydown', (event) => {
+                if(event.getModifierState('CapsLock'))
+                    $(event.target.parentElement).find('.caps-lock').removeClass('d-none')
+                else
+                    $(event.target.parentElement).find('.caps-lock').addClass('d-none')
+            })
             input.addEventListener('focusin', (event) => {
                 event.target.classList.remove('invalid')
                 event.target.classList.add('active')
@@ -440,7 +435,9 @@ const app = new Vue({
         document.querySelector('#terms')?.addEventListener('change', function () {
             if (this.checked) {
                 document.querySelector('#login').classList.add('btn-opacity-1')
+                document.querySelector('#login').disabled = false
             } else {
+                document.querySelector('#login').disabled = true
                 document.querySelector('#login').classList.remove('btn-opacity-1')
             }
         })

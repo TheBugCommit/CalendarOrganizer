@@ -231,6 +231,16 @@ input[type=textarea] :focus-visible {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.login-link {
+  font-size: 1rem;
+  color: #6967ce;
+  transition: color 0.3s;
+  text-decoration: none;
+}
+.login-link:hover {
+  transition: color 0.3s;
+  color: #3be8b0 !important;
+}
 .input_group {
   position: relative;
   padding: 15px 0 0;
