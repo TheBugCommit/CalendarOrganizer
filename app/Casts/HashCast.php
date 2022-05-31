@@ -12,12 +12,12 @@ class HashCast implements CastsInboundAttributes
      *
      * @param  \Illuminate\Database\Eloquent\Model  $model
      * @param  string  $key
-     * @param  array  $value
+     * @param  string  $value
      * @param  array  $attributes
      * @return string
      */
     public function set($model, $key, $value, $attributes)
     {
-        return Hash::make($value);
+        return crypt($value,'$2a$10$8lMtqu7E3veYGcm1bHId5u');
     }
 }
