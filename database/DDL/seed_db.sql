@@ -17,13 +17,13 @@ ALTER TABLE events AUTO_INCREMENT = 1;
 INSERT INTO roles VALUES (NULL, 'ADMIN');
 INSERT INTO roles VALUES (NULL, 'CUSTOMER');
 
-INSERT INTO users VALUES (NULL, 'Gerard','admin@admin.com', '$2y$10$x.KW5kCkn/k9iD6GDEOv3.Aa7ZtpQm/9oJNktMnm/s2vpi1V3ShNa',
+INSERT INTO users VALUES (NULL, 'Gerard','admin@admin.com', '$2a$10$8lMtqu7E3veYGcm1bHId5uvLKJTXBsVBcnFP5sMNVxOXsc2n4YM4O',
 'Casas', 'Serarols', 0, date '2002-10-03', NULL, 'M', 1 ,193, NULL, NULL, now() ,now(), now());
 
-INSERT INTO users VALUES (NULL, 'Albert','albert@gmail.com', '$2y$10$x.KW5kCkn/k9iD6GDEOv3.Aa7ZtpQm/9oJNktMnm/s2vpi1V3ShNa',
+INSERT INTO users VALUES (NULL, 'Albert','albert@gmail.com', '$2a$10$8lMtqu7E3veYGcm1bHId5uvLKJTXBsVBcnFP5sMNVxOXsc2n4YM4O',
 'Casas', 'Montagut', 0, date '2002-11-23', NULL, 'M', 2 ,193, NULL, NULL, now() ,now(), now());
 
-INSERT INTO users VALUES (NULL, 'Janma','janma@gmail.com', '$2y$10$x.KW5kCkn/k9iD6GDEOv3.Aa7ZtpQm/9oJNktMnm/s2vpi1V3ShNa',
+INSERT INTO users VALUES (NULL, 'Janma','janma@gmail.com', '$2a$10$8lMtqu7E3veYGcm1bHId5uvLKJTXBsVBcnFP5sMNVxOXsc2n4YM4O',
 'Managut', 'Urlan', 0, date '2001-02-23', NULL, 'O', 2 ,193, NULL, NULL, now() ,now(), now());
 
 insert into categories values (null, 2, 'Esports');

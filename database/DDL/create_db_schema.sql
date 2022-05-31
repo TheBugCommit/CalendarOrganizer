@@ -341,6 +341,6 @@ INSERT INTO roles VALUES (NULL, 'ADMIN');
 INSERT INTO roles VALUES (NULL, 'CUSTOMER');
 
 -- Users initialization
-INSERT INTO users VALUES (NULL, 'Gerard','admin@admin.com', '$2y$10$x.KW5kCkn/k9iD6GDEOv3.Aa7ZtpQm/9oJNktMnm/s2vpi1V3ShNa', 'Casas', 'Serarols', 0, date '2002-10-03', NULL, 'M', 1 ,193, NULL, NULL, now() ,now(), now());
+INSERT INTO users VALUES (NULL, 'Gerard','admin@admin.com', '$2a$10$8lMtqu7E3veYGcm1bHId5uvLKJTXBsVBcnFP5sMNVxOXsc2n4YM4O', 'Casas', 'Serarols', 0, date '2002-10-03', NULL, 'M', 1 ,193, NULL, NULL, now() ,now(), now());
 
 
