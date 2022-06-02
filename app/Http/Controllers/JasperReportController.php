@@ -1,0 +1,33 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+
+class JasperReportController extends Controller
+{
+    public function index()
+    {
+        $categories = Auth::user()->categories;
+
+        return view('jasperreport', compact('categories'));
+    }
+
+    public function getReport(Request $request)
+    {
+        $url = 'http://daw2-gcasas:2737C@51.68.224.27:8080/jasperserver/rest_v2/reports/daw2-gcasas/sintesis.pdf?email=' . Auth::user()->email ;
+
+        if(isset($request->categories_id) && $request->categories_id != null){
+            foreach($request->categories_id as $category_id){
+                $url .= "&category_ids=$category_id";
+            }
+        }
+
+
+        $tempfile = file_get_contents($url);
+        Storage::put("report.pdf", $tempfile);
+        return response()->file(storage_path() . "/app/report.pdf");
+    }
+}

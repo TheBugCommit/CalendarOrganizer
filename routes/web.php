@@ -9,6 +9,7 @@ use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\JasperReportController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\CalendarVerify;
 use App\Http\Middleware\CategoryVerify;
@@ -53,9 +54,8 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware('verified')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-        Route::get('/jasperreport', function(){
-            return view('jasperreport');
-        })->name('jasperreport.index');
+        Route::get('/jasperreport', [JasperReportController::class, 'index'])->name('jasperreport.index');
+        Route::post('/jasperreport_report', [JasperReportController::class, 'getReport'])->name('jasperreport.get');
 
         Route::get('/export_events', function(){
             return view('export_events');

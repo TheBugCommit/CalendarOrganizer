@@ -1,5 +1,25 @@
 @extends('layouts.main')
 
+@section('card-header')
+    <div class="card-header">
+        <h1 class="title">Jasper report</h1>
+    </div>
+@endsection
+
 @section('content')
-Jasper report
+    <div class="container">
+        <p class="cursive-gray-text">Generate report events by categories</p>
+        <form action="{{ route('jasperreport.get') }}" method="post">
+            @csrf
+            <div class="input_group">
+                <label for="category">My categories: </label>
+                <select id="categories_id" multiple="multiple" class="mt-2" name="categories_id[]">
+                    @foreach ($categories as $key => $category)
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <input type="submit" class="btn btn-default" value="Get Report">
+        </form>
+    </div>
 @endsection
