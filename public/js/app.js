@@ -20935,7 +20935,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         start: "",
         end: "",
         user_id: "",
-        published: 0
+        published: 0,
+        user_email: ""
       },
       selected_target: null,
       event_editing: false,
@@ -20962,7 +20963,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         start: moment(date.date.getTime()),
         end: moment(date.date.getTime()).add(1, "hours"),
         user_id: "",
-        published: 0
+        published: 0,
+        user_email: ""
       };
       $("#date-range").val(this.selected_event.start.format("YYYY-MM-DD HH:mm:ss") + " - " + this.selected_event.end.add(1, "hours").format("YYYY-MM-DD HH:mm:ss"));
       this.$refs.eventManage.toggle();
@@ -21158,7 +21160,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         start: moment(info.event.start).format("Y-MM-DD HH:mm:ss"),
         end: moment(info.event.end).format("Y-MM-DD HH:mm:ss"),
         published: info.event.extendedProps.published,
-        user_id: info.event.extendedProps.user_id
+        user_id: info.event.extendedProps.user_id,
+        user_email: info.event.extendedProps.user_email
       };
     },
     getPath: function getPath(node) {
@@ -21499,6 +21502,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -21620,6 +21627,7 @@ __webpack_require__.r(__webpack_exports__);
     event: function event(value) {
       if (value == null) return;
       this.setInstance();
+      console.log(value);
     },
     target: function target(value) {
       var _this$tippyInsance2;
@@ -50406,6 +50414,12 @@ var render = function () {
             _c("label", { attrs: { for: "location" } }, [_vm._v("Location: ")]),
             _vm._v(" "),
             _c("p", { domProps: { innerHTML: _vm._s(_vm.event.location) } }),
+          ]),
+          _vm._v(" "),
+          _c("li", [
+            _c("label", { attrs: { for: "location" } }, [_vm._v("User: ")]),
+            _vm._v(" "),
+            _c("p", { domProps: { innerHTML: _vm._s(_vm.event.user_email) } }),
           ]),
         ]),
         _vm._v(" "),

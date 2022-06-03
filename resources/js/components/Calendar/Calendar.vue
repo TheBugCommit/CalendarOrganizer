@@ -74,6 +74,7 @@ export default {
         end: "",
         user_id: "",
         published: 0,
+        user_email: ""
       },
       selected_target: null,
       event_editing: false,
@@ -102,6 +103,7 @@ export default {
         end: moment(date.date.getTime()).add(1, "hours"),
         user_id: "",
         published: 0,
+        user_email: ""
       };
       $("#date-range").val(
         this.selected_event.start.format("YYYY-MM-DD HH:mm:ss") +
@@ -301,6 +303,7 @@ export default {
         end: moment(info.event.end).format("Y-MM-DD HH:mm:ss"),
         published: info.event.extendedProps.published,
         user_id: info.event.extendedProps.user_id,
+        user_email: info.event.extendedProps.user_email,
       };
     },
 

@@ -101,7 +101,11 @@ class CalendarController extends Controller
             return response()->json(['message' => 'Calendar not found'], 404);
         }
 
-        return response()->json($calendar->events);
+        $events = $calendar->events->map(function($event){
+            return array_merge($event->toArray(),['user_email' => $event->user->email]);
+        });
+
+        return response()->json($events);
     }
 
     /**

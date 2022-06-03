@@ -27,6 +27,10 @@
                         <label for="location">Location: </label>
                         <p v-html="event.location"></p>
                     </li>
+                    <li>
+                        <label for="location">User: </label>
+                        <p v-html="event.user_email"></p>
+                    </li>
                 </ul>
 
                 <div class="align-items-center d-flex mb-2">
@@ -160,6 +164,7 @@ export default {
         event: function (value) {
             if (value == null) return;
             this.setInstance();
+            console.log(value)
         },
         target: function (value) {
             this.tippyInsance?.destroy()
