@@ -13,9 +13,9 @@
             @csrf
             <div class="input_group">
                 <label for="category">My categories: </label>
-                <select id="categories_id" multiple="multiple" class="mt-2" name="categories_id[]">
+                <select id="categories" multiple="multiple" class="mt-2" name="categories[]">
                     @foreach ($categories as $key => $category)
-                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        <option value="{{ $category->name }}">{{ $category->name }}</option>
                     @endforeach
                 </select>
             </div>

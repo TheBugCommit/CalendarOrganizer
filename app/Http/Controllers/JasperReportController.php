@@ -19,9 +19,9 @@ class JasperReportController extends Controller
     {
         $url = 'http://daw2-gcasas:2737C@51.68.224.27:8080/jasperserver/rest_v2/reports/daw2-gcasas/sintesis.pdf?email=' . Auth::user()->email ;
 
-        if(isset($request->categories_id) && $request->categories_id != null){
-            foreach($request->categories_id as $category_id){
-                $url .= "&category_ids=$category_id";
+        if(isset($request->categories) && $request->categories != null){
+            foreach($request->categories as $category_name){
+                $url .= "&category_names=$category_name";
             }
         }
 
