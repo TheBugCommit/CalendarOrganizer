@@ -21755,13 +21755,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-        var calendar_id, data;
+        var _this, calendar_id, data;
+
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
+                _this = _this2;
+                _this2.$root.show_loading = true;
                 calendar_id = window.location.href.split("/").pop();
-                _context.next = 3;
+                _context.next = 5;
                 return $.ajax({
                   url: route_helpers_get,
                   method: "GET",
@@ -21771,13 +21774,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   }
                 }).fail(function (error) {
                   sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire('Oppss!', 'Can not get helpers', 'error');
+                }).always(function () {
+                  _this.$root.show_loading = false;
                 });
 
-              case 3:
+              case 5:
                 data = _context.sent;
                 _this2.helpers = data;
 
-              case 5:
+              case 7:
               case "end":
                 return _context.stop();
             }
@@ -21788,6 +21793,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     getAllUsers: function getAllUsers() {
       var _this = this;
 
+      this.$root.show_loading = true;
       $.ajax({
         url: route_user_all,
         method: "GET",
@@ -21813,13 +21819,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         });
       }).fail(function (error) {
         sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire('Oppss!', 'Can not get users', 'error');
+      }).always(function () {
+        _this.$root.show_loading = false;
       });
     },
     addHelpers: function addHelpers() {
+      var _this3 = this;
+
       var _this = this;
 
       var calendar_id = window.location.href.split("/").pop();
       if (this.selected_users.length == 0) sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire('Oppss!', 'You doesn\'t select any helper', 'warning');
+      this.$root.show_loading = true;
       $.ajax({
         url: route_helpers_add,
         method: "POST",
@@ -21837,12 +21848,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         var _error$responseJSON;
 
         sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire('Oppss!', error === null || error === void 0 ? void 0 : (_error$responseJSON = error.responseJSON) === null || _error$responseJSON === void 0 ? void 0 : _error$responseJSON.message, 'error');
+      }).always(function () {
+        _this3.$root.show_loading = false;
       });
     },
     removeHelper: function removeHelper(id) {
+      var _this4 = this;
+
       var _this = this;
 
       var calendar_id = window.location.href.split("/").pop();
+      this.$root.show_loading = true;
       $.ajax({
         url: route_helpers_remove,
         method: "DELETE",
@@ -21861,21 +21877,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         var _error$responseJSON2;
 
         sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire('Oppss!', error === null || error === void 0 ? void 0 : (_error$responseJSON2 = error.responseJSON) === null || _error$responseJSON2 === void 0 ? void 0 : _error$responseJSON2.message, 'error');
+      }).always(function () {
+        _this4.$root.show_loading = false;
       });
     },
     appendCustomUser: function appendCustomUser() {
-      var _this3 = this;
+      var _this5 = this;
 
       if (this.selected_user != '') {
         this.selected_users.push(this.selected_user);
         var index = this.users.findIndex(function (elem) {
-          return elem.email == _this3.selected_user;
+          return elem.email == _this5.selected_user;
         });
         if (index != -1) this.users.splice(index, 1);
         this.selected_user = '';
         this.$nextTick(function () {
           $('#users')[0].selectize.clearOptions();
-          $('#users')[0].selectize.addOption(_this3.users.map(function (elem) {
+          $('#users')[0].selectize.addOption(_this5.users.map(function (elem) {
             return {
               text: elem.email,
               value: elem.email
@@ -21892,7 +21910,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       $('#users')[0].selectize.setValue('');
     },
     removeSelected: function removeSelected(user) {
-      var _this4 = this;
+      var _this6 = this;
 
       var index = this.selected_users.findIndex(function (elem) {
         return elem == user.email;
@@ -21903,7 +21921,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         this.users.push(user);
         this.$nextTick(function () {
           $('#users')[0].selectize.clearOptions();
-          $('#users')[0].selectize.addOption(_this4.users.map(function (elem) {
+          $('#users')[0].selectize.addOption(_this6.users.map(function (elem) {
             return {
               text: elem.email,
               value: elem.email
@@ -22207,6 +22225,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_6__["default"]({
     getCategories: function getCategories() {
       var _this = this;
 
+      this.show_loading = true;
       $.ajax({
         url: '/user_categories',
         dataType: "JSON",
@@ -22216,12 +22235,15 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_6__["default"]({
       }).fail(function (response) {
         sweetalert2__WEBPACK_IMPORTED_MODULE_4___default().fire("Error!", "Can\'t get categories", "error");
         _this.categories = _this.categories || [];
+      }).always(function () {
+        _this.show_loading = false;
       });
     },
     storeCategory: function storeCategory() {
       var _this = this;
 
       this.error = "";
+      this.show_loading = true;
       $.ajax({
         url: '/category_store',
         dataType: 'JSON',
@@ -22235,11 +22257,14 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_6__["default"]({
         $('#newCategoryModal').modal('hide');
       }).fail(function (error) {
         _this.error = error.responseJSON.message;
+      }).always(function () {
+        _this.show_loading = false;
       });
     },
     deleteCategory: function deleteCategory(id) {
       var _this = this;
 
+      this.show_loading = true;
       $.ajax({
         url: '/category_delete',
         dataType: "JSON",
@@ -22259,11 +22284,14 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_6__["default"]({
         var message = (response === null || response === void 0 ? void 0 : (_response$responseJSO = response.responseJSON) === null || _response$responseJSO === void 0 ? void 0 : _response$responseJSO.message) != null ? response.responseJSON.message : "Can\'t delete category";
         sweetalert2__WEBPACK_IMPORTED_MODULE_4___default().fire("Error!", message, "error");
         _this.categories = _this.categories || [];
+      }).always(function () {
+        _this.show_loading = false;
       });
     },
     updateCategory: function updateCategory() {
       var _this = this;
 
+      this.show_loading = true;
       $.ajax({
         url: '/category_update',
         dataType: "JSON",
@@ -22282,6 +22310,8 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_6__["default"]({
       }).fail(function (response) {
         _this.error = response.responseJSON.message;
         _this.categories = _this.categories || [];
+      }).always(function () {
+        _this.show_loading = false;
       });
     },
     getMe: function getMe() {

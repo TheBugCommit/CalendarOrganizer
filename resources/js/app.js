@@ -200,7 +200,7 @@ const app = new Vue({
 
         getCategories() {
             let _this = this;
-
+            this.show_loading = true;
             $.ajax({
                 url: '/user_categories',
                 dataType: "JSON",
@@ -210,6 +210,8 @@ const app = new Vue({
             }).fail((response) => {
                 Swal.fire("Error!", "Can\'t get categories", "error");
                 _this.categories = _this.categories || []
+            }).always(() => {
+                _this.show_loading = false;
             })
         },
 
@@ -217,6 +219,7 @@ const app = new Vue({
         storeCategory() {
             let _this = this
             this.error = ""
+            this.show_loading = true;
             $.ajax({
                 url: '/category_store',
                 dataType: 'JSON',
@@ -227,11 +230,14 @@ const app = new Vue({
                 $('#newCategoryModal').modal('hide');
             }).fail(function (error) {
                 _this.error = error.responseJSON.message
+            }).always(() => {
+                _this.show_loading = false;
             })
         },
 
         deleteCategory(id) {
             let _this = this
+            this.show_loading = true;
             $.ajax({
                 url: '/category_delete',
                 dataType: "JSON",
@@ -245,11 +251,14 @@ const app = new Vue({
                 let message = response?.responseJSON?.message != null ? response.responseJSON.message : "Can\'t delete category";
                 Swal.fire("Error!", message, "error");
                 _this.categories = _this.categories || []
+            }).always(() => {
+                _this.show_loading = false;
             })
         },
 
         updateCategory() {
             let _this = this
+            this.show_loading = true;
             $.ajax({
                 url: '/category_update',
                 dataType: "JSON",
@@ -263,6 +272,8 @@ const app = new Vue({
             }).fail((response) => {
                 _this.error = response.responseJSON.message
                 _this.categories = _this.categories || []
+            }).always(() => {
+                _this.show_loading = false;
             })
         },
 

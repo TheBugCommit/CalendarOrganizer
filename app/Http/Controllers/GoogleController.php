@@ -84,7 +84,6 @@ class GoogleController extends Controller
             DB::commit();
         } catch (Exception $ex) {
             DB::rollBack();
-            dd($ex->getMessage());
             abort(500);
         }
 

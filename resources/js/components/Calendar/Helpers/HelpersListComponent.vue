@@ -63,6 +63,8 @@ export default {
     },
     methods: {
         async getHelpers() {
+            let _this = this;
+            this.$root.show_loading = true;
             let calendar_id = window.location.href.split("/").pop();
             let data = await $.ajax({
                 url: route_helpers_get,
@@ -71,6 +73,8 @@ export default {
                 data: { id: calendar_id }
             }).fail((error) => {
                 Swal.fire('Oppss!', 'Can not get helpers', 'error')
+            }).always(() => {
+                _this.$root.show_loading = false;
             })
 
             this.helpers = data
@@ -78,7 +82,7 @@ export default {
 
         getAllUsers() {
             let _this = this
-
+            this.$root.show_loading = true;
             $.ajax({
                 url: route_user_all,
                 method: "GET",
@@ -100,6 +104,8 @@ export default {
 
             }).fail((error) => {
                 Swal.fire('Oppss!', 'Can not get users', 'error')
+            }).always(() => {
+                _this.$root.show_loading = false;
             })
         },
 
@@ -110,6 +116,7 @@ export default {
             if (this.selected_users.length == 0)
                 Swal.fire('Oppss!', 'You doesn\'t select any helper', 'warning')
 
+            this.$root.show_loading = true;
             $.ajax({
                 url: route_helpers_add,
                 method: "POST",
@@ -120,12 +127,15 @@ export default {
                 Swal.fire('Succes!', response?.responseJSON?.message, 'success')
             }).fail((error) => {
                 Swal.fire('Oppss!', error?.responseJSON?.message, 'error')
+            }).always(() => {
+                this.$root.show_loading = false;
             })
         },
 
         removeHelper(id) {
             let _this = this;
             let calendar_id = window.location.href.split("/").pop();
+            this.$root.show_loading = true;
             $.ajax({
                 url: route_helpers_remove,
                 method: "DELETE",
@@ -136,6 +146,8 @@ export default {
                 _this.helpers.splice(helper_id, 1)
             }).fail((error) => {
                 Swal.fire('Oppss!', error?.responseJSON?.message, 'error')
+            }).always(() => {
+                this.$root.show_loading = false;
             })
         },
 

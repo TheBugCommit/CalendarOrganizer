@@ -68,28 +68,28 @@
   --cell-color: #fd636b;
 }
 .mosaic-loader > .cell:nth-of-type(9) {
-  --cell-color: #ffb900;
+  --cell-color: #9fe684;
 }
 .mosaic-loader > .cell:nth-of-type(10) {
-  --cell-color: #ffb900;
+  --cell-color: #9fe684;
 }
 .mosaic-loader > .cell:nth-of-type(11) {
-  --cell-color: #ffb900;
+  --cell-color: #9fe684;
 }
 .mosaic-loader > .cell:nth-of-type(12) {
-  --cell-color: #ffb900;
+  --cell-color: #9fe684;
 }
 .mosaic-loader > .cell:nth-of-type(13) {
-  --cell-color: #3be8b0;
+  --cell-color: #eead58;
 }
 .mosaic-loader > .cell:nth-of-type(14) {
-  --cell-color: #3be8b0;
+  --cell-color: #eead58;
 }
 .mosaic-loader > .cell:nth-of-type(15) {
-  --cell-color: #3be8b0;
+  --cell-color: #eead58;
 }
 .mosaic-loader > .cell:nth-of-type(16) {
-  --cell-color: #3be8b0;
+  --cell-color: #eead58;
 }
 .mosaic-loader:after {
   content: '';
@@ -226,7 +226,6 @@ input[type=textarea] :focus-visible {
   font-size: 2.2rem;
   color: #444;
   margin-bottom: 10px;
-  width: 22rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -239,7 +238,7 @@ input[type=textarea] :focus-visible {
 }
 .login-link:hover {
   transition: color 0.3s;
-  color: #3be8b0 !important;
+  color: #eead58 !important;
 }
 .input_group {
   position: relative;
@@ -286,7 +285,7 @@ input[type=textarea] :focus-visible {
 .input_field.active {
   padding-bottom: 6px;
   border-width: 1px;
-  border-color: #3be8b0;
+  border-color: #eead58;
 }
 .input_field.active ~ .input_label {
   position: absolute;
@@ -294,7 +293,7 @@ input[type=textarea] :focus-visible {
   display: block;
   transition: 0.2s;
   font-size: 15px;
-  color: #3be8b0;
+  color: #eead58;
   font-weight: 600;
 }
 .input_field.invalid {
@@ -438,7 +437,7 @@ span.error::before {
   --nav-width: 68px;
   --first-color: #6967ce;
   --first-color-light: #f7f6fb;
-  --green-color: #3be8b0;
+  --green-color: #eead58;
   --body-font: 'Nunito', sans-serif;
   --normal-font-size: 1rem;
   --z-fixed: 100;
@@ -599,7 +598,7 @@ ul.nav {
   height: unset !important;
 }
 .calendar-list .calendar {
-  border-left: 4px solid #3be8b0;
+  border-left: 4px solid #eead58;
   box-shadow: rgba(0,0,0,0.24) 0px 3px 8px;
 }
 .calendar-list .calendar:hover {
@@ -660,7 +659,7 @@ ul.nav {
   font-size: 20px;
 }
 .green-text {
-  color: #3be8b0 !important;
+  color: #eead58 !important;
 }
 .c-link {
   font-size: 14px;
@@ -670,7 +669,7 @@ ul.nav {
 }
 .c-link:hover {
   transition: color 0.3s;
-  color: #3be8b0 !important;
+  color: #eead58 !important;
 }
 .verification-mail-box {
   width: 100%;
@@ -786,7 +785,7 @@ ul.nav {
 }
 .adminButtons a:hover,
 .adminButtons button:hover {
-  color: #3be8b0;
+  color: #eead58;
   transition: color 0.3s;
   transform: scale(1.05);
 }
@@ -825,7 +824,7 @@ ul.nav {
   transition: transform 0.3s !important;
 }
 .btn-save:hover {
-  color: #3be8b0 !important;
+  color: #eead58 !important;
   transition: transform 0.3s !important;
   transform: scale(1.1);
 }
@@ -835,7 +834,7 @@ ul.nav {
   transition: color 0.3s !important;
 }
 .btn-default:hover {
-  color: #3be8b0 !important;
+  color: #eead58 !important;
   transition: color 0.3s !important;
 }
 .btn-tab {
@@ -852,7 +851,7 @@ ul.nav {
 }
 .btn-edit:hover {
   transition: color 0.3s;
-  color: #3be8b0 !important;
+  color: #eead58 !important;
 }
 .btn-edit-popup {
   background-color: transparent !important;
@@ -884,7 +883,7 @@ ul.nav {
   padding: 10px 0px;
   background-color: #f7f6fb;
   box-shadow: rgba(0,0,0,0.24) 0px 3px 8px;
-  border-left: 4px solid #3be8b0;
+  border-left: 4px solid #eead58;
   margin-top: 1.3rem;
   transition: box-shadow 0.3s ease-in-out;
   transition: border-left-color 0.3s ease-in-out;
@@ -941,7 +940,7 @@ ul.nav {
   border: none;
 }
 .fc .fc-button:hover {
-  color: #3be8b0 !important;
+  color: #eead58 !important;
   transition: color 0.3s !important;
 }
 .fc .fc-button:focus {

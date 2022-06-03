@@ -223,7 +223,7 @@ class CalendarController extends Controller
      * Display view to manage calendar helpers
      *
      * @param Request $request
-     * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
+     * @return \Illuminate\Contracts\View\View
      */
     public function editHelpers($id)
     {
