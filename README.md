@@ -13,7 +13,7 @@
 - composer v2
 - php7.4
 
-## Prepare Enviroment
+## Prepare Environment
 
 Once you clone this project exec:
 
