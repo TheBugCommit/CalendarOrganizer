@@ -29,7 +29,7 @@
                     </li>
                     <li>
                         <label for="location">User: </label>
-                        <p v-html="event.user_email"></p>
+                        <p v-html="user_email"></p>
                     </li>
                 </ul>
 
@@ -157,6 +157,9 @@ export default {
         },
         isowner() {
             return this.me.id == this.calendar.user_id;
+        },
+        user_email(){
+            return this.event.user_email || this.me.email;
         }
     },
 

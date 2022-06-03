@@ -43,7 +43,7 @@ class EventController extends Controller
         if (!$event)
             return response()->json(['message' => 'Can\'t create event'], 500);
 
-        return response()->json($event);
+        return response()->json(array_merge($event->toArray(), ['user_email' => $event->user->email]));
     }
 
     /**
@@ -88,7 +88,7 @@ class EventController extends Controller
             return response()->json(['message' => 'Can\'t update event on google'], 500);
         }
 
-        return response()->json($event);
+        return response()->json(array_merge($event->toArray(), ['user_email' => $event->user->email]));
     }
 
     /**

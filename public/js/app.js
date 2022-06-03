@@ -21621,6 +21621,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     isowner: function isowner() {
       return this.me.id == this.calendar.user_id;
+    },
+    user_email: function user_email() {
+      return this.event.user_email || this.me.email;
     }
   },
   watch: {
@@ -50419,7 +50422,7 @@ var render = function () {
           _c("li", [
             _c("label", { attrs: { for: "location" } }, [_vm._v("User: ")]),
             _vm._v(" "),
-            _c("p", { domProps: { innerHTML: _vm._s(_vm.event.user_email) } }),
+            _c("p", { domProps: { innerHTML: _vm._s(_vm.user_email) } }),
           ]),
         ]),
         _vm._v(" "),
