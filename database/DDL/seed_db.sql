@@ -37,7 +37,7 @@ insert into categories values (null, 3, 'Grup ajuda drogadictes');
 insert into calendars values (null,2, 'Esportiueig 2022', 'Calendari d''events esportius per l''estiu del 2022' ,NULL, '2022-06-01',  '2023-06-01');
 insert into calendars values(null,3, 'Ajudes Communitaries', 'Calendari de les sessions d''ajuda del 2022' ,NULL, '2022-06-01',  '2023-06-01');
 
-insert into calendar_user values (2, 1);
+insert into calendar_user values (1, 1);
 insert into calendar_user values (3, 1);
 
 insert into events values (null,1, 1, 2, 'Partit Futbol', 'Partit de futobol igualada vs lleida bengemins',
