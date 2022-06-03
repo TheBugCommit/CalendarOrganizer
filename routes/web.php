@@ -57,11 +57,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/jasperreport', [JasperReportController::class, 'index'])->name('jasperreport.index');
         Route::post('/jasperreport_report', [JasperReportController::class, 'getReport'])->name('jasperreport.get');
 
-        Route::get('/export_events', function(){
+        Route::get('/export_events', function () {
             return view('export_events');
         })->name('export.events');
 
-        Route::get('/help', function(){
+        Route::get('/help', function () {
             return view('help');
         })->name('help');
 
@@ -99,7 +99,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/postLogin', [GoogleController::class, 'postLogin'])->name('google.postLogin');
 
             Route::middleware(OwnerCalendarVerify::class)->group(function () {
-                Route::name('google.')->group(function() {
+                Route::name('google.')->group(function () {
                     Route::middleware(CheckGoogleAuth::class)->group(function () {
                         Route::name('calendar.')->group(function () {
                             Route::get('/publish_calendar', [GoogleController::class, 'publishGoogleCalendar'])->name('publish');
@@ -127,10 +127,12 @@ Route::middleware(['auth'])->group(function () {
                 Route::patch('/calendar_event_update', [EventController::class, 'update'])->name('event.update');
                 Route::delete('/calendar_event_destroy', [EventController::class, 'destroy'])->name('event.destroy');
 
-                Route::name('google.event.')->group(function () {
-                    Route::get('/publish_event', [GoogleController::class, 'publishGoogleCalendarEvent'])->name('publish');
-                    Route::get('/delete_event_google', [GoogleController::class, 'destroyGoogleCalendarEvent'])->name('destroy');
-                    Route::get('/update_event_google', [GoogleController::class, 'updateGoogleCalendarEvent'])->name('update');
+                Route::middleware(CheckGoogleAuth::class)->group(function () {
+                    Route::name('google.event.')->group(function () {
+                        Route::get('/publish_event', [GoogleController::class, 'publishGoogleCalendarEvent'])->name('publish');
+                        Route::get('/delete_event_google', [GoogleController::class, 'destroyGoogleCalendarEvent'])->name('destroy');
+                        Route::get('/update_event_google', [GoogleController::class, 'updateGoogleCalendarEvent'])->name('update');
+                    });
                 });
             });
         });
